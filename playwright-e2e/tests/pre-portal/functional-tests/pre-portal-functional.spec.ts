@@ -71,3 +71,25 @@ test.describe('Set of tests to verify functionality of pre portal as a Level 3 u
     },
   );
 });
+
+test.describe('Set of tests to verify functionality of pre portal as a super user', () => {
+  test.use({ storageState: config.portalUsers.preSuperUser.sessionFile });
+
+  test.beforeEach(async ({ portal_HomePage }) => {
+    await portal_HomePage.goTo();
+    await portal_HomePage.verifyUserIsOnHomePage();
+  });
+
+  test(
+    'Verify super user is able to navigate to edit request page and submit an edit request for a recording',
+    {
+      tag: ['@functional'],
+    },
+    async ({ portal_HomePage, portal_EditRequestPage }) => {
+      await test.step('Navigate to edit request page', async () => {
+        await portal_HomePage.$interactive.editRequestButton.click();
+        await portal_EditRequestPage.verifyUserIsOnEditRequestPage();
+      });
+    },
+  );
+});

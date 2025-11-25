@@ -12,6 +12,10 @@ export class PortalHomePage extends Base {
     recording: this.page.locator('tr[id*="recording"]'),
   } as const satisfies Record<string, Locator>;
 
+  public readonly $interactive = {
+    editRequestButton: this.page.getByRole('link', { name: 'Edit Request' }),
+  } as const satisfies Record<string, Locator>;
+
   public async goTo(): Promise<void> {
     await this.page.goto(config.urls.prePortalUrl);
   }

@@ -1,11 +1,13 @@
 import { Page } from '@playwright/test';
 import { PortalHomePage, PortalB2cLoginPage, PortalWatchRecordingPage } from './pages/index.js';
+import { PortalEditRequestPage } from './pages/portal-edit-request-page.po.js';
 
 export interface PortalPageFixtures {
   determinePage: Page;
   portal_HomePage: PortalHomePage;
   portal_B2cLoginPage: PortalB2cLoginPage;
   portal_WatchRecordingPage: PortalWatchRecordingPage;
+  portal_EditRequestPage: PortalEditRequestPage;
   navigateToPortalHomePage: () => Promise<void>;
 }
 
@@ -33,6 +35,11 @@ export const portalPageFixtures = {
   portal_WatchRecordingPage: async ({ determinePage }, use) => {
     const portalWatchRecordingPage = new PortalWatchRecordingPage(determinePage);
     await use(portalWatchRecordingPage);
+  },
+
+  portal_EditRequestPage: async ({ determinePage }, use) => {
+    const portalEditRequestPage = new PortalEditRequestPage(determinePage);
+    await use(portalEditRequestPage);
   },
   navigateToPortalHomePage: async ({ portal_HomePage }: PortalPageFixtures, use) => {
     await use(async () => {

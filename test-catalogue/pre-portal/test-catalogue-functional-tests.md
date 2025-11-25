@@ -10,3 +10,6 @@
 - Navigate to pre-portal and verify playback of recording is successful
 - Unshare the recording from the portal user within power app
 - Verify portal user is no longer able to access the recording after unsharing
+
+## Verify super user is able to navigate to edit request page and submit an edit request for a recording
+- Navigate to edit request page

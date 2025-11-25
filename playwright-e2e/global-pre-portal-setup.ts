@@ -14,6 +14,14 @@ setup.describe('Set up users and retrieve tokens', () => {
     await context.storageState({ path: user.sessionFile });
   });
 
+  setup('Store session data for super user', async ({ portal_HomePage, portal_B2cLoginPage, context, config }) => {
+    const user = config.portalUsers.preSuperUser;
+    await portal_HomePage.goTo();
+    await portal_B2cLoginPage.signIn(user.username, user.password);
+    await portal_HomePage.verifyUserIsOnHomePage();
+    await context.storageState({ path: user.sessionFile });
+  });
+
   setup('Store dynamic data for Level 1 power app user', async ({ config, powerApp_MsSignInPage, networkInterceptUtils }) => {
     // Storing dynamic data to allow api client to use user id and court id,
     // the reason for using try catch block is to allow tests that do not depend on this to continue execution.
