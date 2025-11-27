@@ -12,6 +12,12 @@ export class PortalWatchRecordingPage extends Base {
 
   public readonly $static = {
     heading: this.page.locator('h1[class*="govuk-heading"]'),
+    recordingDate: this.page.locator('[data-testid="summary-value-date"]'),
+    recordingUID: this.page.locator('[data-testid="summary-value-uid"]'),
+    recordingVersion: this.page.locator('[data-testid="summary-value-version"]'),
+    recordingCourt: this.page.locator('[data-testid="summary-value-court"]'),
+    recordingWitness: this.page.locator('[data-testid="summary-value-witness"]'),
+    recordingDefendants: this.page.locator('[data-testid="summary-value-defendants"]'),
   } as const satisfies Record<string, Locator>;
 
   public async verifyUserIsOnWatchRecordingPage(): Promise<void> {
