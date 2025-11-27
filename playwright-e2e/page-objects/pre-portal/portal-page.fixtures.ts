@@ -37,6 +37,7 @@ export const portalPageFixtures = {
   navigateToPortalHomePage: async ({ portal_HomePage }: PortalPageFixtures, use) => {
     await use(async () => {
       await portal_HomePage.goTo();
+      await portal_HomePage.verifyUserIsOnHomePage();
     });
   },
 };

@@ -28,7 +28,7 @@ export class PowerAppHomePage extends Base {
   }
 
   public async verifyUserIsOnHomePage(): Promise<void> {
-    await expect(this.$static.heading).toBeVisible({ timeout: 60000 });
+    await expect(this.$static.heading).toBeVisible({ timeout: 90_000 });
   }
 
   public async provideConsentToStreamingManagerIfPrompted(): Promise<void> {

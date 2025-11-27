@@ -80,6 +80,18 @@ export default defineConfig({
       use: {
         ...ProjectsConfig.edge.use,        
       },
-    },       
+    },  
+    {
+      ...ProjectsConfig.chromium,
+      name: 'Pre-Portal-Chromium', // Chromium project for visual tests only for portal
+      dependencies: ['pre-portal-setup'],
+      teardown: 'pre-portal-teardown',
+      testDir: 'playwright-e2e/tests/pre-portal',
+      snapshotDir: './playwright-e2e/snapshots/pre-portal',
+      testMatch: ['**/*visual*.spec.ts'],
+      use: {
+        ...ProjectsConfig.chromium.use,
+      },
+    },         
   ],
 });

@@ -44,7 +44,7 @@ test.describe('Set of tests to verify functionality of pre portal as a Level 3 u
         await portal_HomePage.page.bringToFront();
         await portal_HomePage.goTo();
         await portal_HomePage.verifyUserIsOnHomePage();
-        await portal_HomePage.selectRecordingByCaseReference(caseData.caseReference);
+        await portal_HomePage.selectRecordingByCaseReferenceAndVersion(caseData.caseReference, 1);
 
         await networkInterceptUtils.interceptNetworkRequestToVerifyClearKeyRequestIsSuccessful(30_000, portal_WatchRecordingPage.page);
         await portal_WatchRecordingPage.verifyUserIsOnWatchRecordingPage();
@@ -66,7 +66,80 @@ test.describe('Set of tests to verify functionality of pre portal as a Level 3 u
         await expect(portal_WatchRecordingPage.page.locator('h1', { hasText: 'Page is not available' })).toBeVisible();
         await portal_HomePage.goTo();
         await portal_HomePage.verifyUserIsOnHomePage();
-        await expect(portal_HomePage.$static.recording.filter({ hasText: caseData.caseReference })).not.toBeAttached();
+        await expect(portal_HomePage.$static.recordingTableRow.filter({ hasText: caseData.caseReference })).not.toBeAttached();
+      });
+    },
+  );
+
+  test(
+    'Verify details of version 1 existing recording is accurately displayed on pre-portal home page',
+    {
+      tag: ['@regression', '@functional'],
+    },
+    async ({ portal_HomePage }) => {
+      await test.step('Navigate to pre-portal home page', async () => {
+        await portal_HomePage.goTo();
+        await portal_HomePage.verifyUserIsOnHomePage();
+      });
+
+      await test.step('Verify details of case reference (PLAYWRIGHT) are accurately displayed on the home page', async () => {
+        await portal_HomePage.verifyDetailsOfCaseReferenceOnHomePage({
+          caseRef: 'PLAYWRIGHT',
+          court: '102 Petty France',
+          date: '25/11/2025',
+          witness: 'WitnessOne',
+          defendants: ['Defendant One', 'Defendant Two'],
+          recordingVersion: 1,
+          status: 'Active',
+        });
+      });
+    },
+  );
+
+  test(
+    'Verify user is able to playback version 1 of an existing recording which has been pre assigned to user',
+    {
+      tag: ['@smoke', '@functional'],
+    },
+    async ({ portal_HomePage, portal_WatchRecordingPage, networkInterceptUtils }) => {
+      await test.step('Navigate to pre-portal home page and select case reference (PLAYWRIGHT)', async () => {
+        await portal_HomePage.goTo();
+        await portal_HomePage.verifyUserIsOnHomePage();
+        await portal_HomePage.selectRecordingByCaseReferenceAndVersion('PLAYWRIGHT', 1);
+      });
+
+      await test.step('Verify playback of recording is successful', async () => {
+        await networkInterceptUtils.interceptNetworkRequestToVerifyClearKeyRequestIsSuccessful(30_000);
+        await portal_WatchRecordingPage.verifyUserIsOnWatchRecordingPage();
+        await expect(portal_WatchRecordingPage.$interactive.playRecordingButton).toBeVisible({ timeout: 30_000 });
+        await portal_WatchRecordingPage.$interactive.playRecordingButton.click();
+
+        await networkInterceptUtils.interceptNetworkRequestToVerifyVideoStreamIsReceivedFromMediaKind(15_000);
+        await networkInterceptUtils.interceptNetworkRequestToVerifyAudioStreamIsReceivedFromMediaKind(15_000);
+      });
+    },
+  );
+
+  test(
+    'Verify recording details are accurately displayed on pre-portal watch recordings page for version 1 of an existing recording',
+    {
+      tag: ['@regression', '@functional'],
+    },
+    async ({ portal_HomePage, portal_WatchRecordingPage }) => {
+      await test.step('Navigate to pre-portal home page and select case reference (PLAYWRIGHT)', async () => {
+        await portal_HomePage.goTo();
+        await portal_HomePage.verifyUserIsOnHomePage();
+        await portal_HomePage.selectRecordingByCaseReferenceAndVersion('PLAYWRIGHT', 1);
+        await portal_WatchRecordingPage.verifyUserIsOnWatchRecordingPage();
+      });
+
+      await test.step('Verify recording details are displayed accurately', async () => {
+        await expect(portal_WatchRecordingPage.$static.recordingDate).toHaveText('25/11/2025');
+        await expect(portal_WatchRecordingPage.$static.recordingVersion).toHaveText('1');
+        await expect(portal_WatchRecordingPage.$static.recordingCourt).toHaveText('102 Petty France');
+        await expect(portal_WatchRecordingPage.$static.recordingWitness).toHaveText('WitnessOne');
+        await expect(portal_WatchRecordingPage.$static.recordingDefendants).toContainText('Defendant One');
+        await expect(portal_WatchRecordingPage.$static.recordingDefendants).toContainText('Defendant Two');
       });
     },
   );

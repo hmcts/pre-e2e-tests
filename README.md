@@ -12,6 +12,8 @@ The following Markdown files contain an up-to-date list of all test scenarios an
 
 #### Pre Portal Tests:
 - [Functional Tests](./test-catalogue/pre-portal/test-catalogue-functional-tests.md)
+- [Visual Tests](./test-catalogue/pre-portal/test-catalogue-visual-tests.md)
+- [Accessibility Tests](./test-catalogue/pre-portal/test-catalogue-accessibility.md)
 
 > These catalogues are automatically generated whenever new tests are added or existing tests are modified.
 > Note: These files are automatically updated on every commit via a pre-commit hook.
