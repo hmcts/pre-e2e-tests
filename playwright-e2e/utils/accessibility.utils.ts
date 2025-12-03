@@ -1,4 +1,3 @@
-
 import axe from 'axe-core';
 
 export async function runAxeAuditIgnoringRules(page, ignoreRules: string[] = []) {
@@ -6,5 +5,5 @@ export async function runAxeAuditIgnoringRules(page, ignoreRules: string[] = [])
   await page.addScriptTag({ path: axePath });
 
   const results = await page.evaluate(async () => axe.run());
-  return results.violations.filter(v => !ignoreRules.includes(v.id));
+  return results.violations.filter((v) => !ignoreRules.includes(v.id));
 }

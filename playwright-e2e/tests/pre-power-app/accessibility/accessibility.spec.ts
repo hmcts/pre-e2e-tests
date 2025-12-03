@@ -251,7 +251,7 @@ test.describe('Set of tests to verify accessibility of pages within pre power ap
         const caseData = await apiClient.getCaseData();
         await navigateToPowerAppViewLiveFeedPage(caseData.caseReference);
       });
-      
+
       await test.step('Check accessibility on view live recording page', async () => {
         // Instead of calling axeUtils.audit(), ignore the axe violation 'scrollable-region-focusable' for now - it is not currently fixable in the current implementation of Power Apps
         // await axeUtils.audit();
