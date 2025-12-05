@@ -251,7 +251,7 @@ test.describe('Set of tests to verify accessibility of pages within pre power ap
 
       await test.step('Check accessibility on view live recording page', async () => {
         await axeUtils.audit({
-          disableRules: ['scrollable-region-focusable'] // This violation is currently not fixable in Power Apps, so ignore it for now
+          disableRules: ['scrollable-region-focusable'], // This violation is currently not fixable in Power Apps, so ignore it for now
         });
       });
     },
