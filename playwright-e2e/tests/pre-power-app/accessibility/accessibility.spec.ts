@@ -138,7 +138,12 @@ test.describe('Set of tests to verify accessibility of pages within pre power ap
     {
       tag: ['@accessibility'],
     },
-    async ({ navigateToPowerAppManageBookingsPage, axeUtils }) => {
+    async ({ navigateToPowerAppManageBookingsPage, axeUtils, config }) => {
+      // eslint-disable-next-line playwright/no-conditional-in-test
+      if (config.urls.prePowerAppApiUrl.includes('.demo.')) {
+        test.fail(true, 'Bug raised on PRE team board - S28-4613 - Failing in demo env only');
+      }
+
       await test.step('Navigate to manage bookings page', async () => {
         await navigateToPowerAppManageBookingsPage();
       });
