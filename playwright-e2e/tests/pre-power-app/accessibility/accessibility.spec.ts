@@ -1,6 +1,5 @@
 import { test, expect } from '../../../fixtures';
 import { config } from '../../../utils';
-import { runAxeAuditIgnoringRules } from '../../../utils/accessibility.utils';
 
 test.describe('Set of tests to verify accessibility of pages within pre power apps', () => {
   test.use({ storageState: config.powerAppUsers.preLevel1User.sessionFile });
@@ -240,9 +239,7 @@ test.describe('Set of tests to verify accessibility of pages within pre power ap
     {
       tag: ['@accessibility'],
     },
-    async ({ navigateToPowerAppViewLiveFeedPage, page, apiClient }) => {
-      // test.fail(true, 'Bug raised on PRE team board - S28-4336');
-
+    async ({ navigateToPowerAppViewLiveFeedPage, axeUtils, apiClient }) => {
       await test.step('Pre-requisite step in order to setup an existing case with a booking assigned via api', async () => {
         await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
       });
@@ -253,10 +250,9 @@ test.describe('Set of tests to verify accessibility of pages within pre power ap
       });
 
       await test.step('Check accessibility on view live recording page', async () => {
-        // Instead of calling axeUtils.audit(), ignore the axe violation 'scrollable-region-focusable' for now - it is not currently fixable in the current implementation of Power Apps
-        // await axeUtils.audit();
-        const filteredViolations = await runAxeAuditIgnoringRules(page, ['scrollable-region-focusable']);
-        expect(filteredViolations).toEqual([]);
+        await axeUtils.audit({
+          disableRules: ['scrollable-region-focusable'] // This violation is currently not fixable in Power Apps, so ignore it for now
+        });
       });
     },
   );
