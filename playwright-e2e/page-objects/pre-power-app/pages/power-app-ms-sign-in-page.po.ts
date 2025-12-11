@@ -38,16 +38,16 @@ export class PowerAppMsSignInPage extends Base {
     await expect(this.$static.signInHeading).toBeVisible();
     await this.$inputs.email.fill(email);
     await expect(this.$interactive.nextButton).toBeVisible();
-    await this.$interactive.nextButton.click();
+    await this.navigationClick(this.$interactive.nextButton);
 
     await expect(this.$static.passwordHeading).toBeVisible();
     await this.$inputs.password.fill(password);
     await expect(this.$interactive.signInButton).toBeVisible();
-    await this.$interactive.signInButton.click();
+    await this.navigationClick(this.$interactive.signInButton);
 
     await expect(this.$static.staySignedInHeading).toBeVisible();
     await expect(this.$staySignedInButton('Yes')).toBeVisible();
-    await this.$staySignedInButton('Yes').click();
+    await this.navigationClick(this.$staySignedInButton('Yes'));
 
     await expect.poll(() => this.page.url()).toContain('apps.powerapps.com/play/');
   }

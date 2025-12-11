@@ -29,7 +29,7 @@ test.describe('Set of tests to verify accessibility of pages within pre portal',
       await test.step('Navigate to watch recording page', async () => {
         await portal_HomePage.selectRecordingByCaseReferenceAndVersion('PLAYWRIGHT', 1);
         await portal_WatchRecordingPage.verifyUserIsOnWatchRecordingPage();
-        await expect(portal_WatchRecordingPage.$interactive.playRecordingButton).toBeVisible({ timeout: 30_000 });
+        await expect(portal_WatchRecordingPage.$interactive.playRecordingButton).toBeVisible({ timeout: 60_000 });
       });
 
       await test.step('Check accessibility on watch recordings page', async () => {

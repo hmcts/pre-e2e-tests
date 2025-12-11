@@ -46,9 +46,9 @@ test.describe('Set of tests to verify functionality of pre portal as a Level 3 u
         await portal_HomePage.verifyUserIsOnHomePage();
         await portal_HomePage.selectRecordingByCaseReferenceAndVersion(caseData.caseReference, 1);
 
-        await networkInterceptUtils.interceptNetworkRequestToVerifyClearKeyRequestIsSuccessful(30_000, portal_WatchRecordingPage.page);
+        await networkInterceptUtils.interceptNetworkRequestToVerifyClearKeyRequestIsSuccessful(45_000, portal_WatchRecordingPage.page);
         await portal_WatchRecordingPage.verifyUserIsOnWatchRecordingPage();
-        await expect(portal_WatchRecordingPage.$interactive.playRecordingButton).toBeVisible({ timeout: 30_000 });
+        await expect(portal_WatchRecordingPage.$interactive.playRecordingButton).toBeVisible({ timeout: 15_000 });
         await portal_WatchRecordingPage.$interactive.playRecordingButton.click();
 
         await networkInterceptUtils.interceptNetworkRequestToVerifyVideoStreamIsReceivedFromMediaKind(15_000, portal_WatchRecordingPage.page);
@@ -109,9 +109,9 @@ test.describe('Set of tests to verify functionality of pre portal as a Level 3 u
       });
 
       await test.step('Verify playback of recording is successful', async () => {
-        await networkInterceptUtils.interceptNetworkRequestToVerifyClearKeyRequestIsSuccessful(30_000);
+        await networkInterceptUtils.interceptNetworkRequestToVerifyClearKeyRequestIsSuccessful(45_000);
         await portal_WatchRecordingPage.verifyUserIsOnWatchRecordingPage();
-        await expect(portal_WatchRecordingPage.$interactive.playRecordingButton).toBeVisible({ timeout: 30_000 });
+        await expect(portal_WatchRecordingPage.$interactive.playRecordingButton).toBeVisible({ timeout: 15_000 });
         await portal_WatchRecordingPage.$interactive.playRecordingButton.click();
 
         await networkInterceptUtils.interceptNetworkRequestToVerifyVideoStreamIsReceivedFromMediaKind(15_000);

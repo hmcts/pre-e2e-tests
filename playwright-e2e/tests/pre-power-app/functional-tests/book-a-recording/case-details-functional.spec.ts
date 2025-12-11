@@ -24,7 +24,7 @@ test.describe('Set of tests to verify functionality of case details page as a Le
           witnessNames: caseDetails.witnessNames,
         });
 
-        await powerApp_CaseDetailsPage.$interactive.saveButton.click();
+        await powerApp_CaseDetailsPage.navigationClick(powerApp_CaseDetailsPage.$interactive.saveButton);
       });
 
       await test.step('Verify logo and text is displayed to indicate details have been saved', async () => {

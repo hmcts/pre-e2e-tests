@@ -8,9 +8,9 @@ export class PowerAppHomePage extends Base {
   }
 
   public readonly $interactive = {
-    bookARecordingButton: this.iFrame.getByText('Book a Recording', { exact: true }),
-    manageBookingsButton: this.iFrame.getByText('Manage Bookings', { exact: true }),
-    viewRecordingsButton: this.iFrame.getByText('View Recordings', { exact: true }),
+    bookARecordingButton: this.iFrame.locator('[data-control-name="landingScrn_BookARecording_Btn"] button'),
+    manageBookingsButton: this.iFrame.locator('[data-control-name="landingScrn_ManageBookings_Btn"] button'),
+    viewRecordingsButton: this.iFrame.locator('[data-control-name="landingScrn_ViewRecordings_Btn"] button'),
     adminButton: this.iFrame.getByText('Admin', { exact: true }),
   } as const satisfies Record<string, Locator>;
 

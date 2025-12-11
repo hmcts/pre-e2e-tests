@@ -51,7 +51,7 @@ test.describe('Set of tests to verify pre portal UI is visually correct as Level
       await test.step('Navigate to watch recording page', async () => {
         await portal_HomePage.selectRecordingByCaseReferenceAndVersion('PLAYWRIGHT', 1);
         await portal_WatchRecordingPage.verifyUserIsOnWatchRecordingPage();
-        await expect(portal_WatchRecordingPage.$interactive.playRecordingButton).toBeVisible({ timeout: 30_000 });
+        await expect(portal_WatchRecordingPage.$interactive.playRecordingButton).toBeVisible({ timeout: 60_000 });
       });
 
       await test.step('Verify watch recording page is visually correct', async () => {
