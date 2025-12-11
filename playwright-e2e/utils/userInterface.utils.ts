@@ -110,4 +110,22 @@ export class UserInterfaceUtils {
       await expect(locator).toContainText(replacement);
     }
   }
+
+  /**
+   * Clicks on a specified element and waits for it to be hidden,
+   * indicating that the navigation or action has been completed.
+   * Verifies that the element is visible before clicking.
+   * Verifies that the element is hidden after the click action.
+   * @param elementToClickOn - The element to be clicked.
+   */
+  public async navigationClick(elementToClickOn: Locator): Promise<void> {
+    await expect(elementToClickOn).toBeVisible();
+
+    await expect(async () => {
+      if ((await elementToClickOn.isVisible()) && (await elementToClickOn.isEnabled())) {
+        await elementToClickOn.click();
+      }
+      await expect(elementToClickOn).toBeHidden({ timeout: 5_000 });
+    }).toPass({ intervals: [1_000], timeout: 60_000 });
+  }
 }

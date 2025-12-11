@@ -22,5 +22,6 @@ export class PortalWatchRecordingPage extends Base {
 
   public async verifyUserIsOnWatchRecordingPage(): Promise<void> {
     await expect.poll(() => this.page.url()).toContain('watch');
+    await expect(this.page.locator('h1[class*="govuk-heading"]')).toBeVisible({ timeout: 40_000 });
   }
 }

@@ -81,9 +81,9 @@ export const powerAppPageFixtures = {
   },
   navigateToPowerAppHomePage: async ({ powerApp_HomePage, determinePage, powerApp_NavBarComponent }: PowerAppPageFixtures, use) => {
     await use(async () => {
-      if (determinePage.url().includes('apps.powerapps.com')) {
+      if (determinePage.url().includes('apps.powerapps.com') && !(await powerApp_HomePage.$static.heading.isVisible())) {
         await powerApp_NavBarComponent.$interactive.HomeButton.click();
-      } else {
+      } else if (!determinePage.url().includes('apps.powerapps.com')) {
         await powerApp_HomePage.goTo();
       }
       await powerApp_HomePage.verifyUserIsOnHomePage();
@@ -95,7 +95,7 @@ export const powerAppPageFixtures = {
   ) => {
     await use(async () => {
       await navigateToPowerAppHomePage();
-      await powerApp_HomePage.$interactive.bookARecordingButton.click();
+      await powerApp_HomePage.navigationClick(powerApp_HomePage.$interactive.bookARecordingButton);
       await powerApp_CaseDetailsPage.verifyUserIsOnCaseDetailsPage();
     });
   },
@@ -106,7 +106,7 @@ export const powerAppPageFixtures = {
     await use(async (caseReference: string) => {
       await navigateToPowerAppCaseDetailsPage();
       await powerApp_CaseDetailsPage.searchAndSelectExistingCase(caseReference);
-      await powerApp_CaseDetailsPage.$interactive.bookingsButton.click();
+      await powerApp_CaseDetailsPage.navigationClick(powerApp_CaseDetailsPage.$interactive.bookingsButton);
       await powerApp_ScheduleRecordingPage.verifyUserIsOnScheduleRecordingsPage();
     });
   },
@@ -116,7 +116,7 @@ export const powerAppPageFixtures = {
   ) => {
     await use(async () => {
       await navigateToPowerAppHomePage();
-      await powerApp_HomePage.$interactive.manageBookingsButton.click();
+      await powerApp_HomePage.navigationClick(powerApp_HomePage.$interactive.manageBookingsButton);
       await powerApp_ManageBookingsPage.verifyUserIsOnManageBookingsPage();
     });
   },
@@ -127,7 +127,7 @@ export const powerAppPageFixtures = {
     await use(async (caseReference: string) => {
       await navigateToPowerAppManageBookingsPage();
       await powerApp_ManageBookingsPage.searchForABooking(caseReference);
-      await powerApp_ManageBookingsPage.$interactive.recordButton.click();
+      await powerApp_ManageBookingsPage.navigationClick(powerApp_ManageBookingsPage.$interactive.recordButton);
       await powerApp_ViewLiveFeedPage.verifyUserIsOnViewLiveFeedPage();
     });
   },
@@ -137,7 +137,7 @@ export const powerAppPageFixtures = {
   ) => {
     await use(async () => {
       await navigateToPowerAppHomePage();
-      await powerApp_HomePage.$interactive.viewRecordingsButton.click();
+      await powerApp_HomePage.navigationClick(powerApp_HomePage.$interactive.viewRecordingsButton);
       await powerApp_ViewRecordingsPage.verifyUserIsOnViewRecordingsPage();
     });
   },

@@ -30,7 +30,7 @@ export class PortalB2cLoginPage extends Base {
     await expect(this.$static.signInHeading).toBeVisible();
     await this.$inputs.email.fill(email);
     await this.$inputs.password.fill(password);
-    await this.$interactive.signInButton.click();
+    await this.navigationClick(this.$interactive.signInButton);
 
     await expect.poll(() => this.page.url()).toContain('pre-portal');
   }

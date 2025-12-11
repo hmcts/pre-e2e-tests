@@ -15,12 +15,10 @@ test.describe('Ensure e2e journey is working as expected', () => {
       tag: ['@smoke', '@e2e'],
     },
     async ({
-      powerApp_NavBarComponent,
       powerApp_HomePage,
       powerApp_CaseDetailsPage,
       dataUtils,
       powerApp_ScheduleRecordingPage,
-      powerApp_ManageBookingsPage,
       powerApp_ViewLiveFeedPage,
       cvp_SignInPage,
       cvp_RoomSettingsPage,
@@ -31,6 +29,9 @@ test.describe('Ensure e2e journey is working as expected', () => {
       powerApp_ProcessingRecordingsPage,
       powerApp_ViewRecordingsPage,
       apiClient,
+      navigateToPowerAppCaseDetailsPage,
+      navigateToPowerAppViewLiveFeedPage,
+      navigateToPowerAppViewRecordingsPage,
     }) => {
       /**
        * Increased the timeout to allow e2e journey to complete, set to a total of 9 minutes.
@@ -50,14 +51,13 @@ test.describe('Ensure e2e journey is working as expected', () => {
 
       await test.step('Verify user is able to open a new case', async () => {
         await powerApp_HomePage.page.bringToFront();
-        await powerApp_HomePage.$interactive.bookARecordingButton.click();
-        await powerApp_CaseDetailsPage.verifyUserIsOnCaseDetailsPage();
+        await navigateToPowerAppCaseDetailsPage();
         await powerApp_CaseDetailsPage.populateCaseDetails({
           caseReference: caseDetails.caseReference,
           defendantNames: caseDetails.defendantNames,
           witnessNames: caseDetails.witnessNames,
         });
-        await powerApp_CaseDetailsPage.$interactive.saveButton.click();
+        await powerApp_CaseDetailsPage.navigationClick(powerApp_CaseDetailsPage.$interactive.saveButton);
         await powerApp_ScheduleRecordingPage.verifyUserIsOnScheduleRecordingsPage();
       });
 
@@ -72,13 +72,7 @@ test.describe('Ensure e2e journey is working as expected', () => {
       });
 
       await test.step('Verify user is able to begin recording by obtaining rtmps link', async () => {
-        await powerApp_NavBarComponent.$interactive.HomeButton.click();
-        await powerApp_HomePage.verifyUserIsOnHomePage();
-        await powerApp_HomePage.$interactive.manageBookingsButton.click();
-        await powerApp_ManageBookingsPage.verifyUserIsOnManageBookingsPage();
-        await powerApp_ManageBookingsPage.searchForABooking(caseDetails.caseReference);
-        await powerApp_ManageBookingsPage.$interactive.recordButton.click();
-        await powerApp_ViewLiveFeedPage.verifyUserIsOnViewLiveFeedPage();
+        await navigateToPowerAppViewLiveFeedPage(caseDetails.caseReference);
         await expect(powerApp_ViewLiveFeedPage.$static.notRecordingText).toBeVisible();
         rtmpsLink = await powerApp_ViewLiveFeedPage.startRecordingAndCaptureRtmpsLink();
       });
@@ -139,10 +133,7 @@ test.describe('Ensure e2e journey is working as expected', () => {
       });
 
       await test.step('Verify recording is now available in view recordings page', async () => {
-        await powerApp_NavBarComponent.$interactive.HomeButton.click();
-        await powerApp_HomePage.verifyUserIsOnHomePage();
-        await powerApp_HomePage.$interactive.viewRecordingsButton.click();
-        await powerApp_ViewRecordingsPage.verifyUserIsOnViewRecordingsPage();
+        await navigateToPowerAppViewRecordingsPage();
         await powerApp_ViewRecordingsPage.searchForCaseReference(caseDetails.caseReference, 'recordingCreatedByUi');
       });
     },

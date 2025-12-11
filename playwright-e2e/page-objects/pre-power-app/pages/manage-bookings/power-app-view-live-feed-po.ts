@@ -85,6 +85,6 @@ export class PowerAppViewLiveFeedPage extends Base {
   public async finishRecording(): Promise<void> {
     await this.$interactive.finishRecordingButton.click();
     await expect(this.$finishRecordingModal.finishRecordingText).toBeVisible();
-    await this.$finishRecordingModal.yesButton.click();
+    await this.navigationClick(this.$finishRecordingModal.yesButton);
   }
 }

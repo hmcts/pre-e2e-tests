@@ -33,7 +33,7 @@ export class PortalHomePage extends Base {
         has: this.page.locator(`td:text-is("${recordingVersion}")`),
       })
       .locator('[class="govuk-link"]');
-    await recordingLink.click();
+    await this.navigationClick(recordingLink);
   }
 
   /**
