@@ -32,13 +32,13 @@ static Map < String, Object > secret(String secretName, String envVariable) {
 }
 
 def secrets = [
-  'DTS-SHAREDSERVICES-TEST-Pre-Recorded Evidence': [
+  'pre-hmctskv-test': [
     secret('pre-level-1-test-login-email', 'PRE_LEVEL_1_USER_EMAIL'),
     secret('pre-level-1-test-login-password', 'PRE_LEVEL_1_USER_PASSWORD'),
     secret('pre-level-3-test-login-email', 'PRE_LEVEL_3_USER_EMAIL'),
     secret('pre-level-3-test-login-password', 'PRE_LEVEL_3_USER_PASSWORD'),
   ],
-  'DTS-SHAREDSERVICES-STG-Pre-Recorded Evidence': [
+  'pre-hmctskv-stg': [
     secret('pre-power-app-base-url', 'PRE_POWER_APP_URL'),
     secret('pre-api-url', 'PRE_POWER_APP_API_URL'),
     secret('pre-portal-base-url', 'PRE_PORTAL_URL'),
