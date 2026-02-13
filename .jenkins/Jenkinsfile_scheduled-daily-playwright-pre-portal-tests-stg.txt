@@ -1,0 +1,79 @@
+#!groovy
+
+properties([
+  pipelineTriggers(
+    [cron('0 7 * 1-3 1-5'), 
+    cron('0 6 * 4-10 1-5'), 
+    cron('0 7 * 11-12 1-5') 
+    ]),
+  disableConcurrentBuilds(),
+  parameters([
+    string(
+      name: 'FUNCTIONAL_TESTS_WORKERS',
+      defaultValue: '4',
+      description: 'Number of workers running functional tests'
+    ), 
+  ])
+])
+
+@Library("Infrastructure")
+
+def type = "nodejs"
+def product = "pre"
+def component = "portal"
+
+static Map < String, Object > secret(String secretName, String envVariable) {
+  [
+    $class: 'AzureKeyVaultSecret',
+    secretType: 'Secret',
+    name: secretName,
+    envVariable: envVariable
+  ]
+}
+
+def secrets = [
+  'DTS-SHAREDSERVICES-TEST-Pre-Recorded Evidence': [
+    secret('pre-level-1-test-login-email', 'PRE_LEVEL_1_USER_EMAIL'),
+    secret('pre-level-1-test-login-password', 'PRE_LEVEL_1_USER_PASSWORD'),
+    secret('pre-level-3-test-login-email', 'PRE_LEVEL_3_USER_EMAIL'),
+    secret('pre-level-3-test-login-password', 'PRE_LEVEL_3_USER_PASSWORD'),
+  ],
+  'DTS-SHAREDSERVICES-STG-Pre-Recorded Evidence': [
+    secret('pre-power-app-base-url', 'PRE_POWER_APP_URL'),
+    secret('pre-api-url', 'PRE_POWER_APP_API_URL'),
+    secret('pre-portal-base-url', 'PRE_PORTAL_URL'),
+  ]
+]
+
+def yarnBuilder = new uk.gov.hmcts.contino.YarnBuilder(this)
+
+withNightlyPipeline(type, product, component, 600) {
+  loadVaultSecrets(secrets)
+
+  afterAlways('DependencyCheckNightly') {
+    stage('Set up playwright') {
+      try {
+        yarnBuilder.yarn('setup')
+      } catch (Error) {
+        unstable(message: "${STAGE_NAME} is unstable: " + Error.toString())
+      }
+    }
+      currentBuild.displayName = "All E2E Tests"
+      stage('Functional E2E Tests') {
+        try {
+          yarnBuilder.yarn('playwright test playwright-e2e/tests/pre-portal --workers=' + FUNCTIONAL_TESTS_WORKERS)
+        } catch (Error) {
+          unstable(message: "${STAGE_NAME} is unstable: " + Error.toString())
+        } finally {
+          publishHTML([
+            allowMissing: true,
+            alwaysLinkToLastBuild: true,
+            keepAll: true,
+            reportDir: "playwright-report",
+            reportFiles: 'index.html',
+            reportName: 'E2E Tests Results'
+          ])
+        }
+      }
+  }
+}
