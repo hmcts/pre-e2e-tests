@@ -51,6 +51,7 @@ withNightlyPipeline(type, product, component, 600) {
   loadVaultSecrets(secrets)
 
   afterAlways('DependencyCheckNightly') {
+
     stage('Set up playwright') {
       try {
         yarnBuilder.yarn('setup')
@@ -58,22 +59,34 @@ withNightlyPipeline(type, product, component, 600) {
         unstable(message: "${STAGE_NAME} is unstable: " + Error.toString())
       }
     }
-      currentBuild.displayName = "All E2E Tests"
-      stage('Functional E2E Tests') {
-        try {
-          yarnBuilder.yarn('playwright test playwright-e2e/tests/pre-portal --workers=' + FUNCTIONAL_TESTS_WORKERS)
-        } catch (Error) {
-          unstable(message: "${STAGE_NAME} is unstable: " + Error.toString())
-        } finally {
-          publishHTML([
-            allowMissing: true,
-            alwaysLinkToLastBuild: true,
-            keepAll: true,
-            reportDir: "playwright-report",
-            reportFiles: 'index.html',
-            reportName: 'E2E Tests Results'
-          ])
-        }
+
+    stage('Install Microsoft Edge for Playwright') {
+      try {
+        yarnBuilder.yarn('playwright install msedge')
+      } catch (Error) {
+        unstable(message: "${STAGE_NAME} is unstable: " + Error.toString())
       }
+    }
+
+    currentBuild.displayName = "All E2E Tests"
+
+    stage('Functional E2E Tests') {
+      try {
+        yarnBuilder.yarn(
+          'playwright test playwright-e2e/tests/pre-portal --workers=' + FUNCTIONAL_TESTS_WORKERS
+        )
+      } catch (Error) {
+        unstable(message: "${STAGE_NAME} is unstable: " + Error.toString())
+      } finally {
+        publishHTML([
+          allowMissing: true,
+          alwaysLinkToLastBuild: true,
+          keepAll: true,
+          reportDir: "playwright-report",
+          reportFiles: 'index.html',
+          reportName: 'E2E Tests Results'
+        ])
+      }
+    }
   }
 }
