@@ -47,7 +47,7 @@ test.describe('Set of tests to verify pre portal UI is visually correct as Level
     {
       tag: ['@regression', '@visual'],
     },
-    async ({ portal_HomePage, portal_WatchRecordingPage }) => {
+    async ({ portal_HomePage, portal_WatchRecordingPage, userInterfaceUtils }) => {
       await test.step('Navigate to watch recording page', async () => {
         await portal_HomePage.selectRecordingByCaseReferenceAndVersion('PLAYWRIGHT', 1);
         await portal_WatchRecordingPage.verifyUserIsOnWatchRecordingPage();
@@ -55,6 +55,12 @@ test.describe('Set of tests to verify pre portal UI is visually correct as Level
       });
 
       await test.step('Verify watch recording page is visually correct', async () => {
+        // Redact the defendent names which can appear on screen in a different order which breaks visual tests
+        const defendantNameEelement = portal_WatchRecordingPage.page.locator('[data-testid="summary-value-defendants"]');
+        await userInterfaceUtils.replaceTextWithinStaticElement(defendantNameEelement, [
+          ['Defendant Two', '{Redacted Name}'],
+          ['Defendant One', '{Redacted Name}'],
+        ]);
         await expect(async () => {
           await expect(portal_WatchRecordingPage.page).toHaveScreenshot('portal-watch-recording-page-visual.png', {
             fullPage: true,
