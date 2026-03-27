@@ -156,7 +156,6 @@ export const powerAppPageFixtures = {
       await powerApp_ViewRecordingsPage.verifyUserIsOnViewRecordingsPage();
     });
   },
-
   navigateToPowerAppAdminPage: async ({ navigateToPowerAppHomePage, powerApp_HomePage, powerApp_AdminPage }: PowerAppPageFixtures, use) => {
     await use(async () => {
       await navigateToPowerAppHomePage();
@@ -168,9 +167,10 @@ export const powerAppPageFixtures = {
     { powerApp_AdminPage, navigateToPowerAppAdminPage, powerApp_ManageCasesPage }: PowerAppPageFixtures,
     use,
   ) => {
-    await use(async () => {});
-    await navigateToPowerAppAdminPage();
-    await powerApp_AdminPage.navigationClick(powerApp_AdminPage.$interactive.manageCasesButton, powerApp_ManageCasesPage.$static.casesLabel);
-    await powerApp_ManageCasesPage.verifyUserIsOnManageCasesPage();
+    await use(async () => {
+      await navigateToPowerAppAdminPage();
+      await powerApp_AdminPage.navigationClick(powerApp_AdminPage.$interactive.manageCasesButton, powerApp_ManageCasesPage.$static.casesLabel);
+      await powerApp_ManageCasesPage.verifyUserIsOnManageCasesPage();
+    });
   },
 };
