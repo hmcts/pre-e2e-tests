@@ -27,11 +27,6 @@ export class PowerAppManageCasesPage extends Base {
   }
   public async searchForAnExistingCase(caseReference: string): Promise<void> {
     await expect(async () => {
-      //await expect(this.$inputs.caseReference).toBeAttached();
-      // const caseReferenceFiledValue = await this.$inputs.caseReference.inputValue();
-      // if (caseReferenceFiledValue && caseReferenceFiledValue.trim() !== '') {
-      //   await this.$inputs.caseReference.clear();
-      // }
       await this.$inputs.caseReference.fill(caseReference);
       await expect(this.$inputs.caseReference).toHaveValue(caseReference, { timeout: 5000 });
       await this.verifySingleCaseReferenceIsReturned();
@@ -39,7 +34,6 @@ export class PowerAppManageCasesPage extends Base {
     await expect(this.$static.caseReferenceInSearchResults).toContainText(caseReference);
   }
   private async verifySingleCaseReferenceIsReturned(): Promise<void> {
-    const count = await this.$static.listItemsInSearchResultsGallery.count();
     await expect(this.$static.listItemsInSearchResultsGallery).toHaveCount(1, { timeout: 5000 });
   }
 }

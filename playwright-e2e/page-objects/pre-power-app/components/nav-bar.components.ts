@@ -7,7 +7,6 @@ export class NavBarComponent extends Base {
     ManageBookings: this.iFrame.getByText('Manage Bookings', { exact: true }),
     ProcessingRecordings: this.iFrame.getByText('Processing Recordings', { exact: true }),
     ViewRecordings: this.iFrame.getByText('View Recordings', { exact: true }),
-    AdminButton: this.iFrame.getByText('Admin', { exact: true }),
   } as const satisfies Record<string, Locator>;
 
   constructor(page: Page) {

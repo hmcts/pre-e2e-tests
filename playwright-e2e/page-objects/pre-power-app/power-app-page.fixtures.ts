@@ -168,9 +168,10 @@ export const powerAppPageFixtures = {
     { powerApp_AdminPage, navigateToPowerAppAdminPage, powerApp_ManageCasesPage }: PowerAppPageFixtures,
     use,
   ) => {
-    await use(async () => {});
-    await navigateToPowerAppAdminPage();
-    await powerApp_AdminPage.navigationClick(powerApp_AdminPage.$interactive.manageCasesButton, powerApp_ManageCasesPage.$static.casesLabel);
-    await powerApp_ManageCasesPage.verifyUserIsOnManageCasesPage();
+    await use(async () => {
+      await navigateToPowerAppAdminPage();
+      await powerApp_AdminPage.navigationClick(powerApp_AdminPage.$interactive.manageCasesButton, powerApp_ManageCasesPage.$static.casesLabel);
+      await powerApp_ManageCasesPage.verifyUserIsOnManageCasesPage();
+    });
   },
 };
