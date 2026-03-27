@@ -14,7 +14,7 @@ export abstract class Base {
     applicationEnvironment: this.iFrame.locator('[data-control-name="HeaderEnvLabel"]'),
   } as const satisfies Record<string, Locator>;
 
-  public async navigationClick(elementTOClick: Locator): Promise<void> {
-    await this.userInterfaceUtils.navigationClick(elementTOClick);
+  public async navigationClick(elementTOClick: Locator, verifyLocatorIsVisible?: Locator): Promise<void> {
+    await this.userInterfaceUtils.navigationClick(elementTOClick, verifyLocatorIsVisible);
   }
 }

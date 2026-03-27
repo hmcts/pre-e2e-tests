@@ -6,3 +6,5 @@ export * from './manage-bookings/power-app-manage-bookings-po';
 export * from './manage-bookings/power-app-view-live-feed-po';
 export * from './manage-bookings/power-app-processing-recordings-po';
 export * from './view-recordings/power-app-view-recordings-po';
+export * from './Admin/power-app-manage-cases.po';
+export * from './Admin/power-app-admin-po';
