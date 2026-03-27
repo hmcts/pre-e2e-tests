@@ -11,7 +11,7 @@ export class PowerAppHomePage extends Base {
     bookARecordingButton: this.iFrame.locator('[data-control-name="landingScrn_BookARecording_Btn"] button'),
     manageBookingsButton: this.iFrame.locator('[data-control-name="landingScrn_ManageBookings_Btn"] button'),
     viewRecordingsButton: this.iFrame.locator('[data-control-name="landingScrn_ViewRecordings_Btn"] button'),
-    adminButton: this.iFrame.getByText('Admin', { exact: true }),
+    adminButton: this.iFrame.locator('[data-control-name="landingScrn_Admin_Btn"] button'),
   } as const satisfies Record<string, Locator>;
 
   public readonly $static = {

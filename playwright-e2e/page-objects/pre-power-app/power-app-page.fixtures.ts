@@ -8,6 +8,8 @@ import {
   PowerAppViewLiveFeedPage,
   PowerAppProcessingRecordingsPage,
   PowerAppViewRecordingsPage,
+  PowerAppManageCasesPage,
+  PowerAppAdminPage,
 } from './pages/index.js';
 import { NavBarComponent } from './components/index.js';
 
@@ -22,12 +24,16 @@ export interface PowerAppPageFixtures {
   powerApp_ViewLiveFeedPage: PowerAppViewLiveFeedPage;
   powerApp_ProcessingRecordingsPage: PowerAppProcessingRecordingsPage;
   powerApp_ViewRecordingsPage: PowerAppViewRecordingsPage;
+  powerApp_ManageCasesPage: PowerAppManageCasesPage;
+  powerApp_AdminPage: PowerAppAdminPage;
   navigateToPowerAppHomePage: () => Promise<void>;
   navigateToPowerAppCaseDetailsPage: () => Promise<void>;
   navigateToPowerAppScheduleRecordingsPage: (caseReference: string) => Promise<void>;
   navigateToPowerAppManageBookingsPage: () => Promise<void>;
   navigateToPowerAppViewLiveFeedPage: (caseReference: string) => Promise<void>;
   navigateToPowerAppViewRecordingsPage: () => Promise<void>;
+  navigateToPowerAppAdminPage: () => Promise<void>;
+  navigateToPowerAppManageCasesPage: () => Promise<void>;
 }
 
 /* Instantiates pages and provides page to the test via use()
@@ -50,6 +56,10 @@ export const powerAppPageFixtures = {
   powerApp_HomePage: async ({ determinePage }, use) => {
     const powerApp_HomePage = new PowerAppHomePage(determinePage);
     await use(powerApp_HomePage);
+  },
+  powerApp_AdminPage: async ({ determinePage }, use) => {
+    const powerApp_AdminPage = new PowerAppAdminPage(determinePage);
+    await use(powerApp_AdminPage);
   },
   powerApp_CaseDetailsPage: async ({ determinePage }, use) => {
     const powerApp_CaseDetailsPage = new PowerAppCaseDetailsPage(determinePage);
@@ -78,6 +88,11 @@ export const powerAppPageFixtures = {
   powerApp_ViewRecordingsPage: async ({ determinePage, apiClient }, use) => {
     const powerApp_ViewRecordingsPage = new PowerAppViewRecordingsPage(determinePage, apiClient);
     await use(powerApp_ViewRecordingsPage);
+  },
+
+  powerApp_ManageCasesPage: async ({ determinePage }, use) => {
+    const powerApp_ManageCasesPage = new PowerAppManageCasesPage(determinePage);
+    await use(powerApp_ManageCasesPage);
   },
   navigateToPowerAppHomePage: async ({ powerApp_HomePage, determinePage, powerApp_NavBarComponent }: PowerAppPageFixtures, use) => {
     await use(async () => {
@@ -139,6 +154,24 @@ export const powerAppPageFixtures = {
       await navigateToPowerAppHomePage();
       await powerApp_HomePage.navigationClick(powerApp_HomePage.$interactive.viewRecordingsButton);
       await powerApp_ViewRecordingsPage.verifyUserIsOnViewRecordingsPage();
+    });
+  },
+
+  navigateToPowerAppAdminPage: async ({ navigateToPowerAppHomePage, powerApp_HomePage, powerApp_AdminPage }: PowerAppPageFixtures, use) => {
+    await use(async () => {
+      await navigateToPowerAppHomePage();
+      await powerApp_HomePage.navigationClick(powerApp_HomePage.$interactive.adminButton);
+      await powerApp_AdminPage.verifyUserIsOnAdminPage();
+    });
+  },
+  navigateToPowerAppManageCasesPage: async (
+    { powerApp_AdminPage, navigateToPowerAppAdminPage, powerApp_ManageCasesPage }: PowerAppPageFixtures,
+    use,
+  ) => {
+    await use(async () => {
+      await navigateToPowerAppAdminPage();
+      await powerApp_AdminPage.navigationClick(powerApp_AdminPage.$interactive.manageCasesButton, powerApp_ManageCasesPage.$static.casesLabel);
+      await powerApp_ManageCasesPage.verifyUserIsOnManageCasesPage();
     });
   },
 };

@@ -117,15 +117,21 @@ export class UserInterfaceUtils {
    * Verifies that the element is visible before clicking.
    * Verifies that the element is hidden after the click action.
    * @param elementToClickOn - The element to be clicked.
+   * @param verifyLocatorIsVisible - Optional locator to verify visibility after click.
    */
-  public async navigationClick(elementToClickOn: Locator): Promise<void> {
+  public async navigationClick(elementToClickOn: Locator, verifyLocatorIsVisible?: Locator): Promise<void> {
     await expect(elementToClickOn).toBeVisible();
+    await expect(elementToClickOn).toBeEnabled();
 
     await expect(async () => {
       if ((await elementToClickOn.isVisible()) && (await elementToClickOn.isEnabled())) {
         await elementToClickOn.click();
       }
-      await expect(elementToClickOn).toBeHidden({ timeout: 5_000 });
+      if (verifyLocatorIsVisible) {
+        await expect(verifyLocatorIsVisible).toBeVisible({ timeout: 5_000 });
+      } else {
+        await expect(elementToClickOn).toBeHidden({ timeout: 5_000 });
+      }
     }).toPass({ intervals: [1_000], timeout: 60_000 });
   }
 }
