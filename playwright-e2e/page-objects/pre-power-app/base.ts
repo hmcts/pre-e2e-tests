@@ -14,7 +14,28 @@ export abstract class Base {
     applicationEnvironment: this.iFrame.locator('[data-control-name="HeaderEnvLabel"]'),
   } as const satisfies Record<string, Locator>;
 
-  public async navigationClick(elementTOClick: Locator): Promise<void> {
-    await this.userInterfaceUtils.navigationClick(elementTOClick);
+  public async navigationClick(elementTOClick: Locator, verifyLocatorIsVisible?: Locator): Promise<void> {
+    await this.userInterfaceUtils.navigationClick(elementTOClick, verifyLocatorIsVisible);
+  }
+  public async navigationClickAndWaitForElementToDisappear(elementToClickOn: Locator, elementToDisappear: Locator): Promise<void> {
+    await this.userInterfaceUtils.navigationClick(elementToClickOn);
+    await this.userInterfaceUtils.navigationClick(elementToClickOn, elementToDisappear);
+  }
+
+  public async clickAndWaitForElementToDisappear(elementToClickOn: Locator, elementToDisappear: Locator): Promise<void> {
+    await this.userInterfaceUtils.navigationClick(elementToClickOn, elementToDisappear);
+  }
+
+  public async hideElements(elementToHide: Locator | Locator[]): Promise<void> {
+    await this.userInterfaceUtils.hideElements(elementToHide);
+  }
+  public async replaceTextWithinInput(locator: Locator, replacements: Array<[string | RegExp, string]>): Promise<void> {
+    await this.userInterfaceUtils.replaceTextWithinInput(locator, replacements);
+  }
+  public async replaceTextWithinStaticElement(locator: Locator, replacements: Array<[string | RegExp, string]>): Promise<void> {
+    await this.userInterfaceUtils.replaceTextWithinStaticElement(locator, replacements);
+  }
+  public async clickAndWaitForElementToAppear(elementToClickOn: Locator, elementToAppear: Locator): Promise<void> {
+    await this.userInterfaceUtils.clickAndWaitForElementToAppear(elementToClickOn, elementToAppear);
   }
 }

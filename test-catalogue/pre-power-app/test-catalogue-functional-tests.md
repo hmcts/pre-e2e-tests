@@ -1,6 +1,16 @@
 # functional-tests catalogue
 
 ----------------------------------------------------------------------------------------------------
+** File:** `playwright-e2e/tests/pre-power-app/functional-tests/admin/manage-cases-functional.spec.ts`
+
+## Verify user is able to search for an existing case and delete the case successfully
+- Pre-requisite step create a new case using api
+- Verify existing case is available on manage cases page
+- Verify user is able to delete the case successfully
+- Verify case is deleted successfully and no longer appears in search results
+
+
+----------------------------------------------------------------------------------------------------
 ** File:** `playwright-e2e/tests/pre-power-app/functional-tests/book-a-recording/case-details-functional.spec.ts`
 
 ## Verify user is able to open a new case and is redirected to the schedule recordings page
