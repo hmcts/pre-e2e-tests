@@ -134,4 +134,30 @@ export class UserInterfaceUtils {
       }
     }).toPass({ intervals: [1_000], timeout: 60_000 });
   }
+
+  public async navigationClickAndWaitForElementToDisappear(elementToClickOn: Locator, elementToDisappear: Locator): Promise<void> {
+    await expect(elementToClickOn).toBeVisible();
+    await expect(elementToClickOn).toBeEnabled();
+
+    await expect(async () => {
+      if ((await elementToClickOn.isVisible()) && (await elementToClickOn.isEnabled())) {
+        await elementToClickOn.click();
+      }
+      await expect(elementToDisappear).toBeHidden({ timeout: 5_000 });
+    }).toPass({ intervals: [1_000], timeout: 60_000 });
+  }
+  public async clickAndWaitForElementToAppear(elementToClickOn: Locator, elementToAppear: Locator): Promise<void> {
+    await expect(elementToClickOn).toBeVisible();
+    await expect(elementToClickOn).toBeEnabled();
+
+    await elementToClickOn.click();
+    await expect(elementToAppear).toBeVisible({ timeout: 60_000 });
+  }
+  public async clickAndWaitForElementToDisappear(elementToClickOn: Locator, elementToDisappear: Locator): Promise<void> {
+    await expect(elementToClickOn).toBeVisible();
+    await expect(elementToClickOn).toBeEnabled();
+
+    await elementToClickOn.click();
+    await expect(elementToDisappear).toBeHidden({ timeout: 60_000 });
+  }
 }

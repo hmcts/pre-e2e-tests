@@ -10,6 +10,10 @@ import {
   PowerAppViewRecordingsPage,
   PowerAppManageCasesPage,
   PowerAppAdminPage,
+  PowerAppManageUsersPage,
+  PowerAppAddUserPage,
+  PowerAppSearchUserPage,
+  PowerAppManageCourtAccessPage,
 } from './pages/index.js';
 import { NavBarComponent } from './components/index.js';
 
@@ -26,6 +30,10 @@ export interface PowerAppPageFixtures {
   powerApp_ViewRecordingsPage: PowerAppViewRecordingsPage;
   powerApp_ManageCasesPage: PowerAppManageCasesPage;
   powerApp_AdminPage: PowerAppAdminPage;
+  powerApp_ManageUsersPage: PowerAppManageUsersPage;
+  powerApp_AddUserPage: PowerAppAddUserPage;
+  powerApp_SearchUserPage: PowerAppSearchUserPage;
+  powerApp_ManageCourtAccessPage: PowerAppManageCourtAccessPage;
   navigateToPowerAppHomePage: () => Promise<void>;
   navigateToPowerAppCaseDetailsPage: () => Promise<void>;
   navigateToPowerAppScheduleRecordingsPage: (caseReference: string) => Promise<void>;
@@ -34,6 +42,10 @@ export interface PowerAppPageFixtures {
   navigateToPowerAppViewRecordingsPage: () => Promise<void>;
   navigateToPowerAppAdminPage: () => Promise<void>;
   navigateToPowerAppManageCasesPage: () => Promise<void>;
+  navigateToPowerAppManageUsersPage: () => Promise<void>;
+  navigateToPowerAppAddUserPage: () => Promise<void>;
+  navigateToPowerAppSearchUserPage: () => Promise<void>;
+  navigateToPowerAppManageCourtAccessPage: () => Promise<void>;
 }
 
 /* Instantiates pages and provides page to the test via use()
@@ -94,6 +106,23 @@ export const powerAppPageFixtures = {
     const powerApp_ManageCasesPage = new PowerAppManageCasesPage(determinePage);
     await use(powerApp_ManageCasesPage);
   },
+  powerApp_ManageUsersPage: async ({ determinePage }, use) => {
+    const powerApp_ManageUsersPage = new PowerAppManageUsersPage(determinePage);
+    await use(powerApp_ManageUsersPage);
+  },
+  powerApp_AddUserPage: async ({ determinePage }, use) => {
+    const powerApp_AddUserPage = new PowerAppAddUserPage(determinePage);
+    await use(powerApp_AddUserPage);
+  },
+  powerApp_SearchUserPage: async ({ determinePage }, use) => {
+    const powerApp_SearchUserPage = new PowerAppSearchUserPage(determinePage);
+    await use(powerApp_SearchUserPage);
+  },
+  powerApp_ManageCourtAccessPage: async ({ determinePage }, use) => {
+    const powerApp_ManageCourtAccessPage = new PowerAppManageCourtAccessPage(determinePage);
+    await use(powerApp_ManageCourtAccessPage);
+  },
+
   navigateToPowerAppHomePage: async ({ powerApp_HomePage, determinePage, powerApp_NavBarComponent }: PowerAppPageFixtures, use) => {
     await use(async () => {
       if (determinePage.url().includes('apps.powerapps.com') && !(await powerApp_HomePage.$static.heading.isVisible())) {
@@ -172,6 +201,61 @@ export const powerAppPageFixtures = {
       await navigateToPowerAppAdminPage();
       await powerApp_AdminPage.navigationClick(powerApp_AdminPage.$interactive.manageCasesButton, powerApp_ManageCasesPage.$static.casesLabel);
       await powerApp_ManageCasesPage.verifyUserIsOnManageCasesPage();
+    });
+  },
+
+  navigateToPowerAppManageUsersPage: async (
+    { powerApp_AdminPage, navigateToPowerAppAdminPage, powerApp_ManageUsersPage }: PowerAppPageFixtures,
+    use,
+  ) => {
+    await use(async () => {
+      await navigateToPowerAppAdminPage();
+      await powerApp_AdminPage.navigationClick(
+        powerApp_AdminPage.$interactive.manageUsersButton,
+        powerApp_ManageUsersPage.$interactive.addUserButton,
+      );
+      await powerApp_ManageUsersPage.verifyUserIsOnManageUsersPage();
+    });
+  },
+
+  navigateToPowerAppAddUserPage: async (
+    { powerApp_AdminPage, navigateToPowerAppAdminPage, powerApp_ManageUsersPage, powerApp_AddUserPage }: PowerAppPageFixtures,
+    use,
+  ) => {
+    await use(async () => {
+      await navigateToPowerAppAdminPage();
+      await powerApp_AdminPage.navigationClick(
+        powerApp_AdminPage.$interactive.manageUsersButton,
+        powerApp_ManageUsersPage.$interactive.addUserButton,
+      );
+      await powerApp_AddUserPage.verifyUserIsOnAddUserPage();
+    });
+  },
+
+  navigateToPowerAppSearchUserPage: async (
+    { powerApp_AdminPage, navigateToPowerAppAdminPage, powerApp_ManageUsersPage, powerApp_SearchUserPage }: PowerAppPageFixtures,
+    use,
+  ) => {
+    await use(async () => {
+      await navigateToPowerAppAdminPage();
+      await powerApp_AdminPage.navigationClick(
+        powerApp_AdminPage.$interactive.manageUsersButton,
+        powerApp_ManageUsersPage.$interactive.searchUserButton,
+      );
+      await powerApp_SearchUserPage.verifyUserIsOnSearchUserPage();
+    });
+  },
+  navigateToPowerAppManageCourtAccessPage: async (
+    { powerApp_AdminPage, navigateToPowerAppAdminPage, powerApp_ManageUsersPage, powerApp_ManageCourtAccessPage }: PowerAppPageFixtures,
+    use,
+  ) => {
+    await use(async () => {
+      await navigateToPowerAppAdminPage();
+      await powerApp_AdminPage.navigationClick(
+        powerApp_AdminPage.$interactive.manageUsersButton,
+        powerApp_ManageUsersPage.$interactive.manageCourtAccessButton,
+      );
+      await powerApp_ManageCourtAccessPage.verifyUserIsOnManageCourtAccessPage();
     });
   },
 };

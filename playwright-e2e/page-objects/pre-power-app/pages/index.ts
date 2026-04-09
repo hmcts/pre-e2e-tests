@@ -8,3 +8,7 @@ export * from './manage-bookings/power-app-processing-recordings-po';
 export * from './view-recordings/power-app-view-recordings-po';
 export * from './admin/power-app-manage-cases.po';
 export * from './admin/power-app-admin-po';
+export * from './admin/power-app-manage-users.po';
+export * from './admin/power-app-add-user-po';
+export * from './admin/power-app-search-user-po';
+export * from './admin/power-app-manage-court-access-po';
