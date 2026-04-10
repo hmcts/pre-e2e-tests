@@ -14,6 +14,7 @@ import {
   PowerAppAddUserPage,
   PowerAppSearchUserPage,
   PowerAppManageCourtAccessPage,
+  PowerAppManageRecordingsPage,
 } from './pages/index.js';
 import { NavBarComponent } from './components/index.js';
 
@@ -34,6 +35,7 @@ export interface PowerAppPageFixtures {
   powerApp_AddUserPage: PowerAppAddUserPage;
   powerApp_SearchUserPage: PowerAppSearchUserPage;
   powerApp_ManageCourtAccessPage: PowerAppManageCourtAccessPage;
+  powerApp_ManageRecordingsPage: PowerAppManageRecordingsPage;
   navigateToPowerAppHomePage: () => Promise<void>;
   navigateToPowerAppCaseDetailsPage: () => Promise<void>;
   navigateToPowerAppScheduleRecordingsPage: (caseReference: string) => Promise<void>;
@@ -46,6 +48,7 @@ export interface PowerAppPageFixtures {
   navigateToPowerAppAddUserPage: () => Promise<void>;
   navigateToPowerAppSearchUserPage: () => Promise<void>;
   navigateToPowerAppManageCourtAccessPage: () => Promise<void>;
+  navigateToPowerAppManageRecordingsPage: () => Promise<void>;
 }
 
 /* Instantiates pages and provides page to the test via use()
@@ -101,7 +104,10 @@ export const powerAppPageFixtures = {
     const powerApp_ViewRecordingsPage = new PowerAppViewRecordingsPage(determinePage, apiClient);
     await use(powerApp_ViewRecordingsPage);
   },
-
+  powerApp_ManageRecordingsPage: async ({ determinePage }, use) => {
+    const powerApp_ManageRecordingsPage = new PowerAppManageRecordingsPage(determinePage);
+    await use(powerApp_ManageRecordingsPage);
+  },
   powerApp_ManageCasesPage: async ({ determinePage }, use) => {
     const powerApp_ManageCasesPage = new PowerAppManageCasesPage(determinePage);
     await use(powerApp_ManageCasesPage);
@@ -256,6 +262,19 @@ export const powerAppPageFixtures = {
         powerApp_ManageUsersPage.$interactive.manageCourtAccessButton,
       );
       await powerApp_ManageCourtAccessPage.verifyUserIsOnManageCourtAccessPage();
+    });
+  },
+  navigateToPowerAppManageRecordingsPage: async (
+    { powerApp_AdminPage, navigateToPowerAppAdminPage, powerApp_ManageRecordingsPage }: PowerAppPageFixtures,
+    use,
+  ) => {
+    await use(async () => {
+      await navigateToPowerAppAdminPage();
+      await powerApp_AdminPage.navigationClick(
+        powerApp_AdminPage.$interactive.manageRecordingsButton,
+        powerApp_ManageRecordingsPage.$interactive.manageRecordingsLabel,
+      );
+      await powerApp_ManageRecordingsPage.verifyUserIsOnManageRecordingsPage();
     });
   },
 };
