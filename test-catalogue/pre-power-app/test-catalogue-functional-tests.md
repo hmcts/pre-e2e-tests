@@ -29,6 +29,15 @@
 
 
 ----------------------------------------------------------------------------------------------------
+** File:** `playwright-e2e/tests/pre-power-app/functional-tests/admin/manage-recording-functional.spec.ts`
+
+## Verify user is able to view recordings on manage recordings page
+- Pre-requisite step click on manage recordings button
+- Verify user can click on manage recordings button
+- Verify user is able to view the recording details on manage recordings page
+
+
+----------------------------------------------------------------------------------------------------
 ** File:** `playwright-e2e/tests/pre-power-app/functional-tests/admin/manage-users-functional.spec.ts`
 
 ## Verify user is able to view Manage Users page and see all three buttons
