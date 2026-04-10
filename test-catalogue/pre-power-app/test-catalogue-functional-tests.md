@@ -1,7 +1,7 @@
 # functional-tests catalogue
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/pre-power-app/functional-tests/admin/add-user-functional.spec.ts`
+** File:** `playwright-e2e/tests/pre-power-app/functional-tests/Admin/add-user-functional.spec.ts`
 
 ## Verify user is able to click on Add user button and see add user form
 - Pre-requisite step click on Add user button
@@ -10,7 +10,7 @@
 
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/pre-power-app/functional-tests/admin/manage-cases-functional.spec.ts`
+** File:** `playwright-e2e/tests/pre-power-app/functional-tests/Admin/manage-cases-functional.spec.ts`
 
 ## Verify user is able to search for an existing case and delete the case successfully
 - Pre-requisite step create a new case using api
@@ -20,7 +20,7 @@
 
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/pre-power-app/functional-tests/admin/manage-court-access-functional.spec.ts`
+** File:** `playwright-e2e/tests/pre-power-app/functional-tests/Admin/manage-court-access-functional.spec.ts`
 
 ## Verify user is able to click on Manage Court Access button and see the deatails
 - Pre-requisite step click on Manage Court Access button
@@ -29,7 +29,7 @@
 
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/pre-power-app/functional-tests/admin/manage-recording-functional.spec.ts`
+** File:** `playwright-e2e/tests/pre-power-app/functional-tests/Admin/manage-recording-functional.spec.ts`
 
 ## Verify user is able to view recordings on manage recordings page
 - Pre-requisite step click on manage recordings button
@@ -38,7 +38,7 @@
 
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/pre-power-app/functional-tests/admin/manage-users-functional.spec.ts`
+** File:** `playwright-e2e/tests/pre-power-app/functional-tests/Admin/manage-users-functional.spec.ts`
 
 ## Verify user is able to view Manage Users page and see all three buttons
 - Pre-requisite step verify Manage Users page is visible
@@ -47,7 +47,7 @@
 
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/pre-power-app/functional-tests/admin/search-user-functional.spec.ts`
+** File:** `playwright-e2e/tests/pre-power-app/functional-tests/Admin/search-user-functional.spec.ts`
 
 ## Verify user is able to click on Search button and see search user form
 - Pre-requisite step click on Search User button

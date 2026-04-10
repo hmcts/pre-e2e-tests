@@ -1,4 +1,4 @@
-import { test, expect } from '../../../../fixtures';
+import { test } from '../../../../fixtures';
 import { BaseCaseDetails } from '../../../../types';
 import { config } from '../../../../utils';
 

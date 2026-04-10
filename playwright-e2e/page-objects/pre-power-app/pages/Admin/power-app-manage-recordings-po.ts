@@ -2,9 +2,6 @@ import { Page, Locator, expect } from '@playwright/test';
 import { Base } from '../../base';
 
 export class PowerAppManageRecordingsPage extends Base {
-  searchForAnExistingRecording(caseReference: string) {
-    throw new Error('Method not implemented.');
-  }
   constructor(page: Page) {
     super(page);
   }
