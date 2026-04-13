@@ -18,12 +18,9 @@ test.describe('Set of tests to verify functionality of manage recordings page fo
     },
     async ({ apiClient, powerApp_ManageRecordingsPage }) => {
       await test.step('Pre-requisite step click on manage recordings button', async () => {
-        await apiClient.createCase(1, 1);
-      });
-
-      await test.step('Verify user can click on manage recordings button', async () => {
         await powerApp_ManageRecordingsPage.$interactive.manageRecordingsButton.click();
         await powerApp_ManageRecordingsPage.verifyUserIsOnManageRecordingsPage();
+        await apiClient.createCase(1, 1);
       });
       await test.step('Verify user is able to view the recording details on manage recordings page', async () => {});
     },
