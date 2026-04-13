@@ -1,5 +1,4 @@
 import { test } from '../../../../fixtures';
-import { BaseCaseDetails } from '../../../../types';
 import { config } from '../../../../utils';
 
 test.describe('Set of tests to verify functionality of manage recordings page for pre-level 1 user', async () => {
@@ -21,8 +20,6 @@ test.describe('Set of tests to verify functionality of manage recordings page fo
       await test.step('Pre-requisite step click on manage recordings button', async () => {
         await apiClient.createCase(1, 1);
       });
-
-      const caseData: BaseCaseDetails = await apiClient.getCaseData();
 
       await test.step('Verify user can click on manage recordings button', async () => {
         await powerApp_ManageRecordingsPage.$interactive.manageRecordingsButton.click();

@@ -1,5 +1,4 @@
 import { test, expect } from '../../../../fixtures';
-import { BaseCaseDetails } from '../../../../types';
 import { config } from '../../../../utils';
 
 test.describe('Set of tests to verify functionality of manage users for Level 1 user', async () => {
@@ -23,7 +22,6 @@ test.describe('Set of tests to verify functionality of manage users for Level 1 
         await apiClient.createCase(1, 1);
       });
 
-      const caseData: BaseCaseDetails = await apiClient.getCaseData();
       await test.step('Verify user is able to view Manage Users page and see all three buttons', async () => {
         await powerApp_ManageUsersPage.verifyUserIsOnManageUsersPage();
       });
