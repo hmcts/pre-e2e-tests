@@ -1,5 +1,4 @@
 import { test } from '../../../../fixtures';
-import { BaseCaseDetails } from '../../../../types';
 import { config } from '../../../../utils';
 
 test.describe('Set of tests to verify functionality of manage court access page for Level 1 user', async () => {
@@ -21,7 +20,6 @@ test.describe('Set of tests to verify functionality of manage court access page 
       await test.step('Pre-requisite step click on Manage Court Access button', async () => {
         await apiClient.createCase(1, 1);
       });
-      const caseData: BaseCaseDetails = await apiClient.getCaseData();
 
       await test.step('Verify user can click on Manage Court Access button see add user form', async () => {
         await powerApp_ManageCourtAccessPage.$interactive.manageCourtAccessButton.click();

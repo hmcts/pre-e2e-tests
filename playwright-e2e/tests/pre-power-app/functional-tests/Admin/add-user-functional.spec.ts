@@ -1,5 +1,4 @@
 import { test } from '../../../../fixtures';
-import { BaseCaseDetails } from '../../../../types';
 import { config } from '../../../../utils';
 
 test.describe('Set of tests to verify functionality of add users page for Level 1 user', async () => {
@@ -21,7 +20,6 @@ test.describe('Set of tests to verify functionality of add users page for Level 
       await test.step('Pre-requisite step click on Add user button', async () => {
         await apiClient.createCase(1, 1);
       });
-      const caseData: BaseCaseDetails = await apiClient.getCaseData();
 
       await test.step('Verify user can click on Add User button see add user form', async () => {
         await powerApp_AddUserPage.$interactive.addUserButton.click();

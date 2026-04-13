@@ -1,5 +1,4 @@
 import { test } from '../../../../fixtures';
-import { BaseCaseDetails } from '../../../../types';
 import { config } from '../../../../utils';
 
 test.describe('Set of tests to verify functionality of search user page for Level 1 user', async () => {
@@ -21,7 +20,6 @@ test.describe('Set of tests to verify functionality of search user page for Leve
       await test.step('Pre-requisite step click on Search User button', async () => {
         await apiClient.createCase(1, 1);
       });
-      const caseData: BaseCaseDetails = await apiClient.getCaseData();
 
       await test.step('Verify user can click on Search User button', async () => {
         await powerApp_SearchUserPage.$interactive.searchUserButton.click();
