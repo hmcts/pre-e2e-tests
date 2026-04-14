@@ -2,7 +2,7 @@ import { test } from '../../../../fixtures';
 import { BaseCaseDetails } from '../../../../types';
 import { config } from '../../../../utils';
 
-test.describe('Set of tests to verify functionality of delete cases for Level 1 user', async () => {
+test.describe('Set of tests to verify functionality of delete cases for Level 1 user', () => {
   const user = config.powerAppUsers.preLevel1User;
   test.use({ storageState: user.sessionFile });
 
