@@ -1,7 +1,7 @@
 import { test } from '../../../../fixtures';
 import { config } from '../../../../utils';
 
-test.describe('Set of tests to verify functionality of manage court access page for Level 1 user', async () => {
+test.describe('Set of tests to verify functionality of manage court access page for Level 1 user', () => {
   const user = config.powerAppUsers.preLevel1User;
   test.use({ storageState: user.sessionFile });
 
