@@ -16,7 +16,7 @@ test.describe('Set of tests to verify functionality of manage recordings page fo
     {
       tag: ['@regression', '@functional'],
     },
-    async ({ apiClient, powerApp_ManageRecordingsPage }) => {
+    async ({ powerApp_ManageRecordingsPage }) => {
       await test.step('Pre-requisite step click on manage recordings button', async () => {
         await powerApp_ManageRecordingsPage.$interactive.manageRecordingsButton.click();
         await powerApp_ManageRecordingsPage.verifyUserIsOnManageRecordingsPage();
