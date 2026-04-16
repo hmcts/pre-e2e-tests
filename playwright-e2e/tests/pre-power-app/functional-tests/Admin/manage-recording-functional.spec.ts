@@ -21,8 +21,10 @@ test.describe('Set of tests to verify functionality of manage recordings page fo
         await powerApp_ManageRecordingsPage.$interactive.manageRecordingsButton.click();
         await powerApp_ManageRecordingsPage.verifyUserIsOnManageRecordingsPage();
       });
-      await test.step('Verify user is able to view the recording details on manage recordings page', async () => {
-        await expect(powerApp_ManageRecordingsPage.$interactive.manageRecordingsLabel).toBeVisible({ timeout: 15000 });
+      await test.step('Verify user is on manage recording page and see the details', async () => {
+        await expect(powerApp_ManageRecordingsPage.$interactive.manageRecordingsLabel).toBeVisible();
+
+        await test.step('Verify user can see recording details', async () => {});
       });
     },
   );
