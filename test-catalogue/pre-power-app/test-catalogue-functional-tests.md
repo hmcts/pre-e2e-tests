@@ -34,7 +34,7 @@
 ## Verify user is able to view recordings on manage recordings page
 - Pre-requisite step click on manage recordings button
 - Verify user is on manage recording page and see the details
-- Verify user can see all the details successfully. 
+- Verify user can see recording details
 
 
 ----------------------------------------------------------------------------------------------------
