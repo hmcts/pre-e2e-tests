@@ -52,14 +52,14 @@ export default defineConfig({
       },
     },
     {
-      ...ProjectsConfig.edge,
+      ...ProjectsConfig.chromium,
       name: 'Pre-Power-App-Edge', // Edge project for all tests besides visual tests for power app
       dependencies: ['pre-power-app-setup'],
       teardown: 'pre-power-app-teardown',
       testDir: 'playwright-e2e/tests/pre-power-app',
       testIgnore: ['**/*visual*.spec.ts'],
       use: {
-        ...ProjectsConfig.edge.use,
+        ...ProjectsConfig.chromium.use,
         viewport: { width: 1280, height: 720 },
         deviceScaleFactor: 1,
         launchOptions: {
