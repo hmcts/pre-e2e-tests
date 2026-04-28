@@ -34,6 +34,7 @@ test.describe('Set of tests to verify pre portal UI is visually correct as Level
 
       await test.step('Verify portal home page is visually correct', async () => {
         await expect(async () => {
+          await portal_HomePage.$static.heading.waitFor({ state: 'visible', timeout: 60_000 });
           await expect(portal_HomePage.page).toHaveScreenshot('portal-home-page-visual.png', {
             fullPage: true,
           });
