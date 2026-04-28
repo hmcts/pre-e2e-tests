@@ -33,7 +33,6 @@
 
 ## Verify user is able to view recordings on manage recordings page
 - Pre-requisite step click on manage recordings button
-- Verify user can click on manage recordings button
 - Verify user is able to view the recording details on manage recordings page
 
 

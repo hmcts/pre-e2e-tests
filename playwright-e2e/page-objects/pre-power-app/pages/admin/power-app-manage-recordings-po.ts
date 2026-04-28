@@ -12,7 +12,7 @@ export class PowerAppManageRecordingsPage extends Base {
   } as const satisfies Record<string, Locator>;
 
   public async verifyUserIsOnManageRecordingsPage(): Promise<void> {
-    await expect(this.$interactive.manageRecordingsLabel).toBeVisible({ timeout: 15000 });
+    await expect(this.$interactive.manageRecordingsButton).toBeVisible({ timeout: 15000 });
   }
   public async navigateToManageRecordingsPage(): Promise<void> {
     await this.$interactive.manageRecordingsButton.click();
