@@ -3,6 +3,7 @@ import { Base } from '../base';
 import { config } from '../../../utils';
 
 export class PortalHomePage extends Base {
+  waitForLoadState: any;
   constructor(page: Page) {
     super(page);
   }
