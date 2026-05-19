@@ -35,7 +35,7 @@ export class NetworkInterceptUtils {
 
           try {
             const responseBody = await response.json();
-            userId = responseBody?.user.id;
+            userId = responseBody?.user?.id;
             x_userId = responseBody?.app_access?.[0]?.id;
 
             if (Array.isArray(responseBody.app_access)) {
