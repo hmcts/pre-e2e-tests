@@ -79,7 +79,7 @@ export class NetworkInterceptUtils {
       .poll(
         async () => {
           const response = await this.page
-            .waitForResponse((res) => res.url().includes('/invoke') && res.request().method() === 'POST', { timeout: 5000 })
+            .waitForResponse((res) => res.url().includes('/invoke') && res.request().method() === 'GET', { timeout: 5000 })
             .catch(() => null);
 
           if (!response) return false;
