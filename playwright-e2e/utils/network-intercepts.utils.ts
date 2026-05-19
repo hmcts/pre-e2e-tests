@@ -25,7 +25,10 @@ export class NetworkInterceptUtils {
         async () => {
           await this.homePage.provideConsentToStreamingManagerIfPrompted();
           const response = await this.page
-            .waitForResponse((res) => res.url().includes('custom.uk.azure-apihub.net/invoke') && res.request().method() === 'POST', { timeout: 5000 })
+            .waitForResponse(
+              (res) => res.url().includes('environment.api.powerplatform.com/connectors/runtime/invoke') && res.request().method() === 'GET',
+              { timeout: 5000 },
+            )
             .catch(() => null);
 
           if (!response) return false;
