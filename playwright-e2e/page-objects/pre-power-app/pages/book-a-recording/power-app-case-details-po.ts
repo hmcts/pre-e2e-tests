@@ -1,8 +1,8 @@
 import { Page, Locator, expect } from '@playwright/test';
-import { Base } from '../../base';
+import { PowerAppBase } from '../../power-app-base';
 import { BaseCaseDetails } from '../../../../types';
 
-export class PowerAppCaseDetailsPage extends Base {
+export class PowerAppCaseDetailsPage extends PowerAppBase {
   constructor(page: Page) {
     super(page);
   }

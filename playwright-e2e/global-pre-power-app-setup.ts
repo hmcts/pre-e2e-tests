@@ -12,9 +12,9 @@ setup.describe('Set up users and retrieve tokens', () => {
    * This setup logs in using the provided credentials and saves the browser
    * storage state to a file, allowing tests to reuse the authenticated session.
    */
-  setup('Store session and user data for Level 1 user', async ({ powerApp_MsSignInPage, networkInterceptUtils, context, config }) => {
+  setup('Store session and user data for Level 1 user', async ({ powerAppPages, networkInterceptUtils, context, config }) => {
     const user = config.powerAppUsers.preLevel1User;
-    await powerApp_MsSignInPage.signIn(user.username, user.password);
+    await powerAppPages.msSignInPage.signIn(user.username, user.password);
     await networkInterceptUtils.interceptAndStoreUserDataUponLogin(user.userDataFile);
     await context.storageState({ path: user.sessionFile });
   });

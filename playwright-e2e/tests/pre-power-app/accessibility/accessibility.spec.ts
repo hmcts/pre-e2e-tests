@@ -41,14 +41,14 @@ test.describe('Set of tests to verify accessibility of pages within pre power ap
     {
       tag: ['@accessibility'],
     },
-    async ({ navigateToPowerAppCaseDetailsPage, powerApp_CaseDetailsPage, axeUtils }) => {
+    async ({ navigateToPowerAppCaseDetailsPage, powerAppPages, axeUtils }) => {
       await test.step('Select option to book a recording in order to navigate to case details page', async () => {
         await navigateToPowerAppCaseDetailsPage();
       });
 
       await test.step('Search for cases beginning with PR- to obtain a list of existing cases', async () => {
-        await powerApp_CaseDetailsPage.$inputs.caseReference.fill('PR-');
-        await expect(powerApp_CaseDetailsPage.$static.searchResultExistingCasesTitle).toBeVisible();
+        await powerAppPages.caseDetailsPage.$inputs.caseReference.fill('PR-');
+        await expect(powerAppPages.caseDetailsPage.$static.searchResultExistingCasesTitle).toBeVisible();
       });
 
       await test.step('Check accessibility on case details page', async () => {
@@ -62,7 +62,7 @@ test.describe('Set of tests to verify accessibility of pages within pre power ap
     {
       tag: ['@accessibility'],
     },
-    async ({ navigateToPowerAppCaseDetailsPage, powerApp_CaseDetailsPage, axeUtils, apiClient }) => {
+    async ({ navigateToPowerAppCaseDetailsPage, powerAppPages, axeUtils, apiClient }) => {
       await test.step('Pre-requisite step in order to setup an existing case via api', async () => {
         await apiClient.createCase(2, 2);
       });
@@ -73,7 +73,7 @@ test.describe('Set of tests to verify accessibility of pages within pre power ap
 
       await test.step('Search and select an existing case', async () => {
         const caseData = await apiClient.getCaseData();
-        await powerApp_CaseDetailsPage.searchAndSelectExistingCase(caseData.caseReference);
+        await powerAppPages.caseDetailsPage.searchAndSelectExistingCase(caseData.caseReference);
       });
 
       await test.step('Check accessibility on case details page', async () => {
@@ -87,7 +87,7 @@ test.describe('Set of tests to verify accessibility of pages within pre power ap
     {
       tag: ['@accessibility'],
     },
-    async ({ navigateToPowerAppCaseDetailsPage, powerApp_CaseDetailsPage, axeUtils, apiClient }) => {
+    async ({ navigateToPowerAppCaseDetailsPage, powerAppPages, axeUtils, apiClient }) => {
       await test.step('Pre-requisite step in order to setup an existing case via api', async () => {
         await apiClient.createCase(2, 2);
       });
@@ -98,12 +98,12 @@ test.describe('Set of tests to verify accessibility of pages within pre power ap
 
       await test.step('Search and select an existing case', async () => {
         const caseData = await apiClient.getCaseData();
-        await powerApp_CaseDetailsPage.searchAndSelectExistingCase(caseData.caseReference);
+        await powerAppPages.caseDetailsPage.searchAndSelectExistingCase(caseData.caseReference);
       });
 
       await test.step('Select option to modify case that has been selected', async () => {
-        await powerApp_CaseDetailsPage.$interactive.modifyButton.click();
-        await expect(powerApp_CaseDetailsPage.$static.modifyCaseReferenceText).toBeVisible();
+        await powerAppPages.caseDetailsPage.$interactive.modifyButton.click();
+        await expect(powerAppPages.caseDetailsPage.$static.modifyCaseReferenceText).toBeVisible();
       });
 
       await test.step('Check accessibility on case details page', async () => {
@@ -159,7 +159,7 @@ test.describe('Set of tests to verify accessibility of pages within pre power ap
     {
       tag: ['@accessibility'],
     },
-    async ({ navigateToPowerAppManageBookingsPage, powerApp_ManageBookingsPage, axeUtils, apiClient }) => {
+    async ({ navigateToPowerAppManageBookingsPage, powerAppPages, axeUtils, apiClient }) => {
       await test.step('Pre-requisite step in order to setup an existing case with a booking assigned via api', async () => {
         await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
       });
@@ -167,12 +167,12 @@ test.describe('Set of tests to verify accessibility of pages within pre power ap
       await test.step('Navigate to manage bookings page and search for an existing case', async () => {
         await navigateToPowerAppManageBookingsPage();
         const caseData = await apiClient.getCaseData();
-        await powerApp_ManageBookingsPage.searchForABooking(caseData.caseReference);
+        await powerAppPages.manageBookingsPage.searchForABooking(caseData.caseReference);
       });
 
       await test.step('Select option to manage existing case', async () => {
-        await powerApp_ManageBookingsPage.$interactive.manageButton.click();
-        await expect(powerApp_ManageBookingsPage.$manageCaseModal.modalWindow).toBeVisible();
+        await powerAppPages.manageBookingsPage.$interactive.manageButton.click();
+        await expect(powerAppPages.manageBookingsPage.$manageCaseModal.modalWindow).toBeVisible();
       });
 
       await test.step('Check accessibility of manage modal on manage bookings page', async () => {
@@ -180,8 +180,8 @@ test.describe('Set of tests to verify accessibility of pages within pre power ap
       });
 
       await test.step('Select option to audit within manage bookings modal', async () => {
-        await powerApp_ManageBookingsPage.$manageCaseModal.auditButton.click();
-        await expect(powerApp_ManageBookingsPage.$manageCaseModal.auditCaseInformationText).toBeVisible();
+        await powerAppPages.manageBookingsPage.$manageCaseModal.auditButton.click();
+        await expect(powerAppPages.manageBookingsPage.$manageCaseModal.auditCaseInformationText).toBeVisible();
       });
 
       await test.step('Check accessibility of audit option within manage bookings modal', async () => {
@@ -189,11 +189,11 @@ test.describe('Set of tests to verify accessibility of pages within pre power ap
       });
 
       await test.step('Select option to share within manage bookings modal', async () => {
-        await powerApp_ManageBookingsPage.$manageCaseModal.closeAuditButton.click();
-        await powerApp_ManageBookingsPage.$manageCaseModal.shareButton.click();
-        await expect(powerApp_ManageBookingsPage.$manageCaseModal.shareWithUsersTitle).toBeVisible();
-        await expect(powerApp_ManageBookingsPage.$manageCaseModal.shareDropdown).toBeVisible();
-        await expect(powerApp_ManageBookingsPage.$manageCaseModal.grantAccessButton).toBeVisible();
+        await powerAppPages.manageBookingsPage.$manageCaseModal.closeAuditButton.click();
+        await powerAppPages.manageBookingsPage.$manageCaseModal.shareButton.click();
+        await expect(powerAppPages.manageBookingsPage.$manageCaseModal.shareWithUsersTitle).toBeVisible();
+        await expect(powerAppPages.manageBookingsPage.$manageCaseModal.shareDropdown).toBeVisible();
+        await expect(powerAppPages.manageBookingsPage.$manageCaseModal.grantAccessButton).toBeVisible();
       });
 
       await test.step('Check accessibility of share option within manage bookings modal', async () => {
@@ -208,7 +208,7 @@ test.describe('Set of tests to verify accessibility of pages within pre power ap
     {
       tag: ['@accessibility'],
     },
-    async ({ navigateToPowerAppManageBookingsPage, powerApp_ManageBookingsPage, axeUtils, apiClient }) => {
+    async ({ navigateToPowerAppManageBookingsPage, powerAppPages, axeUtils, apiClient }) => {
       await test.step('Pre-requisite step in order to setup an existing case with a booking assigned via api', async () => {
         await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
       });
@@ -216,12 +216,12 @@ test.describe('Set of tests to verify accessibility of pages within pre power ap
       await test.step('Navigate to manage bookings page and search for an existing case', async () => {
         await navigateToPowerAppManageBookingsPage();
         const caseData = await apiClient.getCaseData();
-        await powerApp_ManageBookingsPage.searchForABooking(caseData.caseReference);
+        await powerAppPages.manageBookingsPage.searchForABooking(caseData.caseReference);
       });
 
       await test.step('Select option to amend existing case', async () => {
-        await powerApp_ManageBookingsPage.$interactive.amendButton.click();
-        await expect(powerApp_ManageBookingsPage.$amendCaseModal.modalWindow).toBeVisible();
+        await powerAppPages.manageBookingsPage.$interactive.amendButton.click();
+        await expect(powerAppPages.manageBookingsPage.$amendCaseModal.modalWindow).toBeVisible();
       });
 
       await test.step('Check accessibility of amend modal on manage bookings page', async () => {
@@ -229,8 +229,8 @@ test.describe('Set of tests to verify accessibility of pages within pre power ap
       });
 
       await test.step('Select option to delete case via amend modal', async () => {
-        await powerApp_ManageBookingsPage.$amendCaseModal.deleteButton.click();
-        await expect(powerApp_ManageBookingsPage.$amendCaseModal.deleteCaseText).toBeVisible();
+        await powerAppPages.manageBookingsPage.$amendCaseModal.deleteButton.click();
+        await expect(powerAppPages.manageBookingsPage.$amendCaseModal.deleteCaseText).toBeVisible();
       });
 
       await test.step('Check accessibility of delete option within amend modal', async () => {

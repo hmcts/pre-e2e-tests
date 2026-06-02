@@ -1,6 +1,9 @@
 import path from 'path';
 import fs from 'fs';
 
+export type PowerAppUserRole = keyof Config['powerAppUsers'];
+export type PortalUserRole = keyof Config['portalUsers'];
+
 export interface UserCredentials {
   username: string;
   password: string;

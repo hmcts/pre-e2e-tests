@@ -18,13 +18,13 @@ test.describe('Set of tests to verify the homepage UI is visually correct', () =
     {
       tag: ['@visual'],
     },
-    async ({ page, powerApp_HomePage }) => {
+    async ({ page, powerAppPages }) => {
       const maskedElements = [
-        powerApp_HomePage.$globalMaskedlocatorsForVisualTesting.powerAppsHeaderContainer,
-        powerApp_HomePage.$globalMaskedlocatorsForVisualTesting.applicationCourtTitle,
-        powerApp_HomePage.$globalMaskedlocatorsForVisualTesting.applicationEnvironment,
-        powerApp_HomePage.$maskedlocatorsForVisualTesting.applicationVersion,
-        powerApp_HomePage.$maskedlocatorsForVisualTesting.welcomeTextForUser,
+        powerAppPages.homePage.$globalMaskedlocatorsForVisualTesting.powerAppsHeaderContainer,
+        powerAppPages.homePage.$globalMaskedlocatorsForVisualTesting.applicationCourtTitle,
+        powerAppPages.homePage.$globalMaskedlocatorsForVisualTesting.applicationEnvironment,
+        powerAppPages.homePage.$maskedlocatorsForVisualTesting.applicationVersion,
+        powerAppPages.homePage.$maskedlocatorsForVisualTesting.welcomeTextForUser,
       ];
 
       await test.step('Verify upon accessing homepage, it is visually correct', async () => {

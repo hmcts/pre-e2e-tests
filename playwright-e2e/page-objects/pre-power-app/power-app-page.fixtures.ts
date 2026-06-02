@@ -1,41 +1,9 @@
-import { Page } from '@playwright/test';
-import {
-  PowerAppMsSignInPage,
-  PowerAppHomePage,
-  PowerAppCaseDetailsPage,
-  PowerAppScheduleRecordingPage,
-  PowerAppManageBookingsPage,
-  PowerAppViewLiveFeedPage,
-  PowerAppProcessingRecordingsPage,
-  PowerAppViewRecordingsPage,
-  PowerAppManageCasesPage,
-  PowerAppAdminPage,
-  PowerAppManageUsersPage,
-  PowerAppAddUserPage,
-  PowerAppSearchUserPage,
-  PowerAppManageCourtAccessPage,
-  PowerAppManageRecordingsPage,
-} from './pages/index.js';
-import { NavBarComponent } from './components/index.js';
+import { PageFixtures } from '../page.fixtures.js';
+import { ApiFixtures } from '../../api-requests/api.fixtures.js';
+import { PowerAppPages } from './power-app-pages.js';
 
 export interface PowerAppPageFixtures {
-  determinePage: Page;
-  powerApp_MsSignInPage: PowerAppMsSignInPage;
-  powerApp_HomePage: PowerAppHomePage;
-  powerApp_CaseDetailsPage: PowerAppCaseDetailsPage;
-  powerApp_ScheduleRecordingPage: PowerAppScheduleRecordingPage;
-  powerApp_NavBarComponent: NavBarComponent;
-  powerApp_ManageBookingsPage: PowerAppManageBookingsPage;
-  powerApp_ViewLiveFeedPage: PowerAppViewLiveFeedPage;
-  powerApp_ProcessingRecordingsPage: PowerAppProcessingRecordingsPage;
-  powerApp_ViewRecordingsPage: PowerAppViewRecordingsPage;
-  powerApp_ManageCasesPage: PowerAppManageCasesPage;
-  powerApp_AdminPage: PowerAppAdminPage;
-  powerApp_ManageUsersPage: PowerAppManageUsersPage;
-  powerApp_AddUserPage: PowerAppAddUserPage;
-  powerApp_SearchUserPage: PowerAppSearchUserPage;
-  powerApp_ManageCourtAccessPage: PowerAppManageCourtAccessPage;
-  powerApp_ManageRecordingsPage: PowerAppManageRecordingsPage;
+  powerAppPages: PowerAppPages;
   navigateToPowerAppHomePage: () => Promise<void>;
   navigateToPowerAppCaseDetailsPage: () => Promise<void>;
   navigateToPowerAppScheduleRecordingsPage: (caseReference: string) => Promise<void>;
@@ -56,225 +24,126 @@ export interface PowerAppPageFixtures {
  * this is the same behaviour as a beforeEach/afterEach hook
  */
 export const powerAppPageFixtures = {
-  // If a performance test is executed, use the lighthouse created page instead
-  determinePage: async ({ page, lighthousePage }, use, testInfo) => {
-    if (testInfo.tags.includes('@performance')) {
-      await use(lighthousePage);
-    } else {
-      await use(page);
-    }
+  powerAppPages: async ({ determinePage, apiClient }: PageFixtures & ApiFixtures, use) => {
+    const powerAppPages = new PowerAppPages(determinePage, apiClient);
+    await use(powerAppPages);
   },
-  powerApp_MsSignInPage: async ({ determinePage }, use) => {
-    const powerApp_MsSignInPage = new PowerAppMsSignInPage(determinePage);
-    await use(powerApp_MsSignInPage);
-  },
-  powerApp_HomePage: async ({ determinePage }, use) => {
-    const powerApp_HomePage = new PowerAppHomePage(determinePage);
-    await use(powerApp_HomePage);
-  },
-  powerApp_AdminPage: async ({ determinePage }, use) => {
-    const powerApp_AdminPage = new PowerAppAdminPage(determinePage);
-    await use(powerApp_AdminPage);
-  },
-  powerApp_CaseDetailsPage: async ({ determinePage }, use) => {
-    const powerApp_CaseDetailsPage = new PowerAppCaseDetailsPage(determinePage);
-    await use(powerApp_CaseDetailsPage);
-  },
-  powerApp_ScheduleRecordingPage: async ({ determinePage }, use) => {
-    const powerApp_ScheduleRecordingPage = new PowerAppScheduleRecordingPage(determinePage);
-    await use(powerApp_ScheduleRecordingPage);
-  },
-  powerApp_NavBarComponent: async ({ determinePage }, use) => {
-    const powerApp_NavBarComponent = new NavBarComponent(determinePage);
-    await use(powerApp_NavBarComponent);
-  },
-  powerApp_ManageBookingsPage: async ({ determinePage }, use) => {
-    const powerApp_ManageBookingsPage = new PowerAppManageBookingsPage(determinePage);
-    await use(powerApp_ManageBookingsPage);
-  },
-  powerApp_ViewLiveFeedPage: async ({ determinePage }, use) => {
-    const powerApp_ViewLiveFeedPage = new PowerAppViewLiveFeedPage(determinePage);
-    await use(powerApp_ViewLiveFeedPage);
-  },
-  powerApp_ProcessingRecordingsPage: async ({ determinePage }, use) => {
-    const powerApp_ProcessingRecordingsPage = new PowerAppProcessingRecordingsPage(determinePage);
-    await use(powerApp_ProcessingRecordingsPage);
-  },
-  powerApp_ViewRecordingsPage: async ({ determinePage, apiClient }, use) => {
-    const powerApp_ViewRecordingsPage = new PowerAppViewRecordingsPage(determinePage, apiClient);
-    await use(powerApp_ViewRecordingsPage);
-  },
-  powerApp_ManageRecordingsPage: async ({ determinePage }, use) => {
-    const powerApp_ManageRecordingsPage = new PowerAppManageRecordingsPage(determinePage);
-    await use(powerApp_ManageRecordingsPage);
-  },
-  powerApp_ManageCasesPage: async ({ determinePage }, use) => {
-    const powerApp_ManageCasesPage = new PowerAppManageCasesPage(determinePage);
-    await use(powerApp_ManageCasesPage);
-  },
-  powerApp_ManageUsersPage: async ({ determinePage }, use) => {
-    const powerApp_ManageUsersPage = new PowerAppManageUsersPage(determinePage);
-    await use(powerApp_ManageUsersPage);
-  },
-  powerApp_AddUserPage: async ({ determinePage }, use) => {
-    const powerApp_AddUserPage = new PowerAppAddUserPage(determinePage);
-    await use(powerApp_AddUserPage);
-  },
-  powerApp_SearchUserPage: async ({ determinePage }, use) => {
-    const powerApp_SearchUserPage = new PowerAppSearchUserPage(determinePage);
-    await use(powerApp_SearchUserPage);
-  },
-  powerApp_ManageCourtAccessPage: async ({ determinePage }, use) => {
-    const powerApp_ManageCourtAccessPage = new PowerAppManageCourtAccessPage(determinePage);
-    await use(powerApp_ManageCourtAccessPage);
-  },
-
-  navigateToPowerAppHomePage: async ({ powerApp_HomePage, determinePage, powerApp_NavBarComponent }: PowerAppPageFixtures, use) => {
+  navigateToPowerAppHomePage: async ({ powerAppPages, determinePage }: PageFixtures & PowerAppPageFixtures, use) => {
     await use(async () => {
-      if (determinePage.url().includes('apps.powerapps.com') && !(await powerApp_HomePage.$static.heading.isVisible())) {
-        await powerApp_NavBarComponent.$interactive.HomeButton.click();
+      if (determinePage.url().includes('apps.powerapps.com') && !(await powerAppPages.homePage.$static.heading.isVisible())) {
+        await powerAppPages.navBarComponent.$interactive.HomeButton.click();
       } else if (!determinePage.url().includes('apps.powerapps.com')) {
-        await powerApp_HomePage.goTo();
+        await powerAppPages.homePage.goTo();
       }
-      await powerApp_HomePage.verifyUserIsOnHomePage();
+      await powerAppPages.homePage.verifyUserIsOnHomePage();
     });
   },
-  navigateToPowerAppCaseDetailsPage: async (
-    { navigateToPowerAppHomePage, powerApp_HomePage, powerApp_CaseDetailsPage }: PowerAppPageFixtures,
-    use,
-  ) => {
+  navigateToPowerAppCaseDetailsPage: async ({ navigateToPowerAppHomePage, powerAppPages }: PowerAppPageFixtures, use) => {
     await use(async () => {
       await navigateToPowerAppHomePage();
-      await powerApp_HomePage.navigationClick(powerApp_HomePage.$interactive.bookARecordingButton);
-      await powerApp_CaseDetailsPage.verifyUserIsOnCaseDetailsPage();
+      await powerAppPages.homePage.navigationClick(powerAppPages.homePage.$interactive.bookARecordingButton);
+      await powerAppPages.caseDetailsPage.verifyUserIsOnCaseDetailsPage();
     });
   },
-  navigateToPowerAppScheduleRecordingsPage: async (
-    { navigateToPowerAppCaseDetailsPage, powerApp_CaseDetailsPage, powerApp_ScheduleRecordingPage }: PowerAppPageFixtures,
-    use,
-  ) => {
+  navigateToPowerAppScheduleRecordingsPage: async ({ navigateToPowerAppCaseDetailsPage, powerAppPages }: PowerAppPageFixtures, use) => {
     await use(async (caseReference: string) => {
       await navigateToPowerAppCaseDetailsPage();
-      await powerApp_CaseDetailsPage.searchAndSelectExistingCase(caseReference);
-      await powerApp_CaseDetailsPage.navigationClick(powerApp_CaseDetailsPage.$interactive.bookingsButton);
-      await powerApp_ScheduleRecordingPage.verifyUserIsOnScheduleRecordingsPage();
+      await powerAppPages.caseDetailsPage.searchAndSelectExistingCase(caseReference);
+      await powerAppPages.caseDetailsPage.navigationClick(powerAppPages.caseDetailsPage.$interactive.bookingsButton);
+      await powerAppPages.scheduleRecordingPage.verifyUserIsOnScheduleRecordingsPage();
     });
   },
-  navigateToPowerAppManageBookingsPage: async (
-    { navigateToPowerAppHomePage, powerApp_HomePage, powerApp_ManageBookingsPage }: PowerAppPageFixtures,
-    use,
-  ) => {
+  navigateToPowerAppManageBookingsPage: async ({ navigateToPowerAppHomePage, powerAppPages }: PowerAppPageFixtures, use) => {
     await use(async () => {
       await navigateToPowerAppHomePage();
-      await powerApp_HomePage.navigationClick(powerApp_HomePage.$interactive.manageBookingsButton);
-      await powerApp_ManageBookingsPage.verifyUserIsOnManageBookingsPage();
+      await powerAppPages.homePage.navigationClick(powerAppPages.homePage.$interactive.manageBookingsButton);
+      await powerAppPages.manageBookingsPage.verifyUserIsOnManageBookingsPage();
     });
   },
-  navigateToPowerAppViewLiveFeedPage: async (
-    { navigateToPowerAppManageBookingsPage, powerApp_ManageBookingsPage, powerApp_ViewLiveFeedPage }: PowerAppPageFixtures,
-    use,
-  ) => {
+  navigateToPowerAppViewLiveFeedPage: async ({ navigateToPowerAppManageBookingsPage, powerAppPages }: PowerAppPageFixtures, use) => {
     await use(async (caseReference: string) => {
       await navigateToPowerAppManageBookingsPage();
-      await powerApp_ManageBookingsPage.searchForABooking(caseReference);
-      await powerApp_ManageBookingsPage.navigationClick(powerApp_ManageBookingsPage.$interactive.recordButton);
-      await powerApp_ViewLiveFeedPage.verifyUserIsOnViewLiveFeedPage();
+      await powerAppPages.manageBookingsPage.searchForABooking(caseReference);
+      await powerAppPages.manageBookingsPage.navigationClick(powerAppPages.manageBookingsPage.$interactive.recordButton);
+      await powerAppPages.viewLiveFeedPage.verifyUserIsOnViewLiveFeedPage();
     });
   },
-  navigateToPowerAppViewRecordingsPage: async (
-    { navigateToPowerAppHomePage, powerApp_HomePage, powerApp_ViewRecordingsPage }: PowerAppPageFixtures,
-    use,
-  ) => {
+  navigateToPowerAppViewRecordingsPage: async ({ navigateToPowerAppHomePage, powerAppPages }: PowerAppPageFixtures, use) => {
     await use(async () => {
       await navigateToPowerAppHomePage();
-      await powerApp_HomePage.navigationClick(powerApp_HomePage.$interactive.viewRecordingsButton);
-      await powerApp_ViewRecordingsPage.verifyUserIsOnViewRecordingsPage();
+      await powerAppPages.homePage.navigationClick(powerAppPages.homePage.$interactive.viewRecordingsButton);
+      await powerAppPages.viewRecordingsPage.verifyUserIsOnViewRecordingsPage();
     });
   },
 
-  navigateToPowerAppAdminPage: async ({ navigateToPowerAppHomePage, powerApp_HomePage, powerApp_AdminPage }: PowerAppPageFixtures, use) => {
+  navigateToPowerAppAdminPage: async ({ navigateToPowerAppHomePage, powerAppPages }: PowerAppPageFixtures, use) => {
     await use(async () => {
       await navigateToPowerAppHomePage();
-      await powerApp_HomePage.navigationClick(powerApp_HomePage.$interactive.adminButton);
-      await powerApp_AdminPage.verifyUserIsOnAdminPage();
+      await powerAppPages.homePage.navigationClick(powerAppPages.homePage.$interactive.adminButton);
+      await powerAppPages.adminPage.verifyUserIsOnAdminPage();
     });
   },
-  navigateToPowerAppManageCasesPage: async (
-    { powerApp_AdminPage, navigateToPowerAppAdminPage, powerApp_ManageCasesPage }: PowerAppPageFixtures,
-    use,
-  ) => {
+  navigateToPowerAppManageCasesPage: async ({ navigateToPowerAppAdminPage, powerAppPages }: PowerAppPageFixtures, use) => {
     await use(async () => {
       await navigateToPowerAppAdminPage();
-      await powerApp_AdminPage.navigationClick(powerApp_AdminPage.$interactive.manageCasesButton, powerApp_ManageCasesPage.$static.casesLabel);
-      await powerApp_ManageCasesPage.verifyUserIsOnManageCasesPage();
+      await powerAppPages.adminPage.navigationClick(
+        powerAppPages.adminPage.$interactive.manageCasesButton,
+        powerAppPages.manageCasesPage.$static.casesLabel,
+      );
+      await powerAppPages.manageCasesPage.verifyUserIsOnManageCasesPage();
     });
   },
 
-  navigateToPowerAppManageUsersPage: async (
-    { powerApp_AdminPage, navigateToPowerAppAdminPage, powerApp_ManageUsersPage }: PowerAppPageFixtures,
-    use,
-  ) => {
+  navigateToPowerAppManageUsersPage: async ({ navigateToPowerAppAdminPage, powerAppPages }: PowerAppPageFixtures, use) => {
     await use(async () => {
       await navigateToPowerAppAdminPage();
-      await powerApp_AdminPage.navigationClick(
-        powerApp_AdminPage.$interactive.manageUsersButton,
-        powerApp_ManageUsersPage.$interactive.addUserButton,
+      await powerAppPages.adminPage.navigationClick(
+        powerAppPages.adminPage.$interactive.manageUsersButton,
+        powerAppPages.manageUsersPage.$interactive.addUserButton,
       );
-      await powerApp_ManageUsersPage.verifyUserIsOnManageUsersPage();
+      await powerAppPages.manageUsersPage.verifyUserIsOnManageUsersPage();
     });
   },
 
-  navigateToPowerAppAddUserPage: async (
-    { powerApp_AdminPage, navigateToPowerAppAdminPage, powerApp_ManageUsersPage, powerApp_AddUserPage }: PowerAppPageFixtures,
-    use,
-  ) => {
+  navigateToPowerAppAddUserPage: async ({ navigateToPowerAppAdminPage, powerAppPages }: PowerAppPageFixtures, use) => {
     await use(async () => {
       await navigateToPowerAppAdminPage();
-      await powerApp_AdminPage.navigationClick(
-        powerApp_AdminPage.$interactive.manageUsersButton,
-        powerApp_ManageUsersPage.$interactive.addUserButton,
+      await powerAppPages.adminPage.navigationClick(
+        powerAppPages.adminPage.$interactive.manageUsersButton,
+        powerAppPages.manageUsersPage.$interactive.addUserButton,
       );
-      await powerApp_AddUserPage.verifyUserIsOnAddUserPage();
+      await powerAppPages.addUserPage.verifyUserIsOnAddUserPage();
     });
   },
 
-  navigateToPowerAppSearchUserPage: async (
-    { powerApp_AdminPage, navigateToPowerAppAdminPage, powerApp_ManageUsersPage, powerApp_SearchUserPage }: PowerAppPageFixtures,
-    use,
-  ) => {
+  navigateToPowerAppSearchUserPage: async ({ navigateToPowerAppAdminPage, powerAppPages }: PowerAppPageFixtures, use) => {
     await use(async () => {
       await navigateToPowerAppAdminPage();
-      await powerApp_AdminPage.navigationClick(
-        powerApp_AdminPage.$interactive.manageUsersButton,
-        powerApp_ManageUsersPage.$interactive.searchUserButton,
+      await powerAppPages.adminPage.navigationClick(
+        powerAppPages.adminPage.$interactive.manageUsersButton,
+        powerAppPages.manageUsersPage.$interactive.searchUserButton,
       );
-      await powerApp_SearchUserPage.verifyUserIsOnSearchUserPage();
+      await powerAppPages.searchUserPage.verifyUserIsOnSearchUserPage();
     });
   },
-  navigateToPowerAppManageCourtAccessPage: async (
-    { powerApp_AdminPage, navigateToPowerAppAdminPage, powerApp_ManageUsersPage, powerApp_ManageCourtAccessPage }: PowerAppPageFixtures,
-    use,
-  ) => {
+  navigateToPowerAppManageCourtAccessPage: async ({ navigateToPowerAppAdminPage, powerAppPages }: PowerAppPageFixtures, use) => {
     await use(async () => {
       await navigateToPowerAppAdminPage();
-      await powerApp_AdminPage.navigationClick(
-        powerApp_AdminPage.$interactive.manageUsersButton,
-        powerApp_ManageUsersPage.$interactive.manageCourtAccessButton,
+      await powerAppPages.adminPage.navigationClick(
+        powerAppPages.adminPage.$interactive.manageUsersButton,
+        powerAppPages.manageUsersPage.$interactive.manageCourtAccessButton,
       );
-      await powerApp_ManageCourtAccessPage.verifyUserIsOnManageCourtAccessPage();
+      await powerAppPages.manageCourtAccessPage.verifyUserIsOnManageCourtAccessPage();
     });
   },
-  navigateToPowerAppManageRecordingsPage: async (
-    { powerApp_AdminPage, navigateToPowerAppAdminPage, powerApp_ManageRecordingsPage }: PowerAppPageFixtures,
-    use,
-  ) => {
+  navigateToPowerAppManageRecordingsPage: async ({ navigateToPowerAppAdminPage, powerAppPages }: PowerAppPageFixtures, use) => {
     await use(async () => {
       await navigateToPowerAppAdminPage();
-      await powerApp_AdminPage.navigationClick(
-        powerApp_AdminPage.$interactive.manageRecordingsButton,
-        powerApp_ManageRecordingsPage.$interactive.manageRecordingsLabel,
+      await powerAppPages.adminPage.navigationClick(
+        powerAppPages.adminPage.$interactive.manageRecordingsButton,
+        powerAppPages.manageRecordingsPage.$interactive.manageRecordingsLabel,
       );
-      await powerApp_ManageRecordingsPage.verifyUserIsOnManageRecordingsPage();
+      await powerAppPages.manageRecordingsPage.verifyUserIsOnManageRecordingsPage();
     });
   },
 };

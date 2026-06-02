@@ -1,9 +1,8 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Locator, expect } from '@playwright/test';
 import { config } from '../../../utils';
+import { CvpBase } from '../cvp-base';
 
-export class CvpSignInPage {
-  constructor(public readonly page: Page) {}
-
+export class CvpSignInPage extends CvpBase {
   public readonly $interactive = {
     signInButton: this.page.getByRole('button', { name: 'Sign in' }),
   } as const satisfies Record<string, Locator>;

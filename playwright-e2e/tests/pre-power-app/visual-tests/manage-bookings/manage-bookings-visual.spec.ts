@@ -18,12 +18,12 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
     {
       tag: ['@visual'],
     },
-    async ({ page, powerApp_ManageBookingsPage }) => {
+    async ({ page, powerAppPages }) => {
       const maskedElements = [
-        powerApp_ManageBookingsPage.$globalMaskedlocatorsForVisualTesting.powerAppsHeaderContainer,
-        powerApp_ManageBookingsPage.$globalMaskedlocatorsForVisualTesting.applicationCourtTitle,
-        powerApp_ManageBookingsPage.$globalMaskedlocatorsForVisualTesting.applicationEnvironment,
-        powerApp_ManageBookingsPage.$static.searchResultGallery,
+        powerAppPages.manageBookingsPage.$globalMaskedlocatorsForVisualTesting.powerAppsHeaderContainer,
+        powerAppPages.manageBookingsPage.$globalMaskedlocatorsForVisualTesting.applicationCourtTitle,
+        powerAppPages.manageBookingsPage.$globalMaskedlocatorsForVisualTesting.applicationEnvironment,
+        powerAppPages.manageBookingsPage.$static.searchResultGallery,
       ];
 
       await test.step('Verify manage bookings page is visually correct', async () => {
@@ -43,7 +43,7 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
     {
       tag: ['@visual'],
     },
-    async ({ page, powerApp_ManageBookingsPage, apiClient, userInterfaceUtils }) => {
+    async ({ page, powerAppPages, apiClient, userInterfaceUtils }) => {
       await test.step('Pre-requisite step in order to create a case and assign a booking via api', async () => {
         await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
       });
@@ -51,16 +51,16 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
       await test.step('Search for an existing case and redact test data', async () => {
         const caseData = await apiClient.getCaseData();
         const bookingData = await apiClient.getBookingData();
-        await powerApp_ManageBookingsPage.searchForABooking(caseData.caseReference);
+        await powerAppPages.manageBookingsPage.searchForABooking(caseData.caseReference);
 
-        await userInterfaceUtils.replaceTextWithinStaticElement(powerApp_ManageBookingsPage.$static.listItemsInSearchResultsGallery, [
+        await userInterfaceUtils.replaceTextWithinStaticElement(powerAppPages.manageBookingsPage.$static.listItemsInSearchResultsGallery, [
           [caseData.caseReference, '{Redacted}'],
           [bookingData.witnessSelectedForCaseRecording, '{Redacted}'],
           [/\b\d{2}\/\d{2}\/\d{4}\b/g, '{Redacted}'],
         ]);
 
         for (const defendant of caseData.defendantNames) {
-          await userInterfaceUtils.replaceTextWithinStaticElement(powerApp_ManageBookingsPage.$static.listItemsInSearchResultsGallery, [
+          await userInterfaceUtils.replaceTextWithinStaticElement(powerAppPages.manageBookingsPage.$static.listItemsInSearchResultsGallery, [
             [defendant, '{Redacted}'],
           ]);
         }
@@ -71,10 +71,10 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
 
       await test.step('Verify manage bookings page is visually correct', async () => {
         const maskedElements = [
-          powerApp_ManageBookingsPage.$globalMaskedlocatorsForVisualTesting.powerAppsHeaderContainer,
-          powerApp_ManageBookingsPage.$globalMaskedlocatorsForVisualTesting.applicationCourtTitle,
-          powerApp_ManageBookingsPage.$globalMaskedlocatorsForVisualTesting.applicationEnvironment,
-          powerApp_ManageBookingsPage.$inputs.caseReference,
+          powerAppPages.manageBookingsPage.$globalMaskedlocatorsForVisualTesting.powerAppsHeaderContainer,
+          powerAppPages.manageBookingsPage.$globalMaskedlocatorsForVisualTesting.applicationCourtTitle,
+          powerAppPages.manageBookingsPage.$globalMaskedlocatorsForVisualTesting.applicationEnvironment,
+          powerAppPages.manageBookingsPage.$inputs.caseReference,
         ];
 
         await Promise.all(maskedElements.map((element) => expect(element).toBeAttached()));
@@ -93,33 +93,33 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
     {
       tag: ['@visual'],
     },
-    async ({ page, powerApp_ManageBookingsPage, apiClient, userInterfaceUtils }) => {
+    async ({ page, powerAppPages, apiClient, userInterfaceUtils }) => {
       await test.step('Pre-requisite step in order to create a case and assign a booking via api', async () => {
         await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
       });
 
       const maskedElements = [
-        powerApp_ManageBookingsPage.$globalMaskedlocatorsForVisualTesting.powerAppsHeaderContainer,
-        powerApp_ManageBookingsPage.$globalMaskedlocatorsForVisualTesting.applicationCourtTitle,
-        powerApp_ManageBookingsPage.$globalMaskedlocatorsForVisualTesting.applicationEnvironment,
+        powerAppPages.manageBookingsPage.$globalMaskedlocatorsForVisualTesting.powerAppsHeaderContainer,
+        powerAppPages.manageBookingsPage.$globalMaskedlocatorsForVisualTesting.applicationCourtTitle,
+        powerAppPages.manageBookingsPage.$globalMaskedlocatorsForVisualTesting.applicationEnvironment,
       ];
 
       const caseData = await apiClient.getCaseData();
       const bookingData = await apiClient.getBookingData();
 
       await test.step('Search for an existing case and select option to manage case', async () => {
-        await powerApp_ManageBookingsPage.searchForABooking(caseData.caseReference);
-        await powerApp_ManageBookingsPage.$interactive.manageButton.click();
-        await expect(powerApp_ManageBookingsPage.$manageCaseModal.modalWindow).toBeVisible();
+        await powerAppPages.manageBookingsPage.searchForABooking(caseData.caseReference);
+        await powerAppPages.manageBookingsPage.$interactive.manageButton.click();
+        await expect(powerAppPages.manageBookingsPage.$manageCaseModal.modalWindow).toBeVisible();
       });
 
       await test.step('Redact dynamic test data', async () => {
-        await userInterfaceUtils.replaceTextWithinStaticElement(powerApp_ManageBookingsPage.$static.listItemsInSearchResultsGallery, [
+        await userInterfaceUtils.replaceTextWithinStaticElement(powerAppPages.manageBookingsPage.$static.listItemsInSearchResultsGallery, [
           [caseData.caseReference, '{Redacted}'],
           [bookingData.witnessSelectedForCaseRecording, '{Redacted}'],
         ]);
 
-        await userInterfaceUtils.hideElements(powerApp_ManageBookingsPage.$inputs.caseReference);
+        await userInterfaceUtils.hideElements(powerAppPages.manageBookingsPage.$inputs.caseReference);
       });
 
       await test.step('Verify manage booking modal is visually correct', async () => {
@@ -135,22 +135,22 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
       });
 
       await test.step('Select audit option and redact test data', async () => {
-        await powerApp_ManageBookingsPage.$manageCaseModal.auditButton.click();
-        await expect(powerApp_ManageBookingsPage.$manageCaseModal.auditButton).toBeHidden();
+        await powerAppPages.manageBookingsPage.$manageCaseModal.auditButton.click();
+        await expect(powerAppPages.manageBookingsPage.$manageCaseModal.auditButton).toBeHidden();
 
-        await userInterfaceUtils.replaceTextWithinStaticElement(powerApp_ManageBookingsPage.$manageCaseModal.auditCaseInformationText, [
+        await userInterfaceUtils.replaceTextWithinStaticElement(powerAppPages.manageBookingsPage.$manageCaseModal.auditCaseInformationText, [
           [caseData.caseReference, '{Redacted}'],
           [/\b\d{2}\/\d{2}\/\d{4}\b/g, '{Redacted}'],
           [bookingData.witnessSelectedForCaseRecording, '{Redacted}'],
         ]);
 
         for (const defendant of caseData.defendantNames) {
-          await userInterfaceUtils.replaceTextWithinStaticElement(powerApp_ManageBookingsPage.$manageCaseModal.auditCaseInformationText, [
+          await userInterfaceUtils.replaceTextWithinStaticElement(powerAppPages.manageBookingsPage.$manageCaseModal.auditCaseInformationText, [
             [defendant, '{Redacted}'],
           ]);
         }
 
-        await userInterfaceUtils.replaceTextWithinStaticElement(powerApp_ManageBookingsPage.$manageCaseModal.auditReportDateLabel, [
+        await userInterfaceUtils.replaceTextWithinStaticElement(powerAppPages.manageBookingsPage.$manageCaseModal.auditReportDateLabel, [
           [/\b\d{2}\/\d{2}\/\d{4}\b/g, '{Redacted}'],
         ]);
       });
@@ -166,10 +166,10 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
       });
 
       await test.step('Close audit and select option to share', async () => {
-        await powerApp_ManageBookingsPage.$manageCaseModal.closeAuditButton.click();
-        await expect(powerApp_ManageBookingsPage.$manageCaseModal.closeAuditButton).toBeHidden();
-        await powerApp_ManageBookingsPage.$manageCaseModal.shareButton.click();
-        await expect(powerApp_ManageBookingsPage.$manageCaseModal.shareButton).toBeHidden();
+        await powerAppPages.manageBookingsPage.$manageCaseModal.closeAuditButton.click();
+        await expect(powerAppPages.manageBookingsPage.$manageCaseModal.closeAuditButton).toBeHidden();
+        await powerAppPages.manageBookingsPage.$manageCaseModal.shareButton.click();
+        await expect(powerAppPages.manageBookingsPage.$manageCaseModal.shareButton).toBeHidden();
       });
 
       await test.step('Verify whilst sharing booking, it is visually correct', async () => {
@@ -189,46 +189,46 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
     {
       tag: ['@visual'],
     },
-    async ({ page, powerApp_ManageBookingsPage, apiClient, userInterfaceUtils }) => {
+    async ({ page, powerAppPages, apiClient, userInterfaceUtils }) => {
       await test.step('Pre-requisite step in order to create a case and assign a booking via api', async () => {
         await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
       });
 
       const maskedElements = [
-        powerApp_ManageBookingsPage.$globalMaskedlocatorsForVisualTesting.powerAppsHeaderContainer,
-        powerApp_ManageBookingsPage.$globalMaskedlocatorsForVisualTesting.applicationCourtTitle,
-        powerApp_ManageBookingsPage.$globalMaskedlocatorsForVisualTesting.applicationEnvironment,
+        powerAppPages.manageBookingsPage.$globalMaskedlocatorsForVisualTesting.powerAppsHeaderContainer,
+        powerAppPages.manageBookingsPage.$globalMaskedlocatorsForVisualTesting.applicationCourtTitle,
+        powerAppPages.manageBookingsPage.$globalMaskedlocatorsForVisualTesting.applicationEnvironment,
       ];
 
       const caseData = await apiClient.getCaseData();
       const bookingData = await apiClient.getBookingData();
 
       await test.step('Search for an existing case and select option to manage case', async () => {
-        await powerApp_ManageBookingsPage.searchForABooking(caseData.caseReference);
-        await powerApp_ManageBookingsPage.$interactive.amendButton.click();
-        await expect(powerApp_ManageBookingsPage.$amendCaseModal.modalWindow).toBeVisible();
+        await powerAppPages.manageBookingsPage.searchForABooking(caseData.caseReference);
+        await powerAppPages.manageBookingsPage.$interactive.amendButton.click();
+        await expect(powerAppPages.manageBookingsPage.$amendCaseModal.modalWindow).toBeVisible();
       });
 
       await test.step('Redact dynamic test data', async () => {
-        await userInterfaceUtils.replaceTextWithinStaticElement(powerApp_ManageBookingsPage.$static.listItemsInSearchResultsGallery, [
+        await userInterfaceUtils.replaceTextWithinStaticElement(powerAppPages.manageBookingsPage.$static.listItemsInSearchResultsGallery, [
           [caseData.caseReference, '{Redacted}'],
           [bookingData.witnessSelectedForCaseRecording, '{Redacted}'],
         ]);
 
-        await userInterfaceUtils.hideElements(powerApp_ManageBookingsPage.$inputs.caseReference);
+        await userInterfaceUtils.hideElements(powerAppPages.manageBookingsPage.$inputs.caseReference);
 
-        await userInterfaceUtils.replaceTextWithinInput(powerApp_ManageBookingsPage.$amendCaseModal.caseReferenceText.locator('input'), [
+        await userInterfaceUtils.replaceTextWithinInput(powerAppPages.manageBookingsPage.$amendCaseModal.caseReferenceText.locator('input'), [
           [caseData.caseReference, '{Redacted}'],
         ]);
-        await userInterfaceUtils.replaceTextWithinStaticElement(powerApp_ManageBookingsPage.$amendCaseModal.witnessDropdown, [
+        await userInterfaceUtils.replaceTextWithinStaticElement(powerAppPages.manageBookingsPage.$amendCaseModal.witnessDropdown, [
           [bookingData.witnessSelectedForCaseRecording, '{Redacted}'],
         ]);
         for (const defendant of caseData.defendantNames) {
-          await userInterfaceUtils.replaceTextWithinStaticElement(powerApp_ManageBookingsPage.$amendCaseModal.defendantsDropdown, [
+          await userInterfaceUtils.replaceTextWithinStaticElement(powerAppPages.manageBookingsPage.$amendCaseModal.defendantsDropdown, [
             [defendant, '{Redacted}'],
           ]);
         }
-        await userInterfaceUtils.replaceTextWithinInput(powerApp_ManageBookingsPage.$amendCaseModal.dateDropdown.locator('input'), [
+        await userInterfaceUtils.replaceTextWithinInput(powerAppPages.manageBookingsPage.$amendCaseModal.dateDropdown.locator('input'), [
           [/\b\d{2}\/\d{2}\/\d{4}\b/g, '01/01/0001'],
         ]);
       });
@@ -246,17 +246,17 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
       });
 
       await test.step('Select option to delete case and redact dynamic test data', async () => {
-        await powerApp_ManageBookingsPage.$amendCaseModal.deleteButton.click();
-        await expect(powerApp_ManageBookingsPage.$amendCaseModal.deleteCaseText).toBeVisible();
+        await powerAppPages.manageBookingsPage.$amendCaseModal.deleteButton.click();
+        await expect(powerAppPages.manageBookingsPage.$amendCaseModal.deleteCaseText).toBeVisible();
 
-        await userInterfaceUtils.replaceTextWithinStaticElement(powerApp_ManageBookingsPage.$amendCaseModal.deleteCaseText, [
+        await userInterfaceUtils.replaceTextWithinStaticElement(powerAppPages.manageBookingsPage.$amendCaseModal.deleteCaseText, [
           [caseData.caseReference, '{Redacted}'],
           [/\b\d{2}\/\d{2}\/\d{4}\b/g, '01/01/0001'],
           [bookingData.witnessSelectedForCaseRecording, '{Redacted}'],
         ]);
 
         for (const defendant of caseData.defendantNames) {
-          await userInterfaceUtils.replaceTextWithinStaticElement(powerApp_ManageBookingsPage.$amendCaseModal.deleteCaseText, [
+          await userInterfaceUtils.replaceTextWithinStaticElement(powerAppPages.manageBookingsPage.$amendCaseModal.deleteCaseText, [
             [defendant, '{Redacted}'],
           ]);
         }
@@ -273,10 +273,10 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
       });
 
       await test.step('Select option to cancel deletion of case and cancel amendmendts', async () => {
-        await powerApp_ManageBookingsPage.$amendCaseModal.noToDeleteButton.click();
-        await expect(powerApp_ManageBookingsPage.$amendCaseModal.noToDeleteButton).toBeHidden();
-        await powerApp_ManageBookingsPage.$amendCaseModal.cancelButton.click();
-        await expect(powerApp_ManageBookingsPage.$amendCaseModal.yesToCancelButton).toBeVisible();
+        await powerAppPages.manageBookingsPage.$amendCaseModal.noToDeleteButton.click();
+        await expect(powerAppPages.manageBookingsPage.$amendCaseModal.noToDeleteButton).toBeHidden();
+        await powerAppPages.manageBookingsPage.$amendCaseModal.cancelButton.click();
+        await expect(powerAppPages.manageBookingsPage.$amendCaseModal.yesToCancelButton).toBeVisible();
       });
 
       await test.step('Upon selecting option to cancel case amendments, verify amend booking modal is visually correct', async () => {

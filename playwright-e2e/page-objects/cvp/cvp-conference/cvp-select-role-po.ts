@@ -1,8 +1,7 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Locator, expect } from '@playwright/test';
+import { CvpBase } from '../cvp-base';
 
-export class CvpSelectRolePage {
-  constructor(public readonly page: Page) {}
-
+export class CvpSelectRolePage extends CvpBase {
   public readonly $interactive = {
     cancelButton: this.page.getByRole('button', { name: 'Cancel' }),
     connectButton: this.page.getByRole('button', { name: 'Connect' }),

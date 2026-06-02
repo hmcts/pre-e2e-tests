@@ -1,9 +1,9 @@
 import { Page, Locator, expect } from '@playwright/test';
-import { Base } from '../../base';
+import { PowerAppBase } from '../../power-app-base';
 import { NavBarComponent } from '../../components';
 import { ApiClient } from '../../../../api-requests';
 
-export class PowerAppViewRecordingsPage extends Base {
+export class PowerAppViewRecordingsPage extends PowerAppBase {
   private apiClient: ApiClient;
   constructor(page: Page, apiClient: ApiClient) {
     super(page);

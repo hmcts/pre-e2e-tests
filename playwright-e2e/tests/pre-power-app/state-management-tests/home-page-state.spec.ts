@@ -13,19 +13,19 @@ test.describe('Set of tests to verify the homepage buttons are in the correct st
     {
       tag: ['@regression', '@state-management'],
     },
-    async ({ powerApp_HomePage }) => {
+    async ({ powerAppPages }) => {
       await test.step('Verify all buttons on homepage are visible', async () => {
-        await expect(powerApp_HomePage.$interactive.bookARecordingButton).toBeVisible();
-        await expect(powerApp_HomePage.$interactive.manageBookingsButton).toBeVisible();
-        await expect(powerApp_HomePage.$interactive.viewRecordingsButton).toBeVisible();
-        await expect(powerApp_HomePage.$interactive.adminButton).toBeVisible();
+        await expect(powerAppPages.homePage.$interactive.bookARecordingButton).toBeVisible();
+        await expect(powerAppPages.homePage.$interactive.manageBookingsButton).toBeVisible();
+        await expect(powerAppPages.homePage.$interactive.viewRecordingsButton).toBeVisible();
+        await expect(powerAppPages.homePage.$interactive.adminButton).toBeVisible();
       });
 
       await test.step('Verify all buttons on homepage are enabled', async () => {
-        await expect(powerApp_HomePage.$interactive.bookARecordingButton).toBeEnabled();
-        await expect(powerApp_HomePage.$interactive.manageBookingsButton).toBeEnabled();
-        await expect(powerApp_HomePage.$interactive.viewRecordingsButton).toBeEnabled();
-        await expect(powerApp_HomePage.$interactive.adminButton).toBeEnabled();
+        await expect(powerAppPages.homePage.$interactive.bookARecordingButton).toBeEnabled();
+        await expect(powerAppPages.homePage.$interactive.manageBookingsButton).toBeEnabled();
+        await expect(powerAppPages.homePage.$interactive.viewRecordingsButton).toBeEnabled();
+        await expect(powerAppPages.homePage.$interactive.adminButton).toBeEnabled();
       });
     },
   );

@@ -16,32 +16,34 @@ test.describe('Set of tests to verify functionality of view live feed page for L
     {
       tag: ['@regression', '@functional'],
     },
-    async ({ powerApp_ViewLiveFeedPage }) => {
+    async ({ powerAppPages }) => {
       await test.step('Given user has selected option to start a recording', async () => {
-        await powerApp_ViewLiveFeedPage.selectStartRecordingButton();
-        await expect(powerApp_ViewLiveFeedPage.$startRecordingModal.recordingLinkGeneratedText).toBeVisible({ timeout: 90000 });
-        await powerApp_ViewLiveFeedPage.selectOkButtonToDismissStartRecordingModal();
+        await powerAppPages.viewLiveFeedPage.selectStartRecordingButton();
+        await expect(powerAppPages.viewLiveFeedPage.$startRecordingModal.recordingLinkGeneratedText).toBeVisible({ timeout: 90000 });
+        await powerAppPages.viewLiveFeedPage.selectOkButtonToDismissStartRecordingModal();
       });
 
       await test.step('When user selects the show link button', async () => {
-        await powerApp_ViewLiveFeedPage.$interactive.showLinkButton.click();
+        await powerAppPages.viewLiveFeedPage.$interactive.showLinkButton.click();
       });
 
       await test.step('The correct details are displayed on modal', async () => {
-        await expect(powerApp_ViewLiveFeedPage.$startRecordingModal.recordingLinkGeneratedText).toBeVisible();
-        await expect(powerApp_ViewLiveFeedPage.$startRecordingModal.recordingLinkGeneratedText).toHaveValue(
+        await expect(powerAppPages.viewLiveFeedPage.$startRecordingModal.recordingLinkGeneratedText).toBeVisible();
+        await expect(powerAppPages.viewLiveFeedPage.$startRecordingModal.recordingLinkGeneratedText).toHaveValue(
           'We are now ready to Record. \n\nPlease open CVP and copy the link below:',
         );
 
-        const rtmpsLinkValue = await powerApp_ViewLiveFeedPage.$startRecordingModal.generatedRtmpsLink.inputValue();
-        await expect(powerApp_ViewLiveFeedPage.$startRecordingModal.generatedRtmpsLink).toBeVisible();
+        const rtmpsLinkValue = await powerAppPages.viewLiveFeedPage.$startRecordingModal.generatedRtmpsLink.inputValue();
+        await expect(powerAppPages.viewLiveFeedPage.$startRecordingModal.generatedRtmpsLink).toBeVisible();
         expect(rtmpsLinkValue).toContain('rtmps://');
 
-        await expect(powerApp_ViewLiveFeedPage.$startRecordingModal.dontForgetToStartRecordingText).toBeVisible();
-        await expect(powerApp_ViewLiveFeedPage.$startRecordingModal.dontForgetToStartRecordingText).toHaveText("Don't forget to press Record...");
+        await expect(powerAppPages.viewLiveFeedPage.$startRecordingModal.dontForgetToStartRecordingText).toBeVisible();
+        await expect(powerAppPages.viewLiveFeedPage.$startRecordingModal.dontForgetToStartRecordingText).toHaveText(
+          "Don't forget to press Record...",
+        );
 
-        await expect(powerApp_ViewLiveFeedPage.$startRecordingModal.okButton).toBeVisible();
-        await expect(powerApp_ViewLiveFeedPage.$startRecordingModal.okButton).toHaveText('Ok');
+        await expect(powerAppPages.viewLiveFeedPage.$startRecordingModal.okButton).toBeVisible();
+        await expect(powerAppPages.viewLiveFeedPage.$startRecordingModal.okButton).toHaveText('Ok');
       });
     },
   );

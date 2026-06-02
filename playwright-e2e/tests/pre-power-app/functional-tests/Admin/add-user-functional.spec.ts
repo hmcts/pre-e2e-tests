@@ -16,14 +16,14 @@ test.describe('Set of tests to verify functionality of add users page for Level 
     {
       tag: ['@regression', '@functional'],
     },
-    async ({ apiClient, powerApp_AddUserPage }) => {
+    async ({ apiClient, powerAppPages }) => {
       await test.step('Pre-requisite step click on Add user button', async () => {
         await apiClient.createCase(1, 1);
       });
 
       await test.step('Verify user can click on Add User button see add user form', async () => {
-        await powerApp_AddUserPage.$interactive.addUserButton.click();
-        await powerApp_AddUserPage.verifyAddUserFormIsVisible();
+        await powerAppPages.addUserPage.$interactive.addUserButton.click();
+        await powerAppPages.addUserPage.verifyAddUserFormIsVisible();
       });
 
       await test.step('Verify user is able to fill all the details in add user form and submit the form successfully', async () => {});

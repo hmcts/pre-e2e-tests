@@ -10,7 +10,7 @@ test.describe('Set of tests to verify functionality of schedule a recording page
     {
       tag: ['@regression', '@functional'],
     },
-    async ({ powerApp_ScheduleRecordingPage, apiClient, navigateToPowerAppScheduleRecordingsPage }) => {
+    async ({ powerAppPages, apiClient, navigateToPowerAppScheduleRecordingsPage }) => {
       await test.step('Pre-requisite step in order to create a case via api and navigate to schedule recordings page', async () => {
         const caseData = await apiClient.createCase(2, 2);
         await navigateToPowerAppScheduleRecordingsPage(caseData.caseReference);
@@ -20,19 +20,19 @@ test.describe('Set of tests to verify functionality of schedule a recording page
       let dateSelected: string;
 
       await test.step('Verify user is able to schedule a recording', async () => {
-        dateSelected = await powerApp_ScheduleRecordingPage.selectDateFromToday();
-        await powerApp_ScheduleRecordingPage.selectWitnessFromDropDown(caseData.witnessNames[0]);
-        await powerApp_ScheduleRecordingPage.selectAllDefendantsFromDropDown();
-        await powerApp_ScheduleRecordingPage.$interactive.saveButton.click();
-        await expect(powerApp_ScheduleRecordingPage.$static.saveCaseSuccessLogo).toBeVisible();
-        await expect(powerApp_ScheduleRecordingPage.$static.saveCaseSuccessText).toBeVisible();
+        dateSelected = await powerAppPages.scheduleRecordingPage.selectDateFromToday();
+        await powerAppPages.scheduleRecordingPage.selectWitnessFromDropDown(caseData.witnessNames[0]);
+        await powerAppPages.scheduleRecordingPage.selectAllDefendantsFromDropDown();
+        await powerAppPages.scheduleRecordingPage.$interactive.saveButton.click();
+        await expect(powerAppPages.scheduleRecordingPage.$static.saveCaseSuccessLogo).toBeVisible();
+        await expect(powerAppPages.scheduleRecordingPage.$static.saveCaseSuccessText).toBeVisible();
       });
 
       await test.step('Verify correct details for case have been saved', async () => {
-        await expect(powerApp_ScheduleRecordingPage.iFrame.getByText(`Recording Start: ${dateSelected}`)).toBeVisible();
-        await expect(powerApp_ScheduleRecordingPage.iFrame.getByText(`Witness Name: ${caseData.witnessNames[0]}`)).toBeVisible();
+        await expect(powerAppPages.scheduleRecordingPage.iFrame.getByText(`Recording Start: ${dateSelected}`)).toBeVisible();
+        await expect(powerAppPages.scheduleRecordingPage.iFrame.getByText(`Witness Name: ${caseData.witnessNames[0]}`)).toBeVisible();
         for (const defendant of caseData.defendantNames) {
-          await expect(powerApp_ScheduleRecordingPage.iFrame.getByText('Defendants: ')).toContainText(defendant);
+          await expect(powerAppPages.scheduleRecordingPage.iFrame.getByText('Defendants: ')).toContainText(defendant);
         }
       });
     },
@@ -43,13 +43,7 @@ test.describe('Set of tests to verify functionality of schedule a recording page
     {
       tag: ['@regression', '@functional'],
     },
-    async ({
-      powerApp_ScheduleRecordingPage,
-      apiClient,
-      navigateToPowerAppManageBookingsPage,
-      powerApp_ManageBookingsPage,
-      navigateToPowerAppScheduleRecordingsPage,
-    }) => {
+    async ({ powerAppPages, apiClient, navigateToPowerAppManageBookingsPage, navigateToPowerAppScheduleRecordingsPage }) => {
       await test.step('Pre-requisite step in order to create a booking via api and navigate to schedule recordings page', async () => {
         await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
         const caseData = await apiClient.getCaseData();
@@ -57,16 +51,16 @@ test.describe('Set of tests to verify functionality of schedule a recording page
       });
 
       await test.step('Verify recording scheduled is visisble', async () => {
-        await powerApp_ScheduleRecordingPage.verifyAllScheduledRecordingsAreVisible(1);
+        await powerAppPages.scheduleRecordingPage.verifyAllScheduledRecordingsAreVisible(1);
       });
 
       await test.step('Verify user is able to delete scheduled recording', async () => {
-        await powerApp_ScheduleRecordingPage.$interactive.deleteScheduledRecordingButton.click();
-        await expect(powerApp_ScheduleRecordingPage.$deleteScheduleModal.modalWindow).toBeVisible();
-        await powerApp_ScheduleRecordingPage.$deleteScheduleModal.yesButton.click();
+        await powerAppPages.scheduleRecordingPage.$interactive.deleteScheduledRecordingButton.click();
+        await expect(powerAppPages.scheduleRecordingPage.$deleteScheduleModal.modalWindow).toBeVisible();
+        await powerAppPages.scheduleRecordingPage.$deleteScheduleModal.yesButton.click();
 
         await expect(
-          powerApp_ScheduleRecordingPage.iFrame.locator('[data-control-name="bookingScrn_BookingsGallery_Gal"] [role="listitem"]'),
+          powerAppPages.scheduleRecordingPage.iFrame.locator('[data-control-name="bookingScrn_BookingsGallery_Gal"] [role="listitem"]'),
         ).not.toBeAttached();
       });
 
@@ -76,17 +70,17 @@ test.describe('Set of tests to verify functionality of schedule a recording page
 
       await test.step('Verify user is unable to find deleted scheduled recording within manage bookings page', async () => {
         const caseData = await apiClient.getCaseData();
-        await powerApp_ManageBookingsPage.$inputs.caseReference.fill(caseData.caseReference);
-        await expect(powerApp_ManageBookingsPage.$inputs.caseReference).toHaveValue(caseData.caseReference);
+        await powerAppPages.manageBookingsPage.$inputs.caseReference.fill(caseData.caseReference);
+        await expect(powerAppPages.manageBookingsPage.$inputs.caseReference).toHaveValue(caseData.caseReference);
 
         await expect(async () => {
-          if ((await powerApp_ManageBookingsPage.$static.listItemsInSearchResultsGallery.count()) > 0) {
-            await powerApp_ManageBookingsPage.$interactive.refreshResultsButton.click();
+          if ((await powerAppPages.manageBookingsPage.$static.listItemsInSearchResultsGallery.count()) > 0) {
+            await powerAppPages.manageBookingsPage.$interactive.refreshResultsButton.click();
             // eslint-disable-next-line playwright/no-conditional-expect
-            await expect(powerApp_ManageBookingsPage.$static.listItemsInSearchResultsGallery).toHaveCount(0);
+            await expect(powerAppPages.manageBookingsPage.$static.listItemsInSearchResultsGallery).toHaveCount(0);
           }
 
-          await expect(powerApp_ManageBookingsPage.$static.caseReferenceLabelInSearchList).not.toBeAttached();
+          await expect(powerAppPages.manageBookingsPage.$static.caseReferenceLabelInSearchList).not.toBeAttached();
         }).toPass({ intervals: [3000], timeout: 12000 });
       });
     },
@@ -97,7 +91,7 @@ test.describe('Set of tests to verify functionality of schedule a recording page
     {
       tag: ['@regression', '@functional'],
     },
-    async ({ powerApp_ScheduleRecordingPage, apiClient, navigateToPowerAppScheduleRecordingsPage }) => {
+    async ({ powerAppPages, apiClient, navigateToPowerAppScheduleRecordingsPage }) => {
       await test.step('Pre-requisite step in order to create a case / assign a recording via api and navigate to schedule recordings page', async () => {
         await apiClient.createANewCaseAndAssignRecording(2, 2, 'today');
         const caseData = await apiClient.getCaseData();
@@ -105,11 +99,11 @@ test.describe('Set of tests to verify functionality of schedule a recording page
       });
 
       await test.step('Verify recording scheduled is visisble', async () => {
-        await powerApp_ScheduleRecordingPage.verifyAllScheduledRecordingsAreVisible(1);
+        await powerAppPages.scheduleRecordingPage.verifyAllScheduledRecordingsAreVisible(1);
       });
 
       await test.step('Verify delete button is disabled', async () => {
-        await expect(powerApp_ScheduleRecordingPage.$interactive.deleteScheduledRecordingButton).toBeDisabled();
+        await expect(powerAppPages.scheduleRecordingPage.$interactive.deleteScheduledRecordingButton).toBeDisabled();
       });
     },
   );
