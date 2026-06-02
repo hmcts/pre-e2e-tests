@@ -1,12 +1,12 @@
-import { Page, FrameLocator, Locator } from '@playwright/test';
+import { FrameLocator, Locator } from '@playwright/test';
 import { UserInterfaceUtils } from '../../utils';
+import { Base } from '../base-page';
 
 // A base page inherited by pages & components
 // can contain any additional config needed + instantiated page object
-export abstract class Base {
+export abstract class PowerAppBase extends Base {
   public readonly iFrame: FrameLocator = this.page.frameLocator('#fullscreen-app-host');
   private userInterfaceUtils = new UserInterfaceUtils(this.page);
-  constructor(public readonly page: Page) {}
 
   public readonly $globalMaskedlocatorsForVisualTesting = {
     powerAppsHeaderContainer: this.page.locator('[id*="HeaderContainer"]'),

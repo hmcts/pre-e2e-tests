@@ -1,8 +1,7 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Locator, expect } from '@playwright/test';
+import { CvpBase } from '../cvp-base';
 
-export class CvpRecordingCallPage {
-  constructor(public readonly page: Page) {}
-
+export class CvpRecordingCallPage extends CvpBase {
   public readonly $interactive = {
     participantsMenuButton: this.page.getByRole('button', { name: 'Control participants menu' }),
   } as const satisfies Record<string, Locator>;

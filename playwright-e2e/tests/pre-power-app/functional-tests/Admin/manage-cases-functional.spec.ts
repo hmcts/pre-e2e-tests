@@ -17,7 +17,7 @@ test.describe('Set of tests to verify functionality of delete cases for Level 1 
     {
       tag: ['@regression', '@functional'],
     },
-    async ({ apiClient, powerApp_ManageCasesPage }) => {
+    async ({ apiClient, powerAppPages }) => {
       await test.step('Pre-requisite step create a new case using api', async () => {
         await apiClient.createCase(1, 1);
       });
@@ -25,11 +25,11 @@ test.describe('Set of tests to verify functionality of delete cases for Level 1 
       const caseData: BaseCaseDetails = await apiClient.getCaseData();
 
       await test.step('Verify existing case is available on manage cases page', async () => {
-        await powerApp_ManageCasesPage.searchForAnExistingCase(caseData.caseReference);
+        await powerAppPages.manageCasesPage.searchForAnExistingCase(caseData.caseReference);
       });
 
       await test.step('Verify user is able to delete the case successfully', async () => {
-        await powerApp_ManageCasesPage.$interactive.deleteCaseButton.click();
+        await powerAppPages.manageCasesPage.$interactive.deleteCaseButton.click();
       });
 
       await test.step('Verify case is deleted successfully and no longer appears in search results', async () => {});

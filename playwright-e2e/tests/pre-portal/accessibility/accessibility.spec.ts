@@ -25,11 +25,11 @@ test.describe('Set of tests to verify accessibility of pages within pre portal',
     {
       tag: ['@accessibility'],
     },
-    async ({ portal_HomePage, portal_WatchRecordingPage, axeUtils }) => {
+    async ({ prePortalPages, axeUtils }) => {
       await test.step('Navigate to watch recording page', async () => {
-        await portal_HomePage.selectRecordingByCaseReferenceAndVersion('PLAYWRIGHT', 1);
-        await portal_WatchRecordingPage.verifyUserIsOnWatchRecordingPage();
-        await expect(portal_WatchRecordingPage.$interactive.playRecordingButton).toBeVisible({ timeout: 60_000 });
+        await prePortalPages.homePage.selectRecordingByCaseReferenceAndVersion('PLAYWRIGHT', 1);
+        await prePortalPages.watchRecordingPage.verifyUserIsOnWatchRecordingPage();
+        await expect(prePortalPages.watchRecordingPage.$interactive.playRecordingButton).toBeVisible({ timeout: 60_000 });
       });
 
       await test.step('Check accessibility on watch recordings page', async () => {

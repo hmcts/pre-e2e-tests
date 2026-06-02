@@ -1,8 +1,8 @@
 import { Page, expect } from '@playwright/test';
-import { Base } from '../../base';
+import { PowerAppBase } from '../../power-app-base';
 import { NavBarComponent } from '../../components';
 
-export class PowerAppProcessingRecordingsPage extends Base {
+export class PowerAppProcessingRecordingsPage extends PowerAppBase {
   private navBar = new NavBarComponent(this.page);
   constructor(page: Page) {
     super(page);

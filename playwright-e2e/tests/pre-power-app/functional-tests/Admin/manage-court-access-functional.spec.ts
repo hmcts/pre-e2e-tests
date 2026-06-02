@@ -16,14 +16,14 @@ test.describe('Set of tests to verify functionality of manage court access page 
     {
       tag: ['@regression', '@functional'],
     },
-    async ({ apiClient, powerApp_ManageCourtAccessPage }) => {
+    async ({ apiClient, powerAppPages }) => {
       await test.step('Pre-requisite step click on Manage Court Access button', async () => {
         await apiClient.createCase(1, 1);
       });
 
       await test.step('Verify user can click on Manage Court Access button see add user form', async () => {
-        await powerApp_ManageCourtAccessPage.$interactive.manageCourtAccessButton.click();
-        await powerApp_ManageCourtAccessPage.verifyUserIsOnManageCourtAccessPage();
+        await powerAppPages.manageCourtAccessPage.$interactive.manageCourtAccessButton.click();
+        await powerAppPages.manageCourtAccessPage.verifyUserIsOnManageCourtAccessPage();
       });
 
       await test.step('Verify user is able to fill all the details in add user form and submit the form successfully', async () => {});

@@ -1,9 +1,8 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Locator, expect } from '@playwright/test';
 import { config } from '../../../utils';
+import { CvpBase } from '../cvp-base';
 
-export class CvpRoomSettingsPage {
-  constructor(public readonly page: Page) {}
-
+export class CvpRoomSettingsPage extends CvpBase {
   public readonly $interactive = {
     selectRoomDropdown: this.page.locator('#roomNameDropdown'),
     editRoomSettingsButton: this.page.getByRole('tab', { name: 'Edit room settings' }),

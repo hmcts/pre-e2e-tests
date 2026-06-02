@@ -16,14 +16,14 @@ test.describe('Set of tests to verify functionality of search user page for Leve
     {
       tag: ['@regression', '@functional'],
     },
-    async ({ apiClient, powerApp_SearchUserPage }) => {
+    async ({ apiClient, powerAppPages }) => {
       await test.step('Pre-requisite step click on Search User button', async () => {
         await apiClient.createCase(1, 1);
       });
 
       await test.step('Verify user can click on Search User button', async () => {
-        await powerApp_SearchUserPage.$interactive.searchUserButton.click();
-        await powerApp_SearchUserPage.verifyUserIsOnSearchUserPage();
+        await powerAppPages.searchUserPage.$interactive.searchUserButton.click();
+        await powerAppPages.searchUserPage.verifyUserIsOnSearchUserPage();
       });
 
       await test.step('Verify user is able to search for a user successfully', async () => {});

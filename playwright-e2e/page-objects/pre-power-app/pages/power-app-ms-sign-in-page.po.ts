@@ -1,8 +1,8 @@
 import { Page, Locator, expect } from '@playwright/test';
-import { Base } from '../base';
+import { PowerAppBase } from '../power-app-base';
 import { config } from '../../../utils';
 
-export class PowerAppMsSignInPage extends Base {
+export class PowerAppMsSignInPage extends PowerAppBase {
   public readonly $inputs = {
     email: this.page.getByRole('textbox', { name: 'Enter your email' }),
     password: this.page.getByRole('textbox', { name: 'Enter the password' }),

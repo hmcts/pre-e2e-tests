@@ -15,38 +15,38 @@ test.describe('Set of tests to verify functionality of view recordings page for 
     {
       tag: ['@regression', '@functional'],
     },
-    async ({ apiClient, powerApp_ViewRecordingsPage }) => {
+    async ({ apiClient, powerAppPages }) => {
       const caseData = await apiClient.getCaseData();
 
       await test.step('Verify recording can be found in view recordings page', async () => {
-        await powerApp_ViewRecordingsPage.searchForCaseReference(caseData.caseReference, 'recordingAssignedByApi');
+        await powerAppPages.viewRecordingsPage.searchForCaseReference(caseData.caseReference, 'recordingAssignedByApi');
       });
 
       await test.step('Verify case and recording details are correct in search list', async () => {
         const bookingData = await apiClient.getBookingData();
         const recordingData = await apiClient.getRecordingData();
 
-        await expect(powerApp_ViewRecordingsPage.$static.caseReferenceLabelInSearchList).toHaveText(`Case Reference: ${caseData.caseReference}`);
-        await expect(powerApp_ViewRecordingsPage.$static.recordingVersionLabelInSearchList).toHaveText('V.1');
-        await expect(powerApp_ViewRecordingsPage.$static.courtLabelInSearchList).toContainText('Court:');
-        await expect(powerApp_ViewRecordingsPage.$static.recordingIdLabelInSearchList).toHaveText(`Recording UID: ${recordingData.recordingId}`);
-        await expect(powerApp_ViewRecordingsPage.$static.WitnessLabelInSearchList).toHaveText(
+        await expect(powerAppPages.viewRecordingsPage.$static.caseReferenceLabelInSearchList).toHaveText(`Case Reference: ${caseData.caseReference}`);
+        await expect(powerAppPages.viewRecordingsPage.$static.recordingVersionLabelInSearchList).toHaveText('V.1');
+        await expect(powerAppPages.viewRecordingsPage.$static.courtLabelInSearchList).toContainText('Court:');
+        await expect(powerAppPages.viewRecordingsPage.$static.recordingIdLabelInSearchList).toHaveText(`Recording UID: ${recordingData.recordingId}`);
+        await expect(powerAppPages.viewRecordingsPage.$static.WitnessLabelInSearchList).toHaveText(
           `Witness: ${bookingData.witnessSelectedForCaseRecording}`,
         );
         for (const defendantName of caseData.defendantNames) {
-          await expect(powerApp_ViewRecordingsPage.$static.defendantLabelInSearchList.filter({ hasText: 'Defendants:' })).toContainText(
+          await expect(powerAppPages.viewRecordingsPage.$static.defendantLabelInSearchList.filter({ hasText: 'Defendants:' })).toContainText(
             defendantName,
           );
         }
-        await expect(powerApp_ViewRecordingsPage.$static.recordingDateLabelInSearchList).toHaveText(
+        await expect(powerAppPages.viewRecordingsPage.$static.recordingDateLabelInSearchList).toHaveText(
           `Recording Date: ${recordingData.recordingDate} ${recordingData.recordingTime}`,
         );
-        await expect(powerApp_ViewRecordingsPage.$static.recordingSourceLabelInSearchList).toHaveText('Source: PRE');
-        await expect(powerApp_ViewRecordingsPage.$static.recordingDurationLabelInSearchList).toHaveText(
+        await expect(powerAppPages.viewRecordingsPage.$static.recordingSourceLabelInSearchList).toHaveText('Source: PRE');
+        await expect(powerAppPages.viewRecordingsPage.$static.recordingDurationLabelInSearchList).toHaveText(
           `Duration: ${recordingData.recordingDuration}`,
         );
-        await expect(powerApp_ViewRecordingsPage.$static.StatusLabelInSearchList).toHaveText('Status: ');
-        await expect(powerApp_ViewRecordingsPage.$static.caseStatusLabelInSearchList).toHaveText('Active');
+        await expect(powerAppPages.viewRecordingsPage.$static.StatusLabelInSearchList).toHaveText('Status: ');
+        await expect(powerAppPages.viewRecordingsPage.$static.caseStatusLabelInSearchList).toHaveText('Active');
       });
     },
   );
@@ -56,18 +56,18 @@ test.describe('Set of tests to verify functionality of view recordings page for 
     {
       tag: ['@regression', '@functional'],
     },
-    async ({ apiClient, powerApp_ViewRecordingsPage, networkInterceptUtils }) => {
+    async ({ apiClient, powerAppPages, networkInterceptUtils }) => {
       const caseData = await apiClient.getCaseData();
 
       await test.step('Search and select an existing recording', async () => {
-        await powerApp_ViewRecordingsPage.searchForCaseReference(caseData.caseReference, 'recordingAssignedByApi');
-        await powerApp_ViewRecordingsPage.$interactive.viewRecordingButton.click();
+        await powerAppPages.viewRecordingsPage.searchForCaseReference(caseData.caseReference, 'recordingAssignedByApi');
+        await powerAppPages.viewRecordingsPage.$interactive.viewRecordingButton.click();
       });
 
       await test.step('Select option to confirm playback of recordings is actively monitored', async () => {
-        await expect(powerApp_ViewRecordingsPage.$recordingsMonitoredAndAuditedModal.modalWindow).toBeVisible();
-        await powerApp_ViewRecordingsPage.$recordingsMonitoredAndAuditedModal.confirmButton.click();
-        await expect(powerApp_ViewRecordingsPage.$static.videoPlaybackText).toHaveText('Media selection loading,Please wait.');
+        await expect(powerAppPages.viewRecordingsPage.$recordingsMonitoredAndAuditedModal.modalWindow).toBeVisible();
+        await powerAppPages.viewRecordingsPage.$recordingsMonitoredAndAuditedModal.confirmButton.click();
+        await expect(powerAppPages.viewRecordingsPage.$static.videoPlaybackText).toHaveText('Media selection loading,Please wait.');
       });
 
       await test.step('Verify video and audio stream is received from media kind via network requests', async () => {
@@ -77,10 +77,10 @@ test.describe('Set of tests to verify functionality of view recordings page for 
       });
 
       await test.step('Verify user is able to play back the recording', async () => {
-        await expect(powerApp_ViewRecordingsPage.$interactive.playVideoButton).toBeVisible({ timeout: 15_000 });
-        await powerApp_ViewRecordingsPage.$interactive.playVideoButton.click();
-        await expect(powerApp_ViewRecordingsPage.$interactive.playVideoButton).toBeHidden();
-        await expect(powerApp_ViewRecordingsPage.$interactive.pauseVideoButton).toBeVisible();
+        await expect(powerAppPages.viewRecordingsPage.$interactive.playVideoButton).toBeVisible({ timeout: 15_000 });
+        await powerAppPages.viewRecordingsPage.$interactive.playVideoButton.click();
+        await expect(powerAppPages.viewRecordingsPage.$interactive.playVideoButton).toBeHidden();
+        await expect(powerAppPages.viewRecordingsPage.$interactive.pauseVideoButton).toBeVisible();
       });
     },
   );

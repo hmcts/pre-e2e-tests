@@ -17,7 +17,7 @@ test.describe('Set of tests to verify pre portal UI is visually correct as Level
     {
       tag: ['@regression', '@visual'],
     },
-    async ({ portal_HomePage, page, userInterfaceUtils }) => {
+    async ({ prePortalPages, page, userInterfaceUtils }) => {
       await test.step('Remove dynamic test data displayed within recordings table', async () => {
         await page.evaluate(() => {
           const tbody = document.querySelector('tbody.govuk-table__body');
@@ -28,14 +28,18 @@ test.describe('Set of tests to verify pre portal UI is visually correct as Level
       });
 
       await test.step('Redact dynamic data', async () => {
-        await userInterfaceUtils.replaceTextWithinStaticElement(portal_HomePage.$static.heading, [[/^Welcome back,.*$/, 'Welcome back, Test User']]);
-        await userInterfaceUtils.replaceTextWithinStaticElement(portal_HomePage.$static.recordingHeading, [[/^\s*Recording.*$/im, 'Recordings']]);
+        await userInterfaceUtils.replaceTextWithinStaticElement(prePortalPages.homePage.$static.heading, [
+          [/^Welcome back,.*$/, 'Welcome back, Test User'],
+        ]);
+        await userInterfaceUtils.replaceTextWithinStaticElement(prePortalPages.homePage.$static.recordingHeading, [
+          [/^\s*Recording.*$/im, 'Recordings'],
+        ]);
       });
 
       await test.step('Verify portal home page is visually correct', async () => {
         await expect(async () => {
-          await portal_HomePage.$static.heading.waitFor({ state: 'visible', timeout: 60_000 });
-          await expect(portal_HomePage.page).toHaveScreenshot('portal-home-page-visual.png', {
+          await prePortalPages.homePage.$static.heading.waitFor({ state: 'visible', timeout: 60_000 });
+          await expect(prePortalPages.homePage.page).toHaveScreenshot('portal-home-page-visual.png', {
             fullPage: true,
           });
         }).toPass({ intervals: [2000], timeout: 15000 });
@@ -48,24 +52,24 @@ test.describe('Set of tests to verify pre portal UI is visually correct as Level
     {
       tag: ['@regression', '@visual'],
     },
-    async ({ portal_HomePage, portal_WatchRecordingPage, userInterfaceUtils }) => {
+    async ({ prePortalPages, userInterfaceUtils }) => {
       await test.step('Navigate to watch recording page', async () => {
-        await portal_HomePage.selectRecordingByCaseReferenceAndVersion('PLAYWRIGHT', 1);
-        await portal_WatchRecordingPage.verifyUserIsOnWatchRecordingPage();
-        await expect(portal_WatchRecordingPage.$interactive.playRecordingButton).toBeVisible({ timeout: 60_000 });
+        await prePortalPages.homePage.selectRecordingByCaseReferenceAndVersion('PLAYWRIGHT', 1);
+        await prePortalPages.watchRecordingPage.verifyUserIsOnWatchRecordingPage();
+        await expect(prePortalPages.watchRecordingPage.$interactive.playRecordingButton).toBeVisible({ timeout: 60_000 });
       });
 
       await test.step('Verify watch recording page is visually correct', async () => {
         // Redact the defendent names which can appear on screen in a different order which breaks visual tests
-        const defendantNameEelement = portal_WatchRecordingPage.page.locator('[data-testid="summary-value-defendants"]');
+        const defendantNameEelement = prePortalPages.watchRecordingPage.page.locator('[data-testid="summary-value-defendants"]');
         await userInterfaceUtils.replaceTextWithinStaticElement(defendantNameEelement, [
           ['Defendant Two', '{Redacted Name}'],
           ['Defendant One', '{Redacted Name}'],
         ]);
         await expect(async () => {
-          await expect(portal_WatchRecordingPage.page).toHaveScreenshot('portal-watch-recording-page-visual.png', {
+          await expect(prePortalPages.watchRecordingPage.page).toHaveScreenshot('portal-watch-recording-page-visual.png', {
             fullPage: true,
-            mask: [portal_WatchRecordingPage.$static.recordingUID],
+            mask: [prePortalPages.watchRecordingPage.$static.recordingUID],
           });
         }).toPass({ intervals: [2000], timeout: 15000 });
       });

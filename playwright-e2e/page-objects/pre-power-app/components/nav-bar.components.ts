@@ -1,7 +1,7 @@
 import { Page, Locator } from '@playwright/test';
-import { Base } from '../base';
+import { PowerAppBase } from '../power-app-base';
 
-export class NavBarComponent extends Base {
+export class NavBarComponent extends PowerAppBase {
   public readonly $interactive = {
     HomeButton: this.iFrame.getByText('Home', { exact: true }),
     ManageBookings: this.iFrame.getByText('Manage Bookings', { exact: true }),
