@@ -50,8 +50,6 @@ test.describe('Ensure e2e journey is working as expected', () => {
         });
         await powerAppPages.caseDetailsPage.navigationClick(powerAppPages.caseDetailsPage.$interactive.saveButton);
         await powerAppPages.scheduleRecordingPage.verifyUserIsOnScheduleRecordingsPage();
-        const Test = 'TestOnce';
-        console.log(Test);
       });
 
       await test.step('Verify user is able to book a recording for the new case', async () => {
