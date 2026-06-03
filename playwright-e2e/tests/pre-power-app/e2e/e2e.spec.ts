@@ -23,6 +23,7 @@ test.describe('Ensure e2e journey is working as expected', () => {
       navigateToPowerAppCaseDetailsPage,
       navigateToPowerAppViewLiveFeedPage,
       navigateToPowerAppViewRecordingsPage,
+      context,
     }) => {
       /**
        * Increased the timeout to allow e2e journey to complete, set to a total of 9 minutes.
@@ -41,7 +42,6 @@ test.describe('Ensure e2e journey is working as expected', () => {
       let hostPin: string;
 
       await test.step('Verify user is able to open a new case', async () => {
-        await powerAppPages.homePage.page.bringToFront();
         await navigateToPowerAppCaseDetailsPage();
         await powerAppPages.caseDetailsPage.populateCaseDetails({
           caseReference: caseDetails.caseReference,
@@ -50,8 +50,6 @@ test.describe('Ensure e2e journey is working as expected', () => {
         });
         await powerAppPages.caseDetailsPage.navigationClick(powerAppPages.caseDetailsPage.$interactive.saveButton);
         await powerAppPages.scheduleRecordingPage.verifyUserIsOnScheduleRecordingsPage();
-        const Test = 'TestOnce';
-        console.log(Test);
       });
 
       await test.step('Verify user is able to book a recording for the new case', async () => {
@@ -72,51 +70,59 @@ test.describe('Ensure e2e journey is working as expected', () => {
         rtmpsLink = await powerAppPages.viewLiveFeedPage.startRecordingAndCaptureRtmpsLink();
       });
 
-      await test.step('Verify user is able to configure a cvp room with rtmps link', async () => {
-        await cvpPages.signInPage.page.bringToFront();
-        await cvpPages.signInPage.goTo();
-        await cvpPages.signInPage.verifyUserIsOnCvpSignInPage();
-        await cvpPages.signInPage.signIn(config.cvpUser.username, config.cvpUser.password);
+      const cvpPage1 = await test.step('Verify user is able to configure a cvp room with rtmps link', async () => {
+        const launchNewTab = await context.newPage();
+        const cvpPage1 = await cvpPages.newBrowserContext({ pageContext: launchNewTab });
+        await cvpPage1.signInPage.page.bringToFront();
+        await cvpPage1.signInPage.goTo();
+        await cvpPage1.signInPage.verifyUserIsOnCvpSignInPage();
+        await cvpPage1.signInPage.signIn(config.cvpUser.username, config.cvpUser.password);
 
-        await cvpPages.roomSettingsPage.verifyUserIsOnCvpRoomSettingsPage();
-        await cvpPages.roomSettingsPage.selectRoomByName('PRE008');
-        hostPin = await cvpPages.roomSettingsPage.editRoomSettings(rtmpsLink);
+        await cvpPage1.roomSettingsPage.verifyUserIsOnCvpRoomSettingsPage();
+        await cvpPage1.roomSettingsPage.selectRoomByName('PRE008');
+        hostPin = await cvpPage1.roomSettingsPage.editRoomSettings(rtmpsLink);
+
+        return cvpPage1;
       });
 
-      await test.step('Verify user is able to connect to the conference using the host pin', async () => {
-        await cvpPages.conferencePage.page.bringToFront();
-        await cvpPages.conferencePage.goTo();
-        await cvpPages.conferencePage.verifyUserIsOnCvpConferencePage();
-        await cvpPages.conferencePage.connectToConference(config.cvpUser.cvpConferenceUser, caseDetails.witnessNames[0]);
+      const cvpPage2 = await test.step('Verify user is able to connect to the conference using the host pin', async () => {
+        const launchNewTab = await context.newPage();
+        const cvpPage2 = await cvpPages.newBrowserContext({ pageContext: launchNewTab });
+        await cvpPage2.conferencePage.page.bringToFront();
+        await cvpPage2.conferencePage.goTo();
+        await cvpPage2.conferencePage.verifyUserIsOnCvpConferencePage();
+        await cvpPage2.conferencePage.connectToConference(config.cvpUser.cvpConferenceUser, caseDetails.witnessNames[0]);
 
-        await cvpPages.selectRolePage.verifyUserIsOnCvpSelectRolePage();
-        await cvpPages.selectRolePage.connectAsHost(hostPin);
-        await cvpPages.recordingCallPage.verifyUserIsOnCvpRecordingCallPage();
+        await cvpPage2.selectRolePage.verifyUserIsOnCvpSelectRolePage();
+        await cvpPage2.selectRolePage.connectAsHost(hostPin);
+        await cvpPage2.recordingCallPage.verifyUserIsOnCvpRecordingCallPage();
+
+        return cvpPage2;
       });
 
       await test.step('Verify user begins recording in cvp and live feed received in power app', async () => {
-        await cvpPages.roomSettingsPage.page.bringToFront();
-        await cvpPages.roomSettingsPage.beginRecording(config.cvpUser.serviceId, config.cvpUser.locationCode, caseDetails.caseReference);
+        await cvpPage1.roomSettingsPage.page.bringToFront();
+        await cvpPage1.roomSettingsPage.beginRecording(config.cvpUser.serviceId, config.cvpUser.locationCode, caseDetails.caseReference);
         await powerAppPages.viewLiveFeedPage.page.bringToFront();
 
         try {
           await networkInterceptUtils.interceptNetworkRequestToVerifyRecordingIsTakingPlace(caseDetails.caseReference, 90000);
           await expect(powerAppPages.viewLiveFeedPage.$static.notRecordingText).toBeHidden({ timeout: 90000 });
         } catch (error) {
-          await cvpPages.roomSettingsPage.page.bringToFront();
-          await cvpPages.roomSettingsPage.$interactive.endCallButton.click();
+          await cvpPage1.roomSettingsPage.page.bringToFront();
+          await cvpPage1.roomSettingsPage.$interactive.endCallButton.click();
           throw new Error(`Live feed for recording failed to start for case reference: ${caseDetails.caseReference}. Error: ${error}`);
         }
       });
 
       await test.step('Verify user is disconected from call once call has been ended in cvp', async () => {
-        await cvpPages.roomSettingsPage.page.bringToFront();
-        await cvpPages.roomSettingsPage.$interactive.endCallButton.click();
-        await expect(cvpPages.roomSettingsPage.$interactive.recordButton).toBeVisible();
+        await cvpPage1.roomSettingsPage.page.bringToFront();
+        await cvpPage1.roomSettingsPage.$interactive.endCallButton.click();
+        await expect(cvpPage1.roomSettingsPage.$interactive.recordButton).toBeVisible();
 
-        await cvpPages.recordingCallPage.page.bringToFront();
-        await cvpPages.recordingCallPage.verifyUserHasBeenDisconnectedFromCall();
-        await cvpPages.conferencePage.verifyUserIsOnCvpConferencePage();
+        await cvpPage2.recordingCallPage.page.bringToFront();
+        await cvpPage2.recordingCallPage.verifyUserHasBeenDisconnectedFromCall();
+        await cvpPage2.conferencePage.verifyUserIsOnCvpConferencePage();
       });
 
       await test.step('Verify recording is processed in power app once user has clicked finish', async () => {
