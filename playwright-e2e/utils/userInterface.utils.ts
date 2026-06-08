@@ -107,7 +107,11 @@ export class UserInterfaceUtils {
     }, replacements);
 
     for (const [, replacement] of replacements) {
-      await expect(locator).toContainText(replacement);
+      if (replacement.includes('<')) {
+        await expect(locator).toContainText(replacement.replace(/<[^>]+>/g, ''));
+      } else {
+        await expect(locator).toContainText(replacement);
+      }
     }
   }
 

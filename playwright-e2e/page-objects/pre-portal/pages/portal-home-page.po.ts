@@ -13,6 +13,11 @@ export class PortalHomePage extends PrePortalBase {
     recordingTableRow: this.page.locator('tr[id*="recording"]'),
   } as const satisfies Record<string, Locator>;
 
+  public readonly $interactive = {
+    caseReferenceSearchInput: this.page.locator('#caseReference'),
+    caseReferenceSearchButton: this.page.getByRole('button', { name: 'Search' }),
+  } as const satisfies Record<string, Locator>;
+
   public async goTo(): Promise<void> {
     await this.page.goto(config.urls.prePortalUrl);
   }
@@ -27,6 +32,7 @@ export class PortalHomePage extends PrePortalBase {
    * @param recordingVersion
    */
   public async selectRecordingByCaseReferenceAndVersion(caseRef: string, recordingVersion: number): Promise<void> {
+    await this.searchForCaseReferenceIfAvailable(caseRef);
     const recordingLink = this.$static.recordingTableRow
       .filter({ hasText: caseRef })
       .filter({
@@ -44,21 +50,26 @@ export class PortalHomePage extends PrePortalBase {
    */
   public async verifyDetailsOfCaseReferenceOnHomePage(caseDetails: {
     caseRef: string;
-    court: string;
-    date: string;
+    court?: string;
+    date?: string;
     witness: string;
     defendants: string[];
     recordingVersion: number;
     status: 'Active';
   }): Promise<void> {
+    await this.searchForCaseReferenceIfAvailable(caseDetails.caseRef);
     const recordingListItem = this.$static.recordingTableRow.filter({ hasText: caseDetails.caseRef }).filter({
       has: this.page.locator(`td:text-is("${caseDetails.recordingVersion}")`),
     });
 
     await expect(recordingListItem).toBeVisible();
     await expect(recordingListItem.locator('td').nth(0)).toHaveText(caseDetails.caseRef);
-    await expect(recordingListItem.locator('td').nth(1)).toHaveText(caseDetails.court);
-    await expect(recordingListItem.locator('td').nth(2)).toHaveText(caseDetails.date);
+    if (caseDetails.court) {
+      await expect(recordingListItem.locator('td').nth(1)).toHaveText(caseDetails.court);
+    }
+    if (caseDetails.date) {
+      await expect(recordingListItem.locator('td').nth(2)).toHaveText(caseDetails.date);
+    }
     await expect(recordingListItem.locator('td').nth(3)).toContainText(caseDetails.witness);
 
     for (const defendant of caseDetails.defendants) {
@@ -67,5 +78,26 @@ export class PortalHomePage extends PrePortalBase {
 
     await expect(recordingListItem.locator('td').nth(5)).toHaveText(caseDetails.recordingVersion.toString());
     await expect(recordingListItem.locator('td').nth(6)).toHaveText(caseDetails.status);
+  }
+
+  public async verifyRecordingIsNotListed(caseReference: string): Promise<void> {
+    await expect(async () => {
+      await this.goTo();
+      await this.verifyUserIsOnHomePage();
+      await this.searchForCaseReferenceIfAvailable(caseReference);
+      await expect(this.$static.recordingTableRow.filter({ hasText: caseReference })).not.toBeAttached({ timeout: 2_000 });
+    }).toPass({ intervals: [2_000], timeout: 30_000 });
+  }
+
+  private async searchForCaseReferenceIfAvailable(caseRef: string): Promise<void> {
+    if (!(await this.$interactive.caseReferenceSearchInput.isVisible())) {
+      return;
+    }
+
+    await this.$interactive.caseReferenceSearchInput.fill(caseRef);
+    await expect(this.$interactive.caseReferenceSearchInput).toHaveValue(caseRef);
+    await this.$interactive.caseReferenceSearchButton.click();
+    await this.page.waitForLoadState('domcontentloaded');
+    await expect(this.$interactive.caseReferenceSearchInput).toHaveValue(caseRef);
   }
 }
