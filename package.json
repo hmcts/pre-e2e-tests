@@ -37,7 +37,6 @@
     "load-secrets:dev": "yarn get-secrets pre-hmctskv-test,pre-hmctskv-dev",
     "load-secrets:stg": "yarn get-secrets pre-hmctskv-test,pre-hmctskv-stg",
     "load-secrets:demo": "yarn get-secrets pre-hmctskv-test,pre-hmctskv-demo",
-    "load-secrets:prod": "yarn get-secrets pre-hmctskv-test,pre-hmctskv-prod",
     "build-container": "docker build -t playwright-container .",
     "start-container": "docker run --rm -it --network host --ipc=host -v \"$(pwd)\":/playwright -w /playwright -e CI=true -e FUNCTIONAL_TESTS_WORKERS=4 playwright-container /bin/bash",
     "test:visual": "yarn playwright test tests/ --grep @visual --project=chromium",
