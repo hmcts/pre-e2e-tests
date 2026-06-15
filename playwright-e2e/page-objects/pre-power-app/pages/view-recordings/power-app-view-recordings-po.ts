@@ -144,21 +144,6 @@ export class PowerAppViewRecordingsPage extends PowerAppBase {
   }
 
   /**
-   * Searches for an API-assigned recording and shares it with the specified portal user.
-   * @param caseReference - The case reference containing the recording to share.
-   * @param userEmail - The email of the portal user to share the recording with.
-   */
-  public async shareRecordingWithUser(caseReference: string, userEmail: string): Promise<void> {
-    await this.searchForCaseReference(caseReference, 'recordingAssignedByApi');
-    await this.$interactive.shareRecordingButton.click();
-    await expect(this.$shareRecordingModal.modalWindow).toBeVisible();
-    await this.$shareRecordingModal.shareButton.click();
-    await this.searchAndSelectUserToShareRecordingWith(userEmail);
-    await this.$shareRecordingModal.grantAccessButton.click();
-    await expect(this.$shareRecordingModal.listOfUsersRecordingIsSharedWith).toContainText(userEmail);
-  }
-
-  /**
    * Removes access to the recording from a specified user by clicking the remove access button
    * next to the user's email in the list of users the recording is shared with.
    * Verifies that the user is no longer present in the list after removal.

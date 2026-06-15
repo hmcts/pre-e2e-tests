@@ -7,6 +7,5 @@
 - Check accessibility on home page
 
 ## Verify accessibility on watch recordings page
-- Create and share a recording for the portal user
 - Navigate to watch recording page
 - Check accessibility on watch recordings page
