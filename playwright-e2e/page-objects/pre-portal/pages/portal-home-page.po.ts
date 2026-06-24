@@ -34,6 +34,10 @@ export class PortalHomePage extends PrePortalBase {
       })
       .locator('[class="govuk-link"]');
     await this.navigationClick(recordingLink);
+    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.page.waitForLoadState('load');
+    await this.page.waitForTimeout(1000);
   }
 
   /**
@@ -56,6 +60,8 @@ export class PortalHomePage extends PrePortalBase {
     });
 
     await expect(recordingListItem).toBeVisible();
+    await expect(recordingListItem.locator('td').nth(0)).toBeVisible();
+    await expect(recordingListItem).toHaveCount(1);
     await expect(recordingListItem.locator('td').nth(0)).toHaveText(caseDetails.caseRef);
     await expect(recordingListItem.locator('td').nth(1)).toHaveText(caseDetails.court);
     await expect(recordingListItem.locator('td').nth(2)).toHaveText(caseDetails.date);

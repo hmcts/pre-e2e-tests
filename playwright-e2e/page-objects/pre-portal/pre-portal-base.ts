@@ -9,5 +9,9 @@ export abstract class PrePortalBase extends Base {
 
   public async navigationClick(elementTOClick: Locator): Promise<void> {
     await this.userInterfaceUtils.navigationClick(elementTOClick);
+    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.page.waitForLoadState('load');
+    await this.page.waitForTimeout(1000);
   }
 }
