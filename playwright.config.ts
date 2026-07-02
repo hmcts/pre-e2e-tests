@@ -25,18 +25,22 @@ export default defineConfig({
   projects: [
     {
       name: 'pre-power-app-setup',
+      testDir: 'playwright-e2e',
       testMatch: 'global-pre-power-app-setup.ts',
     },
     {
       name: 'pre-power-app-teardown',
+      testDir: 'playwright-e2e',
       testMatch: 'global-pre-power-app-teardown.ts',
     },
         {
       name: 'pre-portal-setup',
+      testDir: 'playwright-e2e',
       testMatch: 'global-pre-portal-setup.ts',
     },
     {
       name: 'pre-portal-teardown',
+      testDir: 'playwright-e2e',
       testMatch: 'global-pre-portal-teardown.ts',
     },
     {
