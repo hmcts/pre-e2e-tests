@@ -718,14 +718,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:^1.48.2":
-  version: 1.55.0
-  resolution: "@playwright/test@npm:1.55.0"
+"@playwright/test@npm:^1.60.0":
+  version: 1.61.1
+  resolution: "@playwright/test@npm:1.61.1"
   dependencies:
-    playwright: "npm:1.55.0"
+    playwright: "npm:1.61.1"
   bin:
     playwright: cli.js
-  checksum: 10/bfaede669b0583ee6ec48bfe9ff531cac58da1b83031907d5d0fd71c33bab6766669a23359e401066d97c8e8fa76566900f71be7b290d12213ebb3530a82afbb
+  checksum: 10/08915357031e1bc273a19bb428fb7e51031ca44f25750832e389bcd69c399f6a243f5f832e7832d46153b57b1305f1f5f5dd63f3a3261f928f61e464c6b3c64e
   languageName: node
   linkType: hard
 
@@ -2993,12 +2993,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.55.0, playwright-core@npm:^1.48.2":
-  version: 1.55.0
-  resolution: "playwright-core@npm:1.55.0"
+"playwright-core@npm:1.61.1, playwright-core@npm:^1.60.0":
+  version: 1.61.1
+  resolution: "playwright-core@npm:1.61.1"
   bin:
     playwright-core: cli.js
-  checksum: 10/843376a8e2c1100d3f0625b2c85a69dc4418a0b268bdc7da6cf28252f6dc50c299c734f090a67c7f36cfa9140dacf5b95e817664e69642bcbaf06eea4d216c35
+  checksum: 10/b0e7b1d4de7ca6c1a57eb88f1709609a8b7637092f149e703d84d6c8e01835992ec5ca26b86f1a32fb5f5bc1aad042c3ae27311e131b3dda8a27824a543eb3c7
   languageName: node
   linkType: hard
 
@@ -3018,18 +3018,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright@npm:1.55.0, playwright@npm:^1.48.2":
-  version: 1.55.0
-  resolution: "playwright@npm:1.55.0"
+"playwright@npm:1.61.1, playwright@npm:^1.60.0":
+  version: 1.61.1
+  resolution: "playwright@npm:1.61.1"
   dependencies:
     fsevents: "npm:2.3.2"
-    playwright-core: "npm:1.55.0"
+    playwright-core: "npm:1.61.1"
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: 10/df02529693923b9b671822dac8a2ac8a8471c9142a05e14a24f8d0038a7dcf705712363991a070fc927466bbbe70e485145cf7a77882613822f56960afc4b892
+  checksum: 10/0cd1a8a7e106202e785450763973bf326d4aa112ed195bbd78b17af43dcfd12e29bc8204ae61c88f748dd0f2bdf69a7827bc3bbf8c1ec4c71b8e35586e05f13c
   languageName: node
   linkType: hard
 
@@ -3505,7 +3505,7 @@ __metadata:
     "@eslint/js": "npm:^9.11.1"
     "@faker-js/faker": "npm:^9.8.0"
     "@hmcts/playwright-common": "npm:^1.0.36"
-    "@playwright/test": "npm:^1.48.2"
+    "@playwright/test": "npm:^1.60.0"
     "@types/luxon": "npm:^3"
     "@types/node": "npm:^22.15.32"
     "@typescript-eslint/eslint-plugin": "npm:^8.8.0"
@@ -3519,8 +3519,8 @@ __metadata:
     husky: "npm:^9.1.7"
     lighthouse: "npm:^12.2.1"
     luxon: "npm:^3.7.2"
-    playwright: "npm:^1.48.2"
-    playwright-core: "npm:^1.48.2"
+    playwright: "npm:^1.60.0"
+    playwright-core: "npm:^1.60.0"
     playwright-lighthouse: "npm:^4.0.0"
     prettier: "npm:^3.6.0"
     typescript: "npm:^5.6.2"
