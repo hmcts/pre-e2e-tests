@@ -14,7 +14,7 @@ export class NetworkInterceptUtils {
    * @param pathToFile - The path to the file where user data will be stored.
    */
   public async interceptAndStoreUserDataUponLogin(pathToFile: string): Promise<void> {
-    const timeoutMs = 60000;
+    const timeoutMs = 120000;
 
     let userId: string | undefined;
     let x_userId: string | undefined;
@@ -27,7 +27,7 @@ export class NetworkInterceptUtils {
           const response = await this.page
             .waitForResponse(
               (res) => res.url().includes('environment.api.powerplatform.com/connectors/runtime/invoke') && res.request().method() === 'GET',
-              { timeout: 5000 },
+              { timeout: 10000 },
             )
             .catch(() => null);
 

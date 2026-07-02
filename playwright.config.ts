@@ -4,6 +4,8 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
+const skipPowerAppSetup = process.env.PRE_POWER_APP_SKIP_SETUP === 'true';
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -40,8 +42,8 @@ export default defineConfig({
     {
       ...ProjectsConfig.chromium,
       name: 'Pre-Power-App-Chromium', // Chromium project for visual tests only for power app
-      dependencies: ['pre-power-app-setup'],
-      teardown: 'pre-power-app-teardown',
+      dependencies: skipPowerAppSetup ? [] : ['pre-power-app-setup'],
+      teardown: skipPowerAppSetup ? undefined : 'pre-power-app-teardown',
       testDir: 'playwright-e2e/tests/pre-power-app',
       snapshotDir: './playwright-e2e/snapshots/pre-power-app',
       testMatch: ['**/*visual*.spec.ts'],
@@ -54,8 +56,8 @@ export default defineConfig({
     {
       ...ProjectsConfig.edge,
       name: 'Pre-Power-App-Edge', // Edge project for all tests besides visual tests for power app
-      dependencies: ['pre-power-app-setup'],
-      teardown: 'pre-power-app-teardown',
+      dependencies: skipPowerAppSetup ? [] : ['pre-power-app-setup'],
+      teardown: skipPowerAppSetup ? undefined : 'pre-power-app-teardown',
       testDir: 'playwright-e2e/tests/pre-power-app',
       testIgnore: ['**/*visual*.spec.ts'],
       use: {

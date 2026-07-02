@@ -12,10 +12,24 @@ setup.describe('Set up users and retrieve tokens', () => {
    * This setup logs in using the provided credentials and saves the browser
    * storage state to a file, allowing tests to reuse the authenticated session.
    */
-  setup('Store session and user data for Level 1 user', async ({ powerAppPages, networkInterceptUtils, context, config }) => {
+  setup('Store session and user data for Level 1 user', async ({ powerAppPages, networkInterceptUtils, context, config, page }) => {
     const user = config.powerAppUsers.preLevel1User;
-    await powerAppPages.msSignInPage.signIn(user.username, user.password);
-    await networkInterceptUtils.interceptAndStoreUserDataUponLogin(user.userDataFile);
-    await context.storageState({ path: user.sessionFile });
+    const maxAttempts = 3;
+
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        await powerAppPages.msSignInPage.signIn(user.username, user.password);
+        await networkInterceptUtils.interceptAndStoreUserDataUponLogin(user.userDataFile);
+        await context.storageState({ path: user.sessionFile });
+        return;
+      } catch (error) {
+        if (attempt === maxAttempts) {
+          throw error;
+        }
+
+        console.warn(`Pre-Power-App setup attempt ${attempt} failed, retrying (${maxAttempts - attempt} left)...`, error);
+        await page.goto(config.urls.prePowerAppUrl, { waitUntil: 'domcontentloaded' });
+      }
+    }
   });
 });
