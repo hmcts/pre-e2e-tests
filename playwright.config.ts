@@ -6,11 +6,20 @@ dotenv.config();
 
 const skipPowerAppSetup = process.env.PRE_POWER_APP_SKIP_SETUP === 'true';
 
+function resolveWorkers(): number {
+  const configured = Number.parseInt(process.env.FUNCTIONAL_TESTS_WORKERS ?? '', 10);
+  if (Number.isInteger(configured) && configured > 0) {
+    return configured;
+  }
+  return process.env.CI ? 2 : 4;
+}
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
   ...CommonConfig.recommended,
+  workers: resolveWorkers(),
   reporter: [['list'], ['html', { outputFolder: 'playwright-report' }]],
   timeout: 120_000,
     expect: {
