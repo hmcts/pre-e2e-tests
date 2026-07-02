@@ -4,50 +4,52 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-const skipPowerAppSetup = process.env.PRE_POWER_APP_SKIP_SETUP === 'true';
-
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
   ...CommonConfig.recommended,
-  reporter: [['list'], ['html', { outputFolder: 'playwright-report' }]],
+  reporter: process.env.CI
+    ? [
+        ['list'],
+        ['blob'],
+      ]
+    : [
+        ['list'],
+        ['html', { outputFolder: 'playwright-report' }],
+      ],
   timeout: 120_000,
-    expect: {
+  expect: {
     toHaveScreenshot: {
       maxDiffPixels: 100,
     },
   },
-  use: { 
+  use: {
     ...CommonConfig.recommended.use,
-    actionTimeout: 10_000 
+    actionTimeout: 10_000,
   },
   projects: [
     {
       name: 'pre-power-app-setup',
-      testDir: 'playwright-e2e',
       testMatch: 'global-pre-power-app-setup.ts',
     },
     {
       name: 'pre-power-app-teardown',
-      testDir: 'playwright-e2e',
       testMatch: 'global-pre-power-app-teardown.ts',
     },
-        {
+    {
       name: 'pre-portal-setup',
-      testDir: 'playwright-e2e',
       testMatch: 'global-pre-portal-setup.ts',
     },
     {
       name: 'pre-portal-teardown',
-      testDir: 'playwright-e2e',
       testMatch: 'global-pre-portal-teardown.ts',
     },
     {
       ...ProjectsConfig.chromium,
       name: 'Pre-Power-App-Chromium', // Chromium project for visual tests only for power app
-      dependencies: skipPowerAppSetup ? [] : ['pre-power-app-setup'],
-      teardown: skipPowerAppSetup ? undefined : 'pre-power-app-teardown',
+      dependencies: ['pre-power-app-setup'],
+      teardown: 'pre-power-app-teardown',
       testDir: 'playwright-e2e/tests/pre-power-app',
       snapshotDir: './playwright-e2e/snapshots/pre-power-app',
       testMatch: ['**/*visual*.spec.ts'],
@@ -60,8 +62,8 @@ export default defineConfig({
     {
       ...ProjectsConfig.edge,
       name: 'Pre-Power-App-Edge', // Edge project for all tests besides visual tests for power app
-      dependencies: skipPowerAppSetup ? [] : ['pre-power-app-setup'],
-      teardown: skipPowerAppSetup ? undefined : 'pre-power-app-teardown',
+      dependencies: ['pre-power-app-setup'],
+      teardown: 'pre-power-app-teardown',
       testDir: 'playwright-e2e/tests/pre-power-app',
       testIgnore: ['**/*visual*.spec.ts'],
       use: {
@@ -73,9 +75,9 @@ export default defineConfig({
             '--use-fake-ui-for-media-stream',
             '--use-fake-device-for-media-stream',
           ],
-        },         
+        },
       },
-    },  
+    },
     {
       ...ProjectsConfig.edge,
       name: 'Pre-Portal-Edge', // Edge project for all tests besides visual tests for portal
@@ -84,9 +86,9 @@ export default defineConfig({
       testDir: 'playwright-e2e/tests/pre-portal',
       testIgnore: ['**/*visual*.spec.ts'],
       use: {
-        ...ProjectsConfig.edge.use,        
+        ...ProjectsConfig.edge.use,
       },
-    },  
+    },
     {
       ...ProjectsConfig.chromium,
       name: 'Pre-Portal-Chromium', // Chromium project for visual tests only for portal
@@ -98,6 +100,6 @@ export default defineConfig({
       use: {
         ...ProjectsConfig.chromium.use,
       },
-    },         
+    },
   ],
 });
