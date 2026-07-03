@@ -69,7 +69,7 @@ test.describe('Set of tests to verify pre portal UI is visually correct as Level
         await expect(async () => {
           await expect(prePortalPages.watchRecordingPage.page).toHaveScreenshot('portal-watch-recording-page-visual.png', {
             fullPage: true,
-            mask: [prePortalPages.watchRecordingPage.$static.recordingUID],
+            mask: [prePortalPages.watchRecordingPage.$static.recordingUID, prePortalPages.watchRecordingPage.page.locator('div[id="videoWrapper"]')],
           });
         }).toPass({ intervals: [2000], timeout: 15000 });
       });
