@@ -20,7 +20,6 @@ export class PowerAppViewLiveFeedPage extends PowerAppBase {
 
   public readonly $startRecordingModal = {
     recordingLinkIsBeingGeneratedText: this.iFrame.getByText('A link will be generated.'),
-    recordingLinkGeneratedText: this.iFrame.locator('[data-control-name="CVPPromptGrpRdyToRecordLbl_Input"] textarea'),
     recordingLinkIsBeingGeneratedSpinner: this.iFrame.locator('[data-control-name="RTMPSSpinner"]'),
     generatedRtmpsLink: this.iFrame.locator('[data-control-name*="CVPRTMPUrlTxt"] textarea'),
     dontForgetToStartRecordingText: this.iFrame.locator('[data-control-name*="DontForgetToPressRecordLbl"] [class="appmagic-label-text"]'),
@@ -47,23 +46,15 @@ export class PowerAppViewLiveFeedPage extends PowerAppBase {
     await this.selectStartRecordingButton();
 
     await expect(this.$startRecordingModal.recordingLinkIsBeingGeneratedText).toBeVisible();
-    // await expect(this.$startRecordingModal.recordingLinkGeneratedText).toBeVisible({ timeout: 90_000 });
     await expect(this.$startRecordingModal.recordingLinkIsBeingGeneratedSpinner).toBeHidden({ timeout: 90_000 });
-    await expect(this.$startRecordingModal.generatedRtmpsLink).toBeVisible({ timeout: 90_000 });
-    await expect(this.$startRecordingModal.copyLinkButton).toBeVisible({ timeout: 90_000 });
+    await expect(this.$startRecordingModal.generatedRtmpsLink).toBeVisible();
+    await expect(this.$startRecordingModal.copyLinkButton).toBeVisible();
 
-    let rtmpsLinkValue = '';
-    await expect
-      .poll(
-        async () => {
-          rtmpsLinkValue = (await this.$startRecordingModal.generatedRtmpsLink.inputValue()).trim();
-          return rtmpsLinkValue;
-        },
-        { timeout: 90_000, intervals: [1000, 2000, 3000] },
-      )
-      .toContain('rtmps://');
+    const rtmpsLinkValue = await this.$startRecordingModal.generatedRtmpsLink.inputValue();
+    expect(rtmpsLinkValue).not.toBeNull();
+    expect(rtmpsLinkValue).toContain('rtmps://');
 
-    await this.$startRecordingModal.copyLinkButton.click();
+    await expect(this.$startRecordingModal.copyLinkButton).toBeVisible();
 
     await this.selectCloseButtonToDismissStartRecordingModal();
     return rtmpsLinkValue;
@@ -77,13 +68,6 @@ export class PowerAppViewLiveFeedPage extends PowerAppBase {
     await expect(async () => {
       await this.$interactive.startRecordingButton.click();
       await expect(this.iFrame.locator('[data-control-name="RTMPSWindow"]')).toBeVisible();
-    }).toPass({ intervals: [3000], timeout: 12_000 });
-  }
-
-  public async copyLinkButton(): Promise<void> {
-    await expect(async () => {
-      await this.$startRecordingModal.copyLinkButton.click();
-      await expect(this.$startRecordingModal.generatedRtmpsLink).toBeVisible();
     }).toPass({ intervals: [3000], timeout: 12_000 });
   }
 
