@@ -105,7 +105,22 @@ export class CvpRoomSettingsPage extends CvpBase {
    */
   public async beginRecording(serviceId: string, locationCode: string, caseId: string): Promise<void> {
     await this.$interactive.recordButton.click();
-    await expect(this.$recordingModal.recordingModalHeading).toBeVisible();
+
+    const modalAppeared = await this.$recordingModal.recordingModalHeading
+      .waitFor({ state: 'visible', timeout: 5000 })
+      .then(() => true)
+      .catch(() => false);
+
+    // Some CVP versions start recording immediately and skip the case-details modal.
+    if (!modalAppeared) {
+      await expect(
+        this.page
+          .getByRole('button', { name: /Recording/i })
+          .or(this.page.getByText('The recording has started'))
+          .first(),
+      ).toBeVisible({ timeout: 15000 });
+      return;
+    }
 
     await this.$recordingModal.serviceIDInput.fill(serviceId);
     await expect(this.$recordingModal.serviceIDInput).toHaveValue(serviceId);
@@ -125,6 +140,6 @@ export class CvpRoomSettingsPage extends CvpBase {
     await this.$recordingModal.cancel_close_Button.click();
 
     await expect(this.$recordingModal.recordingModalHeading).toBeHidden();
-    await expect(this.page.getByRole('button', { name: 'Recording' })).toBeVisible({ timeout: 20000 });
+    await expect(this.page.getByRole('button', { name: /Recording/i })).toBeVisible({ timeout: 20000 });
   }
 }

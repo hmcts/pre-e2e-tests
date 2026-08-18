@@ -75,20 +75,50 @@ export class NetworkInterceptUtils {
    * @param timeoutMs - The maximum time to wait for the expected response.
    */
   public async interceptNetworkRequestToVerifyRecordingIsTakingPlace(caseReference: string, timeoutMs: number): Promise<void> {
+    let pollAttempt = 0;
+
     await expect
       .poll(
         async () => {
+          pollAttempt += 1;
           const response = await this.page
-            .waitForResponse((res) => res.url().includes('/invoke') && res.request().method() === 'GET', { timeout: 5000 })
+            .waitForResponse(
+              (res) =>
+                res.url().includes('/invoke') &&
+                (res.request().method() === 'GET' || res.request().method() === 'POST' || res.request().method() === 'OPTIONS'),
+              { timeout: 5000 },
+            )
             .catch(() => null);
 
           if (!response) return false;
 
           try {
             const body = await response.json();
+            const responseMethod = response.request().method();
 
-            const hasExpectedReference = body?.case_dto?.reference === caseReference;
-            const isRecording = body?.capture_sessions?.[0]?.status === 'RECORDING';
+            const responseCaseReference =
+              body?.case_dto?.reference ?? body?.caseDTO?.reference ?? body?._embedded?.bookingDTOList?.[0]?.case_dto?.reference;
+
+            const captureSessions = [
+              ...(Array.isArray(body?.capture_sessions) ? body.capture_sessions : []),
+              ...(Array.isArray(body?._embedded?.bookingDTOList?.[0]?.capture_sessions) ? body._embedded.bookingDTOList[0].capture_sessions : []),
+            ];
+
+            const hasExpectedReference = responseCaseReference === caseReference;
+            const statuses = captureSessions.map((session) => session?.status).filter(Boolean);
+            const isRecording = statuses.some((status) => status === 'RECORDING');
+
+            if (hasExpectedReference && !isRecording) {
+              console.info(
+                `[recording-intercept] attempt=${pollAttempt} method=${responseMethod} caseReference=${responseCaseReference} statuses=${JSON.stringify(statuses)}`,
+              );
+            }
+
+            if (hasExpectedReference && isRecording) {
+              console.info(
+                `[recording-intercept] recording confirmed attempt=${pollAttempt} method=${responseMethod} caseReference=${responseCaseReference}`,
+              );
+            }
 
             return hasExpectedReference && isRecording;
           } catch (err) {
@@ -98,7 +128,7 @@ export class NetworkInterceptUtils {
         },
         {
           timeout: timeoutMs,
-          message: `Timeout: Expected POST /invoke response with 'RECORDING' status and reference '${caseReference}' within ${timeoutMs / 1000} seconds in order to confirm recording is taking place in powerapps.`,
+          message: `Timeout: Expected /invoke response with 'RECORDING' status and reference '${caseReference}' within ${timeoutMs / 1000} seconds in order to confirm recording is taking place in powerapps.`,
         },
       )
       .toBeTruthy();
