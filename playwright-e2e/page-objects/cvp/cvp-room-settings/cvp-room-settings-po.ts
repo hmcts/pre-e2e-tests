@@ -15,18 +15,6 @@ export class CvpRoomSettingsPage extends CvpBase {
     rtmpsLinkInput: this.page.getByRole('textbox', { name: 'Recording URI:' }),
   } as const satisfies Record<string, Locator>;
 
-  public readonly $recordingModal = {
-    recordingModalHeading: this.page.getByRole('heading', { name: 'Recording with case ID' }),
-    serviceIDInput: this.page.getByPlaceholder('Service ID'),
-    locationCodeInput: this.page.getByPlaceholder('Location code'),
-    caseIdInput: this.page.getByPlaceholder('Case ID'),
-    cancel_close_Button: this.page.getByRole('button', { name: 'Cancel' }),
-    okButton: this.page.getByRole('button', { name: 'Ok' }),
-    saveButton: this.page.getByLabel('Save', { exact: true }),
-
-    fileNameSavedText: this.page.getByText('Your file has been saved'),
-  } as const satisfies Record<string, Locator>;
-
   public async goTo(): Promise<void> {
     await this.page.goto(config.urls.cvpSettingsUrl);
   }
@@ -96,50 +84,9 @@ export class CvpRoomSettingsPage extends CvpBase {
     return hostPin;
   }
 
-  /**
-   * Begins recording by clicking the record button, filling in the required fields in the modal,
-   * confirming and saving the recording, and verifying the file has been saved and the modal is closed.
-   * @param serviceId - The service ID to enter.
-   * @param locationCode - The location code to enter.
-   * @param caseId - The case ID to enter.
-   */
-  public async beginRecording(serviceId: string, locationCode: string, caseId: string): Promise<void> {
+  public async beginRecording(): Promise<void> {
     await this.$interactive.recordButton.click();
 
-    const modalAppeared = await this.$recordingModal.recordingModalHeading
-      .waitFor({ state: 'visible', timeout: 5000 })
-      .then(() => true)
-      .catch(() => false);
-
-    // Some CVP versions start recording immediately and skip the case-details modal.
-    if (!modalAppeared) {
-      await expect(
-        this.page
-          .getByRole('button', { name: /Recording/i })
-          .or(this.page.getByText('The recording has started'))
-          .first(),
-      ).toBeVisible({ timeout: 15000 });
-      return;
-    }
-
-    await this.$recordingModal.serviceIDInput.fill(serviceId);
-    await expect(this.$recordingModal.serviceIDInput).toHaveValue(serviceId);
-
-    await this.$recordingModal.locationCodeInput.fill(locationCode);
-    await expect(this.$recordingModal.locationCodeInput).toHaveValue(locationCode);
-
-    await this.$recordingModal.caseIdInput.fill(caseId);
-    await expect(this.$recordingModal.caseIdInput).toHaveValue(caseId);
-
-    await this.$recordingModal.okButton.click();
-    await expect(this.$recordingModal.saveButton).toBeVisible();
-
-    await this.$recordingModal.saveButton.click();
-
-    await expect(this.$recordingModal.fileNameSavedText).toBeVisible();
-    await this.$recordingModal.cancel_close_Button.click();
-
-    await expect(this.$recordingModal.recordingModalHeading).toBeHidden();
     await expect(this.page.getByRole('button', { name: /Recording/i })).toBeVisible({ timeout: 20000 });
   }
 }

@@ -10,8 +10,6 @@ export interface UserCredentials {
 }
 
 interface cvpUserCredentials extends UserCredentials {
-  serviceId: string;
-  locationCode: string;
   cvpConferenceUser: string;
 }
 
@@ -71,8 +69,6 @@ export const config: Config = {
     username: getEnvVar('CVP_USER_EMAIL'),
     password: getEnvVar('CVP_USER_PASSWORD'),
     cvpConferenceUser: getEnvVar('CVP_CONFERENCE_USER_EMAIL'),
-    serviceId: getEnvVar('CVP_SERVICE_ID'),
-    locationCode: getEnvVar('CVP_LOCATION_CODE'),
   },
   urls: {
     prePowerAppUrl: getEnvVar('PRE_POWER_APP_URL'),
