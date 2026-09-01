@@ -225,29 +225,30 @@ export class ApiClient {
    * @param caseReference - The reference of the case to check for recording processing status.
    */
   public async verifyRecordingHasBeenSuccessfullyProcessedForCase(caseReference: string) {
-    await expect
-      .poll(
-        async () => {
-          const response = await this.getBookingDetailsByCaseReferenceApi.request(caseReference);
-          const responseBody = await response.json();
+    await expect.poll(
+      async () => {
+        const response = await this.getBookingDetailsByCaseReferenceApi.request(caseReference);
+        const responseBody = await response.json();
 
-          const status = responseBody?._embedded?.bookingDTOList?.[0]?.capture_sessions?.[0]?.status;
+        const status = responseBody?._embedded?.bookingDTOList?.[0]?.capture_sessions?.[0]?.status;
 
-          if (!status) {
-            throw new Error(
-              `No recording status found for case: ${caseReference} whilst trying to establish recording has been processed successfully.`,
-            );
-          } else if (status === 'FAILURE') {
-            throw new Error(
-              `Recording processing has failed for case: ${caseReference}, status of recording is: ${status}. Please check available logs for more details.`,
-            );
-          } else {
-            return status;
-          }
-        },
-        { timeout: 30_000, intervals: [2_000] },
-      )
-      .toBe('RECORDING_AVAILABLE');
+        if (!status) {
+          throw new Error(
+            `No recording status found for case: ${caseReference} whilst trying to establish recording has been processed successfully.`,
+          );
+        } else if (status === 'FAILURE') {
+          throw new Error(
+            `Recording processing has failed for case: ${caseReference}, status of recording is: ${status}. Please check available logs for more details.`,
+          );
+        } else {
+          return status;
+        }
+      },
+      { timeout: 30_000, intervals: [2_000] },
+    );
+    const status = (await (await this.getBookingDetailsByCaseReferenceApi.request(caseReference)).json())?._embedded?.bookingDTOList?.[0]
+      ?.capture_sessions?.[0]?.status;
+    expect(status).toBe('RECORDING_AVAILABLE');
   }
 
   /**
