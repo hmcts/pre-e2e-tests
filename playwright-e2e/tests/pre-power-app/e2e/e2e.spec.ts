@@ -102,7 +102,7 @@ test.describe('Ensure e2e journey is working as expected', () => {
 
       await test.step('Verify user begins recording in cvp and live feed received in power app', async () => {
         await cvpPage1.roomSettingsPage.page.bringToFront();
-        await cvpPage1.roomSettingsPage.verifyRecordingButtonIsVisible();
+        await cvpPage1.roomSettingsPage.beginRecording();
         await powerAppPages.viewLiveFeedPage.page.bringToFront();
 
         try {

@@ -84,9 +84,9 @@ export class CvpRoomSettingsPage extends CvpBase {
     return hostPin;
   }
   /**
-   * Verifies that the "Recording" button is visible on the page.
+   * Begins recording by clicking the record button.
    */
-  public async verifyRecordingButtonIsVisible(): Promise<void> {
-    await expect(this.page.getByRole('button', { name: 'Recording' })).toBeVisible({ timeout: 20000 });
+  public async beginRecording(): Promise<void> {
+    await this.$interactive.recordButton.click();
   }
 }
