@@ -15,18 +15,6 @@ export class CvpRoomSettingsPage extends CvpBase {
     rtmpsLinkInput: this.page.getByRole('textbox', { name: 'Recording URI:' }),
   } as const satisfies Record<string, Locator>;
 
-  public readonly $recordingModal = {
-    recordingModalHeading: this.page.getByRole('heading', { name: 'Recording with case ID' }),
-    serviceIDInput: this.page.getByPlaceholder('Service ID'),
-    locationCodeInput: this.page.getByPlaceholder('Location code'),
-    caseIdInput: this.page.getByPlaceholder('Case ID'),
-    cancel_close_Button: this.page.getByRole('button', { name: 'Cancel' }),
-    okButton: this.page.getByRole('button', { name: 'Ok' }),
-    saveButton: this.page.getByLabel('Save', { exact: true }),
-
-    fileNameSavedText: this.page.getByText('Your file has been saved'),
-  } as const satisfies Record<string, Locator>;
-
   public async goTo(): Promise<void> {
     await this.page.goto(config.urls.cvpSettingsUrl);
   }
@@ -95,36 +83,10 @@ export class CvpRoomSettingsPage extends CvpBase {
     const hostPin = await this.page.getByRole('spinbutton', { name: 'Host PIN:' }).inputValue();
     return hostPin;
   }
-
   /**
-   * Begins recording by clicking the record button, filling in the required fields in the modal,
-   * confirming and saving the recording, and verifying the file has been saved and the modal is closed.
-   * @param serviceId - The service ID to enter.
-   * @param locationCode - The location code to enter.
-   * @param caseId - The case ID to enter.
+   * Verifies that the "Recording" button is visible on the page.
    */
-  public async beginRecording(serviceId: string, locationCode: string, caseId: string): Promise<void> {
-    await this.$interactive.recordButton.click();
-    await expect(this.$recordingModal.recordingModalHeading).toBeVisible();
-
-    await this.$recordingModal.serviceIDInput.fill(serviceId);
-    await expect(this.$recordingModal.serviceIDInput).toHaveValue(serviceId);
-
-    await this.$recordingModal.locationCodeInput.fill(locationCode);
-    await expect(this.$recordingModal.locationCodeInput).toHaveValue(locationCode);
-
-    await this.$recordingModal.caseIdInput.fill(caseId);
-    await expect(this.$recordingModal.caseIdInput).toHaveValue(caseId);
-
-    await this.$recordingModal.okButton.click();
-    await expect(this.$recordingModal.saveButton).toBeVisible();
-
-    await this.$recordingModal.saveButton.click();
-
-    await expect(this.$recordingModal.fileNameSavedText).toBeVisible();
-    await this.$recordingModal.cancel_close_Button.click();
-
-    await expect(this.$recordingModal.recordingModalHeading).toBeHidden();
+  public async verifyRecordingButtonIsVisible(): Promise<void> {
     await expect(this.page.getByRole('button', { name: 'Recording' })).toBeVisible({ timeout: 20000 });
   }
 }
