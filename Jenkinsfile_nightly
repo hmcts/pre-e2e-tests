@@ -9,11 +9,11 @@ properties([
       name: 'FUNCTIONAL_TESTS_WORKERS',
       defaultValue: '4',
       description: 'Number of workers running functional tests'
-    ), 
+    ),
   ])
 ])
 
-@Library("Infrastructure")
+@Library("Infrastructure@2.5.1")
 
 def type = "nodejs"
 def product = "pre"
