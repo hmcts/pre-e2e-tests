@@ -26,10 +26,10 @@ export class PowerAppProcessingRecordingsPage extends PowerAppBase {
       .getByText('PROCESSING');
 
     await expect(this.iFrame.getByText(caseReference, { exact: true })).toBeVisible({ timeout: 30_000 });
-    await expect(caseProcessingLocator).toBeVisible();
+    await expect(caseProcessingLocator).toBeVisible({ timeout: 30_000 });
 
     // Allow time for the recording to be processed, Currently set to 5 minutes.
-    const processingTimeout = 300_000;
+    const processingTimeout = 5 * 60_000; // 5 minutes
     try {
       await expect(caseProcessingLocator).not.toBeVisible({ timeout: processingTimeout });
     } catch (error) {

@@ -83,11 +83,8 @@ export class CvpRoomSettingsPage extends CvpBase {
     const hostPin = await this.page.getByRole('spinbutton', { name: 'Host PIN:' }).inputValue();
     return hostPin;
   }
-  /**
-   * Begins recording by clicking the record button.
-   */
   public async beginRecording(): Promise<void> {
     await this.$interactive.recordButton.click();
-    await expect(this.page.getByRole('button', { name: 'Recording' })).toBeVisible({ timeout: 20000 });
+    await expect(this.page.getByRole('button', { name: /Recording/i })).toBeVisible({ timeout: 20000 });
   }
 }

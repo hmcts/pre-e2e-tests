@@ -103,7 +103,6 @@ export class NetworkInterceptUtils {
       )
       .toBeTruthy();
   }
-
   /**
    * Intercepts a network request to verify that a video stream is being received from MediaKind.
    * It waits for a GET request to a URL containing 'streaming.mediakind' and 'video'.

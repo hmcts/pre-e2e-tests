@@ -249,7 +249,6 @@ export class ApiClient {
       )
       .toBe('RECORDING_AVAILABLE');
   }
-
   /**
    * Deletes a case by its case ID using the DeleteCaseApi.
    * @param caseId - The ID of the case to delete.
