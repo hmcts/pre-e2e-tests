@@ -19,7 +19,7 @@ test.describe('Set of tests to verify functionality of view live feed page for L
     async ({ powerAppPages }) => {
       await test.step('Given user has selected option to start a recording', async () => {
         await powerAppPages.viewLiveFeedPage.selectStartRecordingButton();
-        await expect(powerAppPages.viewLiveFeedPage.$startRecordingModal.recordingLinkGeneratedText).toBeVisible({ timeout: 90000 });
+        await expect(powerAppPages.viewLiveFeedPage.$startRecordingModal.recordingLinkIsBeingGeneratedText).toBeVisible({ timeout: 90000 });
         await powerAppPages.viewLiveFeedPage.selectCloseButtonToDismissStartRecordingModal();
       });
 
@@ -28,8 +28,8 @@ test.describe('Set of tests to verify functionality of view live feed page for L
       });
 
       await test.step('The correct details are displayed on modal', async () => {
-        await expect(powerAppPages.viewLiveFeedPage.$startRecordingModal.recordingLinkGeneratedText).toBeVisible();
-        await expect(powerAppPages.viewLiveFeedPage.$startRecordingModal.recordingLinkGeneratedText).toHaveValue(
+        await expect(powerAppPages.viewLiveFeedPage.$startRecordingModal.recordingLinkIsBeingGeneratedText).toBeVisible();
+        await expect(powerAppPages.viewLiveFeedPage.$startRecordingModal.recordingLinkIsBeingGeneratedText).toHaveValue(
           'We are now ready to Record. \n\nPlease open CVP and copy the link below:',
         );
 
