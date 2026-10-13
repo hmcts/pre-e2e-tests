@@ -55,21 +55,21 @@ test.describe('Set of tests to verify pre portal UI is visually correct as Level
     async ({ prePortalPages, userInterfaceUtils }) => {
       await test.step('Navigate to watch recording page', async () => {
         await prePortalPages.homePage.selectRecordingByCaseReferenceAndVersion('PLAYWRIGHT', 1);
-        await prePortalPages.watchRecordingPage.verifyUserIsOnWatchRecordingPage();
-        await expect(prePortalPages.watchRecordingPage.$interactive.playRecordingButton).toBeVisible({ timeout: 60_000 });
+        await prePortalPages.recordingPage.verifyUserIsOnWatchRecordingPage();
+        await expect(prePortalPages.recordingPage.$interactive.playRecordingButton).toBeVisible({ timeout: 60_000 });
       });
 
       await test.step('Verify watch recording page is visually correct', async () => {
         // Redact the defendent names which can appear on screen in a different order which breaks visual tests
-        const defendantNameEelement = prePortalPages.watchRecordingPage.page.locator('[data-testid="summary-value-defendants"]');
+        const defendantNameEelement = prePortalPages.recordingPage.page.locator('[data-testid="summary-value-defendants"]');
         await userInterfaceUtils.replaceTextWithinStaticElement(defendantNameEelement, [
           ['Defendant Two', '{Redacted Name}'],
           ['Defendant One', '{Redacted Name}'],
         ]);
         await expect(async () => {
-          await expect(prePortalPages.watchRecordingPage.page).toHaveScreenshot('portal-watch-recording-page-visual.png', {
+          await expect(prePortalPages.recordingPage.page).toHaveScreenshot('portal-watch-recording-page-visual.png', {
             fullPage: true,
-            mask: [prePortalPages.watchRecordingPage.$static.recordingUID, prePortalPages.watchRecordingPage.page.locator('div[id="videoWrapper"]')],
+            mask: [prePortalPages.recordingPage.$static.recordingUID, prePortalPages.recordingPage.page.locator('div[id="videoWrapper"]')],
           });
         }).toPass({ intervals: [2000], timeout: 15000 });
       });

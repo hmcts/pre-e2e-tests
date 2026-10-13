@@ -1,7 +1,7 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { PrePortalBase } from '../pre-portal-base';
 
-export class PortalWatchRecordingPage extends PrePortalBase {
+export class PortalRecordingsPage extends PrePortalBase {
   constructor(page: Page) {
     super(page);
   }
