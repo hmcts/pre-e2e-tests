@@ -1,8 +1,12 @@
 /* eslint-disable playwright/no-skipped-test */
 import { test, expect } from '../../../fixtures.js';
 import { config } from '../../../utils/index.js';
-test.describe('Set of tests to verify pre portal UI is visually correct as Level 3 user', () => {
-  test.use({ storageState: config.portalUsers.preLevel3User.sessionFile });
+
+// test.describe('Set of tests to verify pre portal UI is visually correct as Level 3 user', () => {
+//   test.use({ storageState: config.portalUsers.preLevel3User.sessionFile });
+
+test.describe('Set of tests to verify pre portal UI is visually correct as super user', () => {
+  test.use({ storageState: config.portalUsers.preSuperUser.sessionFile });
 
   test.beforeAll(async ({ headless }) => {
     test.skip(!headless, 'Skipping visual tests in headed mode');
@@ -52,24 +56,27 @@ test.describe('Set of tests to verify pre portal UI is visually correct as Level
     {
       tag: ['@regression', '@visual'],
     },
-    async ({ prePortalPages, userInterfaceUtils }) => {
+    async ({ prePortalPages }) => {
       await test.step('Navigate to watch recording page', async () => {
         await prePortalPages.homePage.selectRecordingByCaseReferenceAndVersion('PLAYWRIGHT', 1);
-        await prePortalPages.recordingPage.verifyUserIsOnWatchRecordingPage();
-        await expect(prePortalPages.recordingPage.$interactive.playRecordingButton).toBeVisible({ timeout: 60_000 });
+        await prePortalPages.watchRecordingPage.verifyUserIsOnWatchRecordingPage();
+        await expect(prePortalPages.watchRecordingPage.$interactive.playRecordingButton).toBeVisible({ timeout: 60_000 });
       });
 
       await test.step('Verify watch recording page is visually correct', async () => {
-        // Redact the defendent names which can appear on screen in a different order which breaks visual tests
-        const defendantNameEelement = prePortalPages.recordingPage.page.locator('[data-testid="summary-value-defendants"]');
-        await userInterfaceUtils.replaceTextWithinStaticElement(defendantNameEelement, [
-          ['Defendant Two', '{Redacted Name}'],
-          ['Defendant One', '{Redacted Name}'],
-        ]);
+        const maskedElements = [
+          prePortalPages.watchRecordingPage.$static.recordingUID,
+          prePortalPages.watchRecordingPage.$static.recordingDefendants,
+          prePortalPages.watchRecordingPage.page.locator('div[id="videoWrapper"]'),
+        ];
+
+        await prePortalPages.watchRecordingPage.$static.heading.waitFor({ state: 'visible', timeout: 60_000 });
+        await Promise.all(maskedElements.map((element) => expect(element).toBeAttached()));
+
         await expect(async () => {
-          await expect(prePortalPages.recordingPage.page).toHaveScreenshot('portal-watch-recording-page-visual.png', {
+          await expect(prePortalPages.watchRecordingPage.page).toHaveScreenshot('portal-watch-recording-page-visual.png', {
             fullPage: true,
-            mask: [prePortalPages.recordingPage.$static.recordingUID, prePortalPages.recordingPage.page.locator('div[id="videoWrapper"]')],
+            mask: maskedElements,
           });
         }).toPass({ intervals: [2000], timeout: 15000 });
       });

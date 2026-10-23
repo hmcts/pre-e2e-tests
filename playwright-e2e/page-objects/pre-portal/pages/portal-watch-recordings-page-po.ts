@@ -1,7 +1,7 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator } from '@playwright/test';
 import { PrePortalBase } from '../pre-portal-base';
 
-export class PortalRecordingsPage extends PrePortalBase {
+export class PortalWatchRecordingsPage extends PrePortalBase {
   constructor(page: Page) {
     super(page);
   }
@@ -21,7 +21,6 @@ export class PortalRecordingsPage extends PrePortalBase {
   } as const satisfies Record<string, Locator>;
 
   public async verifyUserIsOnWatchRecordingPage(): Promise<void> {
-    await expect.poll(() => this.page.url()).toContain('watch');
-    await expect(this.page.locator('h1[class*="govuk-heading"]')).toBeVisible({ timeout: 40_000 });
+    await this.verifyUserIsOnExpectedPage({ pageHeading: this.$static.heading, urlPath: '/recordings/watch/' });
   }
 }
