@@ -9,3 +9,7 @@
 ## Verify accessibility on watch recordings page
 - Navigate to watch recording page
 - Check accessibility on watch recordings page
+
+## Verify accessibility on help page
+- Navigate to help page
+- Check accessibility on help page

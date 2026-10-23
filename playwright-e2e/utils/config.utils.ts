@@ -41,7 +41,9 @@ export interface Config {
   };
   portalUsers: {
     preLevel3User: UserCredentials & portalUserData;
+    preSuperUser: UserCredentials & portalUserData;
   };
+
   cvpUser: cvpUserCredentials;
   urls: Urls;
 }
@@ -63,6 +65,11 @@ export const config: Config = {
       username: getEnvVar('PRE_LEVEL_3_USER_EMAIL'),
       password: getEnvVar('PRE_LEVEL_3_USER_PASSWORD'),
       sessionFile: pathToFile('.sessions/portal/', `${getEnvVar('PRE_LEVEL_3_USER_EMAIL')}.json`),
+    },
+    preSuperUser: {
+      username: getEnvVar('PRE_LEVEL_1_USER_EMAIL'),
+      password: getEnvVar('PRE_LEVEL_1_USER_PASSWORD'),
+      sessionFile: pathToFile('.sessions/portal/', `${getEnvVar('PRE_LEVEL_1_USER_EMAIL')}.json`),
     },
   },
   cvpUser: {

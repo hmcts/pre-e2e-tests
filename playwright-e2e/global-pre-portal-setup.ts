@@ -5,11 +5,23 @@ import { test as setup } from './fixtures';
  * This setup script can be reused for each user type individually.
  * Note: Manually signing out during tests will invalidate the stored session.
  */
+
 setup.describe('Set up users and retrieve tokens', () => {
   setup('Store session data for Level 3 user', async ({ prePortalPages, context, config }) => {
     const user = config.portalUsers.preLevel3User;
     await prePortalPages.homePage.goTo();
     await prePortalPages.b2cLoginPage.signIn(user.username, user.password);
+    await prePortalPages.homePage.verifyUserIsOnHomePage();
+    await context.storageState({ path: user.sessionFile });
+  });
+});
+
+setup.describe('Set up users and retrieve tokens', () => {
+  setup('Store session data for super user', async ({ prePortalPages, context, config }) => {
+    const user = config.portalUsers.preSuperUser;
+    await prePortalPages.homePage.goTo();
+    await prePortalPages.b2cLoginPage.signIn(user.username, user.password);
+    await prePortalPages.homePage.page.waitForLoadState('domcontentloaded');
     await prePortalPages.homePage.verifyUserIsOnHomePage();
     await context.storageState({ path: user.sessionFile });
   });

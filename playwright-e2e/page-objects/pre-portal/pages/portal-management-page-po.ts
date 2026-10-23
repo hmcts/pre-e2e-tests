@@ -1,0 +1,15 @@
+import { Page, Locator, expect } from '@playwright/test';
+import { PrePortalBase } from '../pre-portal-base';
+
+export class PortalManagementPage extends PrePortalBase {
+  constructor(page: Page) {
+    super(page);
+  }
+  public readonly $static = {
+    heading: this.page.getByRole('heading', { level: 1, name: 'This page is under development', exact: true }),
+  } as const satisfies Record<string, Locator>;
+
+  public async verifyUserIsOnManagementPage(): Promise<void> {
+    await this.verifyUserIsOnExpectedPage({ pageHeading: this.$static.heading, urlPath: '/management/reports' });
+  }
+}
