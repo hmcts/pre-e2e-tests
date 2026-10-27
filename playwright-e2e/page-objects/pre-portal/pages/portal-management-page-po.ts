@@ -1,4 +1,4 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator } from '@playwright/test';
 import { PrePortalBase } from '../pre-portal-base';
 
 export class PortalManagementPage extends PrePortalBase {
