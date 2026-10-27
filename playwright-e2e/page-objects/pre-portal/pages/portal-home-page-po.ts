@@ -23,10 +23,6 @@ export class PortalHomePage extends PrePortalBase {
     await this.verifyUserIsOnExpectedPage({ pageHeading: this.$static.heading, urlPath: '/browse' });
   }
 
-  public async goToHelpPage(): Promise<void> {
-    await this.page.goto(new URL('/help', config.urls.prePortalUrl).toString());
-  }
-
   /**
    *  Selects a recording by case reference and version number
    * @param caseRef

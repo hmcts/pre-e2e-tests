@@ -10,6 +10,6 @@ export class PortalUserAdminPage extends PrePortalBase {
   } as const satisfies Record<string, Locator>;
 
   public async verifyUserIsOnPage(): Promise<void> {
-    await this.verifyUserIsOnExpectedPage({ pageHeading: this.$static.heading, urlPath: '/user-admin/onboarding' });
+    await this.verifyUserIsOnExpectedPage({ pageHeading: this.$static.heading, urlPath: '/user-admin' });
   }
 }
