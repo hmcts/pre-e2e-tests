@@ -62,8 +62,6 @@ export class PortalHomePage extends PrePortalBase {
     recordingVersion: number;
     status: 'Active';
   }): Promise<void> {
-    await this.searchForCaseReference(caseDetails.caseRef);
-
     const recordingListItem = this.$static.recordingTableRow.filter({ hasText: caseDetails.caseRef }).filter({
       has: this.page.locator(`td:text-is("${caseDetails.recordingVersion}")`),
     });

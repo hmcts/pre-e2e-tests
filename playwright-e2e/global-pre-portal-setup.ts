@@ -14,9 +14,7 @@ setup.describe('Set up users and retrieve tokens', () => {
     await prePortalPages.homePage.verifyUserIsOnHomePage();
     await context.storageState({ path: user.sessionFile });
   });
-});
 
-setup.describe('Set up users and retrieve tokens', () => {
   setup('Store session data for super user', async ({ prePortalPages, context, config }) => {
     const user = config.portalUsers.preSuperUser;
     await prePortalPages.homePage.goTo();
