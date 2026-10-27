@@ -19,13 +19,17 @@ export class PortalB2cLoginPage extends PrePortalBase {
     signInHeading: this.page.getByRole('heading', { name: 'Sign in' }),
   } as const satisfies Record<string, Locator>;
 
+  public async verifyUserIsOnSignInPage(): Promise<void> {
+    await this.verifyUserIsOnExpectedPage({ pageHeading: this.$static.signInHeading, urlPath: 'b2clogin' });
+  }
+
   /**
    * Signs in to the Microsoft account using the provided email and password.
    * @param email - The email address to sign in with.
    * @param password - The password for the account.
    */
   public async signIn(email: string, password: string): Promise<void> {
-    await expect.poll(() => this.page.url()).toContain('b2clogin');
+    await this.verifyUserIsOnSignInPage();
 
     await expect(this.$static.signInHeading).toBeVisible();
     await this.$inputs.email.fill(email);

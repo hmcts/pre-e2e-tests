@@ -43,6 +43,43 @@ export class CvpRoomSettingsPage extends CvpBase {
     await this.page.locator('h2').filter({ hasText: roomName }).click();
     await this.closeRoomSettingsModal();
   }
+  public async selectRoomByDropDown(roomName: string): Promise<void> {
+    await this.$interactive.selectRoomDropdown.click();
+    const roomMenu = this.page.getByRole('menu').filter({ has: this.page.getByRole('combobox', { name: 'Search rooms' }) });
+
+    await expect(async () => {
+      if (!(await roomMenu.isVisible())) {
+        await this.$interactive.selectRoomDropdown.click();
+      }
+      await expect(roomMenu).toBeVisible();
+    }).toPass({ intervals: [500], timeout: 10_000 });
+
+    const roomLink = roomMenu.getByRole('link', { name: roomName, exact: true }).first();
+
+    await expect(roomLink).toBeVisible();
+    await roomLink.click();
+    await this.closeRoomSettingsModal();
+    await expect(this.page.getByRole('heading', { name: roomName, level: 1 })).toBeVisible();
+  }
+
+  public async refreshPageUntilRecordButtonIsEnabled(): Promise<void> {
+    const pageUrl = this.page.url();
+
+    await expect(async () => {
+      if ((await this.$interactive.recordButton.isVisible()) && (await this.$interactive.recordButton.isEnabled())) {
+        return;
+      }
+
+      await this.page.reload();
+
+      if (pageUrl !== this.page.url()) {
+        await this.page.goto(pageUrl);
+      }
+
+      await expect(this.$interactive.recordButton).toBeVisible({ timeout: 10_000 });
+      await expect(this.$interactive.recordButton).toBeEnabled({ timeout: 5_000 });
+    }).toPass({ intervals: [1_000], timeout: 60_000 });
+  }
 
   /**
    * Edits the room settings by clicking the edit button, clearing and filling the RTMPS link input,
@@ -85,6 +122,6 @@ export class CvpRoomSettingsPage extends CvpBase {
   }
   public async beginRecording(): Promise<void> {
     await this.$interactive.recordButton.click();
-    await expect(this.page.getByRole('button', { name: /Recording/i })).toBeVisible({ timeout: 20000 });
+    await expect(this.page.getByRole('button', { name: /Starting/i })).toBeVisible({ timeout: 15_000 });
   }
 }

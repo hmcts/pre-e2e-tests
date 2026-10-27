@@ -1,6 +1,6 @@
-import { test, expect } from '../../../fixtures';
-import { config } from '../../../utils';
-import { PortalHomePage, PortalWatchRecordingPage } from '../../../page-objects/pre-portal/pages/index.js';
+import { test, expect } from '../../../fixtures.js';
+import { config } from '../../../utils/index.js';
+import { PortalHomePage, PortalWatchRecordingsPage } from '../../../page-objects/pre-portal/pages/index.js';
 test.describe('Set of tests to verify functionality of pre portal as a Level 3 user', () => {
   test.use({ storageState: config.portalUsers.preLevel3User.sessionFile });
 
@@ -38,7 +38,7 @@ test.describe('Set of tests to verify functionality of pre portal as a Level 3 u
 
       const prePortalTab = await context.newPage();
       const portal_HomePage = new PortalHomePage(prePortalTab);
-      const portal_WatchRecordingPage = new PortalWatchRecordingPage(prePortalTab);
+      const portal_WatchRecordingPage = new PortalWatchRecordingsPage(prePortalTab);
 
       await test.step('Navigate to pre-portal and verify playback of recording is successful', async () => {
         await portal_HomePage.page.bringToFront();

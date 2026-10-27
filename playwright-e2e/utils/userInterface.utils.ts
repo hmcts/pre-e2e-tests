@@ -46,25 +46,30 @@ export class UserInterfaceUtils {
   public async replaceTextWithinInput(locator: Locator, replacements: Array<[string | RegExp, string]>): Promise<void> {
     await expect(locator).toBeVisible();
     await expect(locator).not.toBeEmpty();
+    const locatorDescription = locator.toString();
 
-    const updatedValue = await locator.evaluate((node, replacements) => {
-      const tag = node.tagName.toLowerCase();
+    const updatedValue = await locator.evaluate(
+      (node, args) => {
+        const { replacements, locatorDescription } = args;
+        const tag = node.tagName.toLowerCase();
 
-      if (!('value' in node) || (tag !== 'textarea' && tag !== 'input')) {
-        throw new Error(`The provided locator {${locator}} is not an <input> or <textarea> element.`);
-      }
-
-      let inputValue = (node as HTMLInputElement | HTMLTextAreaElement).value;
-
-      for (const [pattern, replacement] of replacements) {
-        if (typeof pattern === 'string' || pattern instanceof RegExp) {
-          inputValue = inputValue.replace(pattern, replacement);
+        if (!('value' in node) || (tag !== 'textarea' && tag !== 'input')) {
+          throw new Error(`The provided locator (${locatorDescription}) is not an <input> or <textarea> element.`);
         }
-      }
 
-      (node as HTMLInputElement | HTMLTextAreaElement).value = inputValue;
-      return inputValue;
-    }, replacements);
+        let inputValue = (node as HTMLInputElement | HTMLTextAreaElement).value;
+
+        for (const [pattern, replacement] of replacements) {
+          if (typeof pattern === 'string' || pattern instanceof RegExp) {
+            inputValue = inputValue.replace(pattern, replacement);
+          }
+        }
+
+        (node as HTMLInputElement | HTMLTextAreaElement).value = inputValue;
+        return inputValue;
+      },
+      { replacements, locatorDescription },
+    );
 
     await expect(locator).toHaveValue(updatedValue);
   }
@@ -86,25 +91,30 @@ export class UserInterfaceUtils {
   public async replaceTextWithinStaticElement(locator: Locator, replacements: Array<[string | RegExp, string]>): Promise<void> {
     await expect(locator).toBeVisible();
     await expect(locator).not.toBeEmpty();
+    const locatorDescription = locator.toString();
 
-    await locator.evaluate((node, replacements) => {
-      let htmlContant = node.innerHTML;
+    await locator.evaluate(
+      (node, args) => {
+        const { replacements, locatorDescription } = args;
+        let htmlContant = node.innerHTML;
 
-      if (!htmlContant) {
-        throw new Error(`The provided locator ${locator} does not have any inner HTML content.`);
-      }
+        if (!htmlContant) {
+          throw new Error(`The provided locator (${locatorDescription}) does not have any inner HTML content.`);
+        }
 
-      for (const [pattern, replacement] of replacements) {
-        const regex =
-          typeof pattern === 'string'
-            ? new RegExp(pattern, 'gi')
-            : new RegExp(pattern.source, pattern.flags.includes('i') ? pattern.flags : pattern.flags + 'i');
+        for (const [pattern, replacement] of replacements) {
+          const regex =
+            typeof pattern === 'string'
+              ? new RegExp(pattern, 'gi')
+              : new RegExp(pattern.source, pattern.flags.includes('i') ? pattern.flags : pattern.flags + 'i');
 
-        htmlContant = htmlContant.replace(regex, replacement);
-      }
+          htmlContant = htmlContant.replace(regex, replacement);
+        }
 
-      node.innerHTML = htmlContant;
-    }, replacements);
+        node.innerHTML = htmlContant;
+      },
+      { replacements, locatorDescription },
+    );
 
     for (const [, replacement] of replacements) {
       await expect(locator).toContainText(replacement);

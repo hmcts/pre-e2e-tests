@@ -11,6 +11,8 @@ export class PortalHomePage extends PrePortalBase {
     heading: this.page.locator('h1[class*="govuk-heading"]'),
     recordingHeading: this.page.locator('h2[class="govuk-heading-m"]'),
     recordingTableRow: this.page.locator('tr[id*="recording"]'),
+    caseReferenceSearchTextbox: this.page.getByRole('textbox', { name: 'Case reference' }),
+    searchButton: this.page.getByRole('button', { name: 'Search', exact: true }),
   } as const satisfies Record<string, Locator>;
 
   public async goTo(): Promise<void> {
@@ -18,7 +20,7 @@ export class PortalHomePage extends PrePortalBase {
   }
 
   public async verifyUserIsOnHomePage(): Promise<void> {
-    await expect(this.$static.heading).toBeVisible({ timeout: 30_000 });
+    await this.verifyUserIsOnExpectedPage({ pageHeading: this.$static.heading, urlPath: '/browse' });
   }
 
   /**
@@ -34,6 +36,11 @@ export class PortalHomePage extends PrePortalBase {
       })
       .locator('[class="govuk-link"]');
     await this.navigationClick(recordingLink);
+  }
+
+  public async searchForCaseReference(caseRef: string): Promise<void> {
+    await this.$static.caseReferenceSearchTextbox.fill(caseRef);
+    await this.$static.searchButton.click();
   }
 
   /**
@@ -55,7 +62,7 @@ export class PortalHomePage extends PrePortalBase {
       has: this.page.locator(`td:text-is("${caseDetails.recordingVersion}")`),
     });
 
-    await expect(recordingListItem).toBeVisible();
+    await expect(recordingListItem).toBeVisible({ timeout: 15_000 });
     await expect(recordingListItem.locator('td').nth(0)).toHaveText(caseDetails.caseRef);
     await expect(recordingListItem.locator('td').nth(1)).toHaveText(caseDetails.court);
     await expect(recordingListItem.locator('td').nth(2)).toHaveText(caseDetails.date);

@@ -1,7 +1,7 @@
 # visual-tests catalogue
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/pre-portal/visual-tests/pre-portal-visual.spec.ts`
+** File:** `playwright-e2e/tests/pre-portal/visual-tests/pre-portal-visual-level-3-user.spec.ts`
 
 ## Verify home page is visually correct
 - Remove dynamic test data displayed within recordings table

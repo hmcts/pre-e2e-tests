@@ -1,7 +1,7 @@
 # functional-tests catalogue
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/pre-portal/functional-tests/pre-portal-functional.spec.ts`
+** File:** `playwright-e2e/tests/pre-portal/functional-tests/pre-portal-functional-level-3-user.spec.ts`
 
 ## Verify user is able to share recording with portal user, confirm playback is successful and unshare the recording afterwards
 - Pre-Rquisite step in order to create a case and assign a recording via API
