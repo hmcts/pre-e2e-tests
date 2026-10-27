@@ -33,8 +33,6 @@ export class PortalHomePage extends PrePortalBase {
    * @param recordingVersion
    */
   public async selectRecordingByCaseReferenceAndVersion(caseRef: string, recordingVersion: number): Promise<void> {
-    await this.searchForCaseReference(caseRef);
-
     const recordingLink = this.$static.recordingTableRow
       .filter({ hasText: caseRef })
       .filter({

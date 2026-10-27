@@ -5,8 +5,8 @@ import { config } from '../../../utils/index.js';
 // test.describe('Set of tests to verify pre portal UI is visually correct as Level 3 user', () => {
 //   test.use({ storageState: config.portalUsers.preLevel3User.sessionFile });
 
-test.describe('Set of tests to verify pre portal UI is visually correct as super user', () => {
-  test.use({ storageState: config.portalUsers.preSuperUser.sessionFile });
+test.describe('Set of tests to verify pre portal UI is visually correct as Level 3 user', () => {
+  test.use({ storageState: config.portalUsers.preLevel3User.sessionFile });
 
   test.beforeAll(async ({ headless }) => {
     test.skip(!headless, 'Skipping visual tests in headed mode');
