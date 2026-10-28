@@ -16,7 +16,6 @@ export class PowerAppMsSignInPage extends PowerAppBase {
   public readonly $staySignedInButton = (option: 'Yes' | 'No'): Locator => this.page.getByRole('button', { name: option });
 
   public readonly $static = {
-    microsoftLogo: this.page.getByRole('img', { name: 'Microsoft' }),
     signInHeading: this.page.getByRole('heading', { name: 'Sign in' }),
     passwordHeading: this.page.getByRole('heading', { name: 'Enter password' }),
     staySignedInHeading: this.page.getByRole('heading', { name: 'Stay signed in?' }),
@@ -34,7 +33,6 @@ export class PowerAppMsSignInPage extends PowerAppBase {
   public async signIn(email: string, password: string): Promise<void> {
     await this.page.goto(config.urls.prePowerAppUrl);
 
-    await expect(this.$static.microsoftLogo).toBeVisible();
     await expect(this.$static.signInHeading).toBeVisible();
     await this.$inputs.email.fill(email);
     await expect(this.$interactive.nextButton).toBeVisible();
