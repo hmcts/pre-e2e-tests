@@ -25,25 +25,10 @@ setup.describe('Set up users and retrieve tokens', () => {
   });
 
   setup('Store dynamic data for Level 1 power app user', async ({ config, powerAppPages, networkInterceptUtils }) => {
-    // Storing dynamic data to allow api client to use user id and court id,
-    // the reason for using try catch block is to allow tests that do not depend on this to continue execution.
     const user = config.powerAppUsers.preLevel1User;
-    const maxRetries = 3;
 
     await powerAppPages.msSignInPage.page.setViewportSize({ width: 1280, height: 720 });
     await powerAppPages.msSignInPage.signIn(user.username, user.password);
-
-    for (let attempt = 1; attempt <= maxRetries; attempt++) {
-      try {
-        await networkInterceptUtils.interceptAndStoreUserDataUponLogin(user.userDataFile);
-        return;
-      } catch (error) {
-        if (attempt === maxRetries) {
-          console.log('Error storing dynamic data for Level 1 power app user:', error);
-        } else {
-          await powerAppPages.msSignInPage.page.reload();
-        }
-      }
-    }
+    await networkInterceptUtils.interceptAndStoreUserDataUponLogin(user.userDataFile);
   });
 });
