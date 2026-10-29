@@ -15,7 +15,10 @@ export abstract class PrePortalBase extends Base {
   public async selectHeaderLink(link: headerLinksType): Promise<void> {
     const headerLinkToSelect = this.page.getByRole('link', { name: link, exact: true });
 
-    await this.navigationClick(headerLinkToSelect);
+    await expect(async () => {
+      await headerLinkToSelect.click();
+      await expect(headerLinkToSelect).toHaveAttribute('aria-current', 'true', { timeout: 5_000 });
+    }).toPass({ intervals: [1_000], timeout: 30_000 });
   }
 
   protected async verifyUserIsOnExpectedPage(options: { urlPath: string | string[]; pageHeading?: Locator; timeout?: number }): Promise<void> {
