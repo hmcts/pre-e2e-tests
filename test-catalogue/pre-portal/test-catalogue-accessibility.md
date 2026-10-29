@@ -14,6 +14,6 @@
 ----------------------------------------------------------------------------------------------------
 ** File:** `playwright-e2e/tests/pre-portal/accessibility/accessibility-super-user.spec.ts`
 
-## Verify accessibility on help page
-- Navigate to help page
-- Check accessibility on help page
+## Verify accessibility on user admin page
+- Navigate to user admin page
+- Check accessibility on user admin page

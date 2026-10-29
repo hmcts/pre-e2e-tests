@@ -9,17 +9,17 @@ test.describe('Set of tests to verify accessibility of pages within pre portal',
   });
 
   test(
-    'Verify accessibility on help page',
+    'Verify accessibility on user admin page',
     {
       tag: ['@accessibility'],
     },
     async ({ prePortalPages, axeUtils }) => {
-      await test.step('Navigate to help page', async () => {
+      await test.step('Navigate to user admin page', async () => {
         await prePortalPages.homePage.selectHeaderLink('User Admin');
         await prePortalPages.userAdminPage.verifyUserIsOnPage();
       });
 
-      await test.step('Check accessibility on help page', async () => {
+      await test.step('Check accessibility on user admin page', async () => {
         await axeUtils.audit();
       });
     },
