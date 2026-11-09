@@ -107,6 +107,28 @@ export default defineConfig({
       use: {
         ...ProjectsConfig.chromium.use,
       },
-    },         
+    },    
+    {
+      ...ProjectsConfig.firefox,
+      name: 'Pre-Portal-Firefox', // Firefox project for all tests besides visual tests for portal
+      dependencies: ['pre-portal-setup'],
+      teardown: 'pre-portal-teardown',
+      testDir: 'playwright-e2e/tests/pre-portal',
+      testIgnore: ['**/*visual*.spec.ts'],
+      use: {
+        ...ProjectsConfig.firefox.use,        
+      },
+    },   
+    {
+      ...ProjectsConfig.webkit,
+      name: 'Pre-Portal-Safari', // Safari project for all tests besides visual tests for portal
+      dependencies: ['pre-portal-setup'],
+      teardown: 'pre-portal-teardown',
+      testDir: 'playwright-e2e/tests/pre-portal',
+      testIgnore: ['**/*visual*.spec.ts'],
+      use: {
+        ...ProjectsConfig.webkit.use,
+      },
+    },
   ],
 });
