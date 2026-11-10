@@ -67,10 +67,10 @@ withNightlyPipeline(type, product, component, 600) {
 
     currentBuild.displayName = "All E2E Tests"
 
-    stage('Functional E2E Tests') {
+    stage('Functional E2E Tests Edge browser') {
       try {
         yarnBuilder.yarn(
-          'playwright test playwright-e2e/tests/pre-portal --workers=' + FUNCTIONAL_TESTS_WORKERS
+          'playwright test --project="Pre-Portal-Edge" --project="Pre-Portal-Chromium" --workers=' + FUNCTIONAL_TESTS_WORKERS
         )
       } catch (Error) {
         unstable(message: "${STAGE_NAME} is unstable: " + Error.toString())
@@ -81,7 +81,25 @@ withNightlyPipeline(type, product, component, 600) {
           keepAll: true,
           reportDir: "playwright-report",
           reportFiles: 'index.html',
-          reportName: 'E2E Tests Results'
+          reportName: 'Edge E2E Tests Results'
+        ])
+      }
+    }
+    stage('Functional E2E Tests Cross Browser') {
+      try {
+        yarnBuilder.yarn(
+          'playwright test --project="Pre-Portal-Firefox" --project="Pre-Portal-Safari" --workers=' + FUNCTIONAL_TESTS_WORKERS
+        )
+      } catch (Error) {
+        unstable(message: "${STAGE_NAME} is unstable: " + Error.toString())
+      } finally {
+        publishHTML([
+          allowMissing: true,
+          alwaysLinkToLastBuild: true,
+          keepAll: true,
+          reportDir: "playwright-report",
+          reportFiles: 'index.html',
+          reportName: 'Cross Browser E2E Tests Results'
         ])
       }
     }
