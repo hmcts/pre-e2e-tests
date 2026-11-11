@@ -11,7 +11,7 @@ test.describe('Set of tests to verify accessibility of pages within pre portal',
   test(
     'Verify accessibility on home page',
     {
-      tag: ['@accessibility'],
+      tag: ['@accessibility', '@crossBrowser'],
     },
     async ({ axeUtils }) => {
       await test.step('Check accessibility on home page', async () => {
@@ -23,7 +23,7 @@ test.describe('Set of tests to verify accessibility of pages within pre portal',
   test(
     'Verify accessibility on watch recordings page',
     {
-      tag: ['@accessibility'],
+      tag: ['@accessibility', '@crossBrowser'],
     },
     async ({ prePortalPages, axeUtils }) => {
       await test.step('Navigate to watch recording page', async () => {

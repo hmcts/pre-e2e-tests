@@ -88,7 +88,7 @@ withNightlyPipeline(type, product, component, 600) {
     stage('Functional E2E Tests Cross Browser') {
       try {
         yarnBuilder.yarn(
-          'playwright test --project="Pre-Portal-Firefox" --project="Pre-Portal-Safari" --workers=' + FUNCTIONAL_TESTS_WORKERS
+          'playwright test --project="Pre-Portal-Firefox" --project="Pre-Portal-Webkit" --workers=' + FUNCTIONAL_TESTS_WORKERS
         )
       } catch (Error) {
         unstable(message: "${STAGE_NAME} is unstable: " + Error.toString())
