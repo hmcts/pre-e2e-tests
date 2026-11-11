@@ -122,6 +122,6 @@ export class CvpRoomSettingsPage extends CvpBase {
   }
   public async beginRecording(): Promise<void> {
     await this.$interactive.recordButton.click();
-    await expect(this.page.getByRole('button', { name: /Starting/i })).toBeVisible({ timeout: 15_000 });
+    await expect(this.page.getByRole('button', { name: /Recording/i })).toBeVisible({ timeout: 15_000 });
   }
 }
