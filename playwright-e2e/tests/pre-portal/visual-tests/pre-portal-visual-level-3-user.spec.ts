@@ -19,7 +19,7 @@ test.describe('Set of tests to verify pre portal UI is visually correct as Level
   test(
     'Verify home page is visually correct',
     {
-      tag: ['@regression', '@visual'],
+      tag: ['@regression', '@visual', '@crossBrowser'],
     },
     async ({ prePortalPages, page, userInterfaceUtils }) => {
       await test.step('Remove dynamic test data displayed within recordings table', async () => {
@@ -54,7 +54,7 @@ test.describe('Set of tests to verify pre portal UI is visually correct as Level
   test(
     'Verify watch recording page is visually correct',
     {
-      tag: ['@regression', '@visual'],
+      tag: ['@regression', '@visual', '@crossBrowser'],
     },
     async ({ prePortalPages }) => {
       await test.step('Navigate to watch recording page', async () => {

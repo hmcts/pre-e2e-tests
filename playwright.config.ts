@@ -126,6 +126,7 @@ export default defineConfig({
       teardown: 'pre-portal-teardown',
       testDir: 'playwright-e2e/tests/pre-portal',
       testIgnore: ['**/*visual*.spec.ts'],
+      grep: /@crossBrowser/,
       use: {
         ...ProjectsConfig.webkit.use,
       },
