@@ -11,7 +11,7 @@ test.describe('Set of tests to verify accessibility of pages within pre portal',
   test(
     'Verify accessibility on user admin page',
     {
-      tag: ['@accessibility'],
+      tag: ['@accessibility', '@crossBrowser'],
     },
     async ({ prePortalPages, axeUtils }) => {
       await test.step('Navigate to user admin page', async () => {

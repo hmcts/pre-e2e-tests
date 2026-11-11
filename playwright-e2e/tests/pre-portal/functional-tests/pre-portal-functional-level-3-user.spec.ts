@@ -74,7 +74,7 @@ test.describe('Set of tests to verify functionality of pre portal as a Level 3 u
   test(
     'Verify details of version 1 existing recording is accurately displayed on pre-portal home page',
     {
-      tag: ['@regression', '@functional'],
+      tag: ['@regression', '@functional', '@crossBrowser'],
     },
     async ({ prePortalPages }) => {
       await test.step('Navigate to pre-portal home page', async () => {
@@ -123,7 +123,7 @@ test.describe('Set of tests to verify functionality of pre portal as a Level 3 u
   test(
     'Verify recording details are accurately displayed on pre-portal watch recordings page for version 1 of an existing recording',
     {
-      tag: ['@regression', '@functional'],
+      tag: ['@regression', '@functional', '@crossBrowser'],
     },
     async ({ prePortalPages }) => {
       await test.step('Navigate to pre-portal home page and select case reference (PLAYWRIGHT)', async () => {
