@@ -115,13 +115,14 @@ export default defineConfig({
       teardown: 'pre-portal-teardown',
       testDir: 'playwright-e2e/tests/pre-portal',
       testIgnore: ['**/*visual*.spec.ts'],
+      grep: /@crossBrowser/,
       use: {
         ...ProjectsConfig.firefox.use,        
       },
     },   
     {
       ...ProjectsConfig.webkit,
-      name: 'Pre-Portal-Safari', // Safari project for all tests besides visual tests for portal
+      name: 'Pre-Portal-Webkit', // Webkit project for all tests besides visual tests for portal
       dependencies: ['pre-portal-setup'],
       teardown: 'pre-portal-teardown',
       testDir: 'playwright-e2e/tests/pre-portal',
