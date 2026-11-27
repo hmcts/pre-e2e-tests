@@ -22,7 +22,7 @@ The following Markdown files contain an up-to-date list of all test scenarios an
 
 ## Features
 
-- **Cross-browser testing**: Supports Chromium.
+- **Cross-browser testing**: Supports Chromium,Edge,Firefox,Webkit.
 - **Responsive testing**: Test conducted on desktop viewport.
 - **Parallel test execution**: Run tests concurrently for faster feedback.
 - **Accessibility tests**: Integrate basic accessibility checks using libraries like Axe Core.
